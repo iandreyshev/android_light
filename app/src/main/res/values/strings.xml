@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Light</string>
+
+    <string name="editor_action_save">Save</string>
+    <string name="editor_action_start_preview">Start preview</string>
+    <string name="editor_action_edit_title">Edit title</string>
+    <string name="editor_action_add_quiz">New Quiz</string>
+    <string name="editor_action_add_image">New Image</string>
+    <string name="editor_action_add_video">New Video</string>
+    <string name="editor_title_prompt">Unknown title</string>
+</resources>

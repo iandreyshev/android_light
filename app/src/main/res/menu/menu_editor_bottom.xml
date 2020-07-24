@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/addVideo"
+        android:icon="@drawable/ic_add_video"
+        android:title="@string/editor_action_add_video"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/addImage"
+        android:icon="@drawable/ic_add_image"
+        android:title="@string/editor_action_add_image"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/addQuiz"
+        android:icon="@drawable/ic_add_quiz"
+        android:title="@string/editor_action_add_quiz"
+        app:showAsAction="always" />
+
+</menu>
