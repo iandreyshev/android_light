@@ -1,6 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:menu="@menu/menu_quiz_maker"
+            app:navigationIcon="@drawable/ic_quiz_maker_exit" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineBegin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/grid_step_2" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineEnd"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/grid_step_2" />
+
+    <TextView
+        android:id="@+id/questionTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/grid_step_vertical_4"
+        android:text="@string/quiz_maker_question_title"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
+        app:layout_constraintStart_toEndOf="@id/guidelineBegin"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
+
+    <ImageButton
+        android:id="@+id/deleteQuestionButton"
+        android:layout_width="@dimen/square_button_small"
+        android:layout_height="@dimen/square_button_small"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="@id/questionTitle"
+        app:layout_constraintEnd_toEndOf="@id/questionTitle"
+        app:layout_constraintTop_toTopOf="@id/questionTitle"
+        app:srcCompat="@drawable/ic_quiz_maker_delete" />
+
+    <EditText
+        android:id="@+id/questionInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:lines="3"
+        app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
+        app:layout_constraintStart_toEndOf="@id/guidelineBegin"
+        app:layout_constraintTop_toBottomOf="@id/questionTitle" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/variantList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/grid_step_vertical_4"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/questionsCounter"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@id/guidelineBegin"
+        app:layout_constraintTop_toBottomOf="@id/questionInput"
+        tools:itemCount="7"
+        tools:listitem="@layout/item_quiz_maker_variant" />
+
+    <ImageButton
+        android:id="@+id/previousQuestionButton"
+        android:layout_width="@dimen/square_button_normal"
+        android:layout_height="@dimen/square_button_normal"
+        android:layout_marginEnd="@dimen/grid_step_1"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="@id/questionsCounter"
+        app:layout_constraintEnd_toStartOf="@id/questionsCounter"
+        app:layout_constraintTop_toTopOf="@id/questionsCounter"
+        app:srcCompat="@drawable/ic_quiz_maker_previous_question" />
+
+    <TextView
+        android:id="@+id/questionsCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/grid_step_vertical_4"
+        android:textColor="#000"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@id/guidelineBegin"
+        tools:text="4 / 22" />
+
+    <ImageButton
+        android:id="@+id/nextQuestionButton"
+        android:layout_width="@dimen/square_button_normal"
+        android:layout_height="@dimen/square_button_normal"
+        android:layout_marginStart="@dimen/grid_step_1"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="@id/questionsCounter"
+        app:layout_constraintStart_toEndOf="@id/questionsCounter"
+        app:layout_constraintTop_toTopOf="@id/questionsCounter"
+        app:srcCompat="@drawable/ic_quiz_maker_next_question" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

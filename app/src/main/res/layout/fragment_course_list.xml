@@ -34,8 +34,8 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/createCourseButton"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="@dimen/square_button_normal"
+        android:layout_height="@dimen/square_button_normal"
         android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

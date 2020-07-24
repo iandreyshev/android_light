@@ -8,4 +8,10 @@
     <string name="editor_action_add_image">New Image</string>
     <string name="editor_action_add_video">New Video</string>
     <string name="editor_title_prompt">Unknown title</string>
+
+    <string name="quiz_maker_action_save">Save</string>
+    <string name="quiz_maker_question_title">Question #%1$d</string>
+    <string name="quiz_maker_variant_title">Variant #%1$d</string>
+    <string name="quiz_maker_is_valid_check_box_title">Is valid</string>
+    <string name="quiz_maker_add_variant_title">Add variant</string>
 </resources>
