@@ -9,7 +9,7 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/editorSave"
+        android:id="@+id/actionEditorSave"
         android:icon="@drawable/ic_editor_save"
         android:title="@string/editor_action_save"
         app:showAsAction="always" />
