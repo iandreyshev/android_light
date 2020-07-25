@@ -8,6 +8,7 @@ import org.koin.core.parameter.parametersOf
 import ru.iandreyshev.light.BaseFragment
 import ru.iandreyshev.light.R
 import ru.iandreyshev.light.navigation.router
+import ru.iandreyshev.light.utill.withItemListeners
 
 class VideoMakerFragment : BaseFragment(R.layout.fragment_video_maker) {
 
@@ -23,14 +24,8 @@ class VideoMakerFragment : BaseFragment(R.layout.fragment_video_maker) {
 
     private fun initMenu() {
         toolbar.setNavigationOnClickListener { router().back() }
-        toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.actionVideoMakerSave -> {
-                    mViewModel.onSave()
-                    return@setOnMenuItemClickListener true
-                }
-                else -> false
-            }
+        toolbar.withItemListeners {
+            R.id.actionVideoMakerSave { mViewModel.onSave() }
         }
 
         mViewModel.eventExit { router().back() }

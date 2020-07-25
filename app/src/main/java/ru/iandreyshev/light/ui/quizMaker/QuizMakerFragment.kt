@@ -11,6 +11,7 @@ import org.koin.core.parameter.parametersOf
 import ru.iandreyshev.light.BaseFragment
 import ru.iandreyshev.light.R
 import ru.iandreyshev.light.navigation.router
+import ru.iandreyshev.light.utill.withItemListeners
 import ru.iandreyshev.light.utill.uiLazy
 
 class QuizMakerFragment : BaseFragment(R.layout.fragment_quiz_maker) {
@@ -34,14 +35,8 @@ class QuizMakerFragment : BaseFragment(R.layout.fragment_quiz_maker) {
 
     private fun initMenu() {
         toolbar.setNavigationOnClickListener { router().back() }
-        toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.actionQuizMakerSave -> {
-                    mViewModel.onSave()
-                    return@setOnMenuItemClickListener true
-                }
-                else -> false
-            }
+        toolbar.withItemListeners {
+            R.id.actionQuizMakerSave { mViewModel.onSave() }
         }
 
         mViewModel.eventExit {

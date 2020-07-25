@@ -15,6 +15,7 @@ import ru.iandreyshev.light.R
 import ru.iandreyshev.light.domain.imageMaker.ImageDuration
 import ru.iandreyshev.light.navigation.router
 import ru.iandreyshev.light.utill.dismissOnDestroy
+import ru.iandreyshev.light.utill.withItemListeners
 
 class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
 
@@ -38,14 +39,8 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
 
     private fun initMenu() {
         toolbar.setNavigationOnClickListener { router().back() }
-        toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.actionImageMakerSave -> {
-                    mViewModel.onSave()
-                    true
-                }
-                else -> false
-            }
+        toolbar.withItemListeners {
+            R.id.actionImageMakerSave { mViewModel.onSave() }
         }
         mViewModel.eventExit { router().back() }
     }
