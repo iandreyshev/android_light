@@ -1,86 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineBegin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="@dimen/grid_step_2" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineEnd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="@dimen/grid_step_2" />
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/grid_step_vertical_2"
-        android:text="@string/quiz_maker_question_title"
-        android:textColor="#000"
-        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@id/guidelineBegin"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/variantInput"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/grid_step_vertical_1"
-        android:lines="2"
-        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@id/guidelineBegin"
-        app:layout_constraintTop_toBottomOf="@id/title" />
-
-    <CheckBox
-        android:id="@+id/isValidCheckbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/grid_step_vertical_1"
-        app:layout_constraintStart_toStartOf="@id/guidelineBegin"
-        app:layout_constraintTop_toBottomOf="@id/variantInput" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/quiz_maker_is_valid_check_box_title"
-        app:layout_constraintBottom_toBottomOf="@id/isValidCheckbox"
-        app:layout_constraintStart_toEndOf="@id/isValidCheckbox"
-        app:layout_constraintTop_toTopOf="@id/isValidCheckbox" />
-
-    <LinearLayout
-        android:id="@+id/addNewButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="#fff"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineBegin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_quiz_maker_add_variant" />
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/grid_step_2" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/grid_step_2" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/grid_step_vertical_2"
+            android:text="@string/quiz_maker_question_title"
+            android:textColor="#000"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@id/guidelineBegin"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/variantInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/grid_step_vertical_1"
+            android:lines="2"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            app:layout_constraintStart_toStartOf="@id/guidelineBegin"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
+        <ImageButton
+            android:id="@+id/deleteButton"
+            android:layout_width="@dimen/square_button_small"
+            android:layout_height="@dimen/square_button_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintBottom_toBottomOf="@id/title"
+            app:layout_constraintEnd_toEndOf="@id/title"
+            app:layout_constraintTop_toTopOf="@id/title"
+            app:srcCompat="@drawable/ic_quiz_maker_delete" />
+
+        <CheckBox
+            android:id="@+id/isValidCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/grid_step_vertical_1"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            app:layout_constraintTop_toBottomOf="@id/variantInput" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/grid_step_1"
-            android:text="@string/quiz_maker_add_variant_title"
-            android:textColor="#000"
-            android:textSize="16sp" />
+            android:text="@string/quiz_maker_is_valid_check_box_title"
+            app:layout_constraintBottom_toBottomOf="@id/isValidCheckbox"
+            app:layout_constraintEnd_toStartOf="@id/isValidCheckbox"
+            app:layout_constraintTop_toTopOf="@id/isValidCheckbox" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/addNewButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#fff"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_quiz_maker_add_variant" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/grid_step_1"
+                android:text="@string/quiz_maker_add_variant_title"
+                android:textColor="#000"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

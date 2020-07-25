@@ -16,7 +16,7 @@ class NavComponentRouter(
             .let(controller::navigate)
     }
 
-    override fun backFromEditor() {
+    override fun back() {
         controller.popBackStack()
     }
 

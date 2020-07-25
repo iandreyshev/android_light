@@ -4,7 +4,7 @@ import ru.iandreyshev.light.domain.quizMaker.QuestionId
 import ru.iandreyshev.light.domain.quizMaker.Quiz
 import ru.iandreyshev.light.domain.quizMaker.VariantId
 
-class QuizMakerDraft constructor() {
+class QuizMakerDraft constructor() : Cloneable {
 
     constructor(quiz: Quiz) : this() {
         mQuestions = quiz.questions
@@ -28,6 +28,14 @@ class QuizMakerDraft constructor() {
 
     val currentQuestion: QuestionDraft
         get() = mQuestions[mCurrentQuestionCursor]
+    val currentQuestionPosition: Int
+        get() = mCurrentQuestionCursor
+    val hasPrevious: Boolean
+        get() = currentQuestionPosition > 0
+    val hasNext: Boolean
+        get() = currentQuestionPosition < questionsCount - 1
+    val questionsCount: Int
+        get() = mQuestions.count()
 
     private var mQuestions = mutableListOf<QuestionDraft>()
     private var mCurrentQuestionCursor: Int = 0
@@ -40,7 +48,7 @@ class QuizMakerDraft constructor() {
 
     fun previousQuestion() {
         if (mCurrentQuestionCursor > 0) {
-            mCurrentQuestionCursor++
+            mCurrentQuestionCursor--
         }
     }
 
@@ -58,6 +66,10 @@ class QuizMakerDraft constructor() {
     fun updateQuestionText(position: Int, text: String) {
         val question = mQuestions.getOrNull(position) ?: return
         question.text = text
+    }
+
+    fun addVariant(qPosition: Int) {
+        mQuestions[qPosition].variants.add(VariantDraft.empty())
     }
 
     fun updateVariant(
@@ -104,4 +116,14 @@ data class VariantDraft(
     val id: VariantId,
     var text: String,
     var isValid: Boolean
-)
+) {
+
+    companion object {
+        fun empty() = VariantDraft(
+            id = VariantId(""),
+            text = "",
+            isValid = false
+        )
+    }
+
+}

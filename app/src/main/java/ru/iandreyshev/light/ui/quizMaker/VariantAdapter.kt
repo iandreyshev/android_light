@@ -1,16 +1,18 @@
 package ru.iandreyshev.light.ui.quizMaker
 
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_quiz_maker.view.*
 import kotlinx.android.synthetic.main.item_quiz_maker_variant.view.*
 import ru.iandreyshev.light.R
 import ru.iandreyshev.light.utill.exhaustive
+import ru.iandreyshev.light.utill.safelyPosition
 
 class VariantAdapter(
     private val onAddNewVariant: () -> Unit
@@ -27,7 +29,7 @@ class VariantAdapter(
             }
 
     override fun onBindViewHolder(holder: VariantViewHolder, position: Int) {
-        holder.bind(getItem(position), position)
+        holder.bind(getItem(position))
     }
 
 }
@@ -37,7 +39,9 @@ class VariantViewHolder(
     private val onAddNewVariant: () -> Unit
 ) : RecyclerView.ViewHolder(view) {
 
-    fun bind(viewState: VariantViewState, variantNumber: Int) {
+    private var mTextWatcher: TextWatcher? = null
+
+    fun bind(viewState: VariantViewState) {
         when (viewState) {
             VariantViewState.AddNew -> {
                 itemView.addNewButton.isVisible = true
@@ -46,10 +50,25 @@ class VariantViewHolder(
             is VariantViewState.Text -> {
                 itemView.addNewButton.isVisible = false
                 itemView.addNewButton.setOnClickListener(null)
+
+                itemView.isValidCheckbox.setOnCheckedChangeListener(null)
                 itemView.isValidCheckbox.isChecked = viewState.isValid
+                itemView.isValidCheckbox.setOnCheckedChangeListener { _, isChecked ->
+                    viewState.onValidStateChanged(isChecked)
+                }
+
                 itemView.title.text = itemView.resources
-                    .getString(R.string.quiz_maker_question_title, variantNumber)
-                itemView.questionInput.setText(viewState.text)
+                    .getString(R.string.quiz_maker_variant_title, viewState.position)
+
+                mTextWatcher?.let(itemView.variantInput::removeTextChangedListener)
+                itemView.variantInput.setText(viewState.text)
+                mTextWatcher = itemView.variantInput.doAfterTextChanged {
+                    viewState.onTextChanged(it.toString())
+                }
+
+                itemView.deleteButton.setOnClickListener {
+                    viewState.onDeleteVariant()
+                }
             }
         }.exhaustive
     }
@@ -57,13 +76,6 @@ class VariantViewHolder(
 }
 
 private object DiffCallback : DiffUtil.ItemCallback<VariantViewState>() {
-
-    override fun areItemsTheSame(oldItem: VariantViewState, newItem: VariantViewState): Boolean {
-        return oldItem == newItem
-    }
-
-    override fun areContentsTheSame(oldItem: VariantViewState, newItem: VariantViewState): Boolean {
-        return oldItem == newItem
-    }
-
+    override fun areItemsTheSame(oldItem: VariantViewState, newItem: VariantViewState) = false
+    override fun areContentsTheSame(oldItem: VariantViewState, newItem: VariantViewState) = false
 }

@@ -10,6 +10,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.iandreyshev.light.BaseFragment
 import ru.iandreyshev.light.R
+import ru.iandreyshev.light.navigation.router
 import ru.iandreyshev.light.utill.uiLazy
 
 class QuizMakerFragment : BaseFragment(R.layout.fragment_quiz_maker) {
@@ -25,14 +26,32 @@ class QuizMakerFragment : BaseFragment(R.layout.fragment_quiz_maker) {
 
         mViewModel.onCreate()
 
+        initMenu()
         initQuestion()
         initVariantsList()
         initQuestionsCounter()
     }
 
+    private fun initMenu() {
+        toolbar.setNavigationOnClickListener { router().back() }
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.quiz_maker_action_save -> {
+                    mViewModel.save()
+                    return@setOnMenuItemClickListener true
+                }
+                else -> false
+            }
+        }
+
+        mViewModel.eventExit {
+            router().back()
+        }
+    }
+
     private fun initQuestion() {
         mViewModel.question.viewObserveWith { question ->
-            questionTitle.text = getString(R.string.quiz_maker_question_title, question.order)
+            questionTitle.text = getString(R.string.quiz_maker_question_title, question.position)
 
             questionInput.removeTextChangedListener(mQuestionInputListener)
             questionInput.setText(question.question.text)
@@ -44,13 +63,16 @@ class QuizMakerFragment : BaseFragment(R.layout.fragment_quiz_maker) {
             deleteQuestionButton.isVisible = question.canDelete
             deleteQuestionButton.setOnClickListener { mViewModel.onQuestionDeleted() }
 
+            nextQuestionButton.setOnClickListener { mViewModel.onNext() }
             nextQuestionButton.setImageResource(
                 when (question.hasNext) {
                     true -> R.drawable.ic_quiz_maker_next_question
                     false -> R.drawable.ic_quiz_maker_new_question
                 }
             )
+
             previousQuestionButton.isVisible = question.hasPrevious
+            previousQuestionButton.setOnClickListener { mViewModel.onPrevious() }
         }
     }
 

@@ -14,6 +14,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:menu="@menu/menu_quiz_maker"
@@ -48,6 +49,15 @@
         app:layout_constraintStart_toEndOf="@id/guidelineBegin"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
+    <EditText
+        android:id="@+id/questionInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:lines="3"
+        app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
+        app:layout_constraintStart_toEndOf="@id/guidelineBegin"
+        app:layout_constraintTop_toBottomOf="@id/questionTitle" />
+
     <ImageButton
         android:id="@+id/deleteQuestionButton"
         android:layout_width="@dimen/square_button_small"
@@ -57,15 +67,6 @@
         app:layout_constraintEnd_toEndOf="@id/questionTitle"
         app:layout_constraintTop_toTopOf="@id/questionTitle"
         app:srcCompat="@drawable/ic_quiz_maker_delete" />
-
-    <EditText
-        android:id="@+id/questionInput"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:lines="3"
-        app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
-        app:layout_constraintStart_toEndOf="@id/guidelineBegin"
-        app:layout_constraintTop_toBottomOf="@id/questionTitle" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/variantList"

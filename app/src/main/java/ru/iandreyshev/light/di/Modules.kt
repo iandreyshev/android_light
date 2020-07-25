@@ -6,8 +6,11 @@ import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import ru.iandreyshev.light.R
+import ru.iandreyshev.light.domain.editor.AddQuizDraftToCourseDraftUseCase
+import ru.iandreyshev.light.domain.editor.CourseDraft
 import ru.iandreyshev.light.domain.editor.IDraftRepository
 import ru.iandreyshev.light.domain.quizMaker.IQuizMakerRepository
+import ru.iandreyshev.light.domain.quizMaker.ISaveDraftUseCase
 import ru.iandreyshev.light.infrastructure.DraftRepository
 import ru.iandreyshev.light.infrastructure.editor.QuizMakerRepository
 import ru.iandreyshev.light.ui.courseList.CourseListViewModel
@@ -31,8 +34,10 @@ fun Application.initDI() = startKoin {
             viewModel { VideoMakerViewModel() }
             viewModel { ImageMakerViewModel() }
             scope(flowQualifier(R.id.nav_editor)) {
+                scoped { CourseDraft() }
                 scoped<IDraftRepository> { DraftRepository() }
                 scoped<IQuizMakerRepository> { QuizMakerRepository() }
+                scoped<ISaveDraftUseCase> { AddQuizDraftToCourseDraftUseCase(get()) }
             }
 
             viewModel { ViewerViewModel() }

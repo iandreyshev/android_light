@@ -4,6 +4,6 @@ class CurrentQuestionViewState(
     val hasNext: Boolean,
     val hasPrevious: Boolean,
     val question: QuestionViewState,
-    val order: Int,
+    val position: Int,
     val canDelete: Boolean
 )

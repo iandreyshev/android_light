@@ -33,7 +33,7 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
         }
 
         mViewModel.backFromEditorEvent {
-            router().backFromEditor()
+            router().back()
         }
         mViewModel.openQuizMakerEvent {
             router().openQuizMaker()

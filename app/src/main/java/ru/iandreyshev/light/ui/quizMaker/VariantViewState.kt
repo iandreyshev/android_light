@@ -7,6 +7,10 @@ sealed class VariantViewState {
     data class Text(
         var id: VariantId? = null,
         var text: String = "",
-        var isValid: Boolean
+        var isValid: Boolean,
+        val position: Int,
+        val onTextChanged: (String) -> Unit,
+        val onValidStateChanged: (Boolean) -> Unit,
+        val onDeleteVariant: () -> Unit
     ) : VariantViewState()
 }
