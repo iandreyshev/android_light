@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Light</string>
 
+    <string name="common_dialog_ok">OK</string>
+    <string name="common_dialog_cancel">Cancel</string>
+
     <string name="editor_action_save">Save</string>
     <string name="editor_action_start_preview">Start preview</string>
     <string name="editor_action_edit_title">Edit title</string>
@@ -9,9 +12,16 @@
     <string name="editor_action_add_video">New Video</string>
     <string name="editor_title_prompt">Unknown title</string>
 
+    <string name="quiz_maker_title">Quiz maker</string>
     <string name="quiz_maker_action_save">Save</string>
     <string name="quiz_maker_question_title">Question #%1$d</string>
     <string name="quiz_maker_variant_title">Variant #%1$d</string>
     <string name="quiz_maker_is_valid_check_box_title">Is valid</string>
     <string name="quiz_maker_add_variant_title">Add variant</string>
+
+    <string name="image_maker_title">Image maker</string>
+    <string name="image_maker_action_save">Save</string>
+
+    <string name="video_maker_title">Video maker</string>
+    <string name="video_maker_action_save">Save</string>
 </resources>

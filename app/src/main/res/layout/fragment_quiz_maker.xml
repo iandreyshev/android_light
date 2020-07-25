@@ -17,8 +17,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#fff"
             app:menu="@menu/menu_quiz_maker"
-            app:navigationIcon="@drawable/ic_quiz_maker_exit" />
+            app:navigationIcon="@drawable/ic_quiz_maker_exit"
+            app:title="@string/quiz_maker_title" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

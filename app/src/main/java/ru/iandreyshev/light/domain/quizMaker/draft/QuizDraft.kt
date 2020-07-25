@@ -4,7 +4,7 @@ import ru.iandreyshev.light.domain.quizMaker.QuestionId
 import ru.iandreyshev.light.domain.quizMaker.Quiz
 import ru.iandreyshev.light.domain.quizMaker.VariantId
 
-class QuizMakerDraft constructor() : Cloneable {
+class QuizDraft constructor() {
 
     constructor(quiz: Quiz) : this() {
         mQuestions = quiz.questions

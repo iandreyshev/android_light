@@ -7,24 +7,27 @@ import ru.iandreyshev.light.utill.invoke
 import ru.iandreyshev.light.utill.voidSingleLiveEvent
 import timber.log.Timber
 
-class EditorViewModel(
-    private val scope: Scope
-) : ViewModel() {
+class EditorViewModel(scope: Scope) : ViewModel() {
 
-    val openQuizMakerEvent = voidSingleLiveEvent()
-    val backFromEditorEvent = voidSingleLiveEvent()
-
-    init {
-        val repository = scope.get<IDraftRepository>()
-        Timber.d("Open quiz maker with repository: $repository")
-    }
+    val eventOpenQuizMaker = voidSingleLiveEvent()
+    val eventOpenImageMaker = voidSingleLiveEvent()
+    val eventOpenVideoMaker = voidSingleLiveEvent()
+    val eventBackFromEditor = voidSingleLiveEvent()
 
     fun onOpenQuizMaker() {
-        openQuizMakerEvent()
+        eventOpenQuizMaker()
+    }
+
+    fun onOpenImageMaker() {
+        eventOpenImageMaker()
+    }
+
+    fun onOpenVideoMaker() {
+        eventOpenVideoMaker()
     }
 
     fun onExit() {
-        backFromEditorEvent()
+        eventBackFromEditor()
     }
 
 }

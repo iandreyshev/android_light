@@ -31,6 +31,6 @@
         android:label="QuizMakerFragment" />
     <fragment
         android:id="@+id/videoMaker"
-        android:name="ru.iandreyshev.light.ui.videoMaker.VideoMaker"
+        android:name="ru.iandreyshev.light.ui.videoMaker.VideoMakerFragment"
         android:label="VideoMaker" />
 </navigation>

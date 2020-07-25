@@ -6,11 +6,11 @@ import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import ru.iandreyshev.light.R
-import ru.iandreyshev.light.domain.editor.AddQuizDraftToCourseDraftUseCase
-import ru.iandreyshev.light.domain.editor.CourseDraft
-import ru.iandreyshev.light.domain.editor.IDraftRepository
+import ru.iandreyshev.light.domain.editor.*
+import ru.iandreyshev.light.domain.imageMaker.ISaveImageDraftUseCase
 import ru.iandreyshev.light.domain.quizMaker.IQuizMakerRepository
-import ru.iandreyshev.light.domain.quizMaker.ISaveDraftUseCase
+import ru.iandreyshev.light.domain.quizMaker.ISaveQuizDraftUseCase
+import ru.iandreyshev.light.domain.videoMaker.ISaveVideoDraftUseCase
 import ru.iandreyshev.light.infrastructure.DraftRepository
 import ru.iandreyshev.light.infrastructure.editor.QuizMakerRepository
 import ru.iandreyshev.light.ui.courseList.CourseListViewModel
@@ -31,13 +31,15 @@ fun Application.initDI() = startKoin {
 
             viewModel { EditorViewModel(it.component1()) }
             viewModel { QuizMakerViewModel(it.component1()) }
-            viewModel { VideoMakerViewModel() }
-            viewModel { ImageMakerViewModel() }
+            viewModel { VideoMakerViewModel(it.component1()) }
+            viewModel { ImageMakerViewModel(it.component1()) }
             scope(flowQualifier(R.id.nav_editor)) {
                 scoped { CourseDraft() }
                 scoped<IDraftRepository> { DraftRepository() }
                 scoped<IQuizMakerRepository> { QuizMakerRepository() }
-                scoped<ISaveDraftUseCase> { AddQuizDraftToCourseDraftUseCase(get()) }
+                scoped<ISaveQuizDraftUseCase> { AddQuizDraftToCourseUseCase(get()) }
+                scoped<ISaveImageDraftUseCase> { AddImageDraftToCourseUseCase(get()) }
+                scoped<ISaveVideoDraftUseCase> { AddVideoDraftToCourseUseCase(get()) }
             }
 
             viewModel { ViewerViewModel() }

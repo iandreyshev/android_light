@@ -26,6 +26,18 @@ class NavComponentRouter(
             .let(controller::navigate)
     }
 
+    override fun openImageMaker() {
+        EditorFragmentDirections
+            .actionEditorFragmentToImageMakerFragment()
+            .let(controller::navigate)
+    }
+
+    override fun openVideoMaker() {
+        EditorFragmentDirections
+            .actionEditorFragmentToVideoMaker()
+            .let(controller::navigate)
+    }
+
 }
 
 fun Fragment.router() = NavComponentRouter(findNavController())

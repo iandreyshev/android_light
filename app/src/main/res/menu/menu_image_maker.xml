@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/actionQuizMakerSave"
-        android:icon="@drawable/ic_quiz_maker_save"
-        android:title="@string/quiz_maker_action_save"
+        android:id="@+id/actionImageMakerSave"
+        android:icon="@drawable/ic_image_maker_save"
+        android:title="@string/image_maker_action_save"
         app:showAsAction="always" />
 
 </menu>

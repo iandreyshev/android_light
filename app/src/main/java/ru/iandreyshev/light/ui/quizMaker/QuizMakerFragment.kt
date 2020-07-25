@@ -36,8 +36,8 @@ class QuizMakerFragment : BaseFragment(R.layout.fragment_quiz_maker) {
         toolbar.setNavigationOnClickListener { router().back() }
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.quiz_maker_action_save -> {
-                    mViewModel.save()
+                R.id.actionQuizMakerSave -> {
+                    mViewModel.onSave()
                     return@setOnMenuItemClickListener true
                 }
                 else -> false

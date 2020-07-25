@@ -28,14 +28,28 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
                     mViewModel.onOpenQuizMaker()
                     true
                 }
+                R.id.addImage -> {
+                    mViewModel.onOpenImageMaker()
+                    true
+                }
+                R.id.addVideo -> {
+                    mViewModel.onOpenVideoMaker()
+                    true
+                }
                 else -> false
             }
         }
 
-        mViewModel.backFromEditorEvent {
+        mViewModel.eventBackFromEditor {
             router().back()
         }
-        mViewModel.openQuizMakerEvent {
+        mViewModel.eventOpenImageMaker {
+            router().openImageMaker()
+        }
+        mViewModel.eventOpenVideoMaker {
+            router().openVideoMaker()
+        }
+        mViewModel.eventOpenQuizMaker {
             router().openQuizMaker()
         }
     }

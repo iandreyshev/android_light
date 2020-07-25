@@ -6,18 +6,16 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.koin.core.scope.Scope
 import ru.iandreyshev.light.domain.quizMaker.IQuizMakerRepository
-import ru.iandreyshev.light.domain.quizMaker.ISaveDraftUseCase
+import ru.iandreyshev.light.domain.quizMaker.ISaveQuizDraftUseCase
 import ru.iandreyshev.light.domain.quizMaker.Quiz
-import ru.iandreyshev.light.domain.quizMaker.draft.QuizMakerDraft
+import ru.iandreyshev.light.domain.quizMaker.draft.QuizDraft
 import ru.iandreyshev.light.domain.quizMaker.draft.VariantDraft
 import ru.iandreyshev.light.utill.*
 
-class QuizMakerViewModel(
-    private val scope: Scope
-) : ViewModel() {
+class QuizMakerViewModel(scope: Scope) : ViewModel() {
 
     private val mRepository by uiLazy { scope.get<IQuizMakerRepository>() }
-    private val mSaveDraft by uiLazy { scope.get<ISaveDraftUseCase>() }
+    private val mSaveDraft by uiLazy { scope.get<ISaveQuizDraftUseCase>() }
 
     val question by uiLazy { mQuestion.distinctUntilChanged() }
     val variants by uiLazy { mVariants.distinctUntilChanged() }
@@ -30,7 +28,7 @@ class QuizMakerViewModel(
     val eventExit = voidSingleLiveEvent()
     val eventShowError = singleLiveEvent<String>()
 
-    private lateinit var mDraft: QuizMakerDraft
+    private lateinit var mDraft: QuizDraft
     private var mIsFirstLoadCompleted = false
 
     fun onCreate() {
@@ -74,19 +72,19 @@ class QuizMakerViewModel(
         updateDraftView()
     }
 
-    fun save() {
+    fun onSave() {
         viewModelScope.launch {
             mSaveDraft(mDraft)
             eventExit()
         }
     }
 
-    private fun buildQuizViewState(quiz: Quiz?): QuizMakerDraft {
-        quiz ?: return QuizMakerDraft().apply {
+    private fun buildQuizViewState(quiz: Quiz?): QuizDraft {
+        quiz ?: return QuizDraft().apply {
             addQuestion()
         }
 
-        return QuizMakerDraft(quiz)
+        return QuizDraft(quiz)
     }
 
     private fun updateDraftView() {
