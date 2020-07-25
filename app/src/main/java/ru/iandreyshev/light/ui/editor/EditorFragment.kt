@@ -36,11 +36,9 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
             R.id.actionEditorSave { mViewModel.onSave() }
         }
 
-        bottomAppBar.withItemListeners {
-            R.id.addQuiz { mViewModel.onOpenQuizMaker() }
-            R.id.addImage { mViewModel.onOpenImageMaker() }
-            R.id.addVideo { mViewModel.onOpenVideoMaker() }
-        }
+        addVideoButton.setOnClickListener { mViewModel.onOpenVideoMaker() }
+        addImageButton.setOnClickListener { mViewModel.onOpenImageMaker() }
+        addQuizButton.setOnClickListener { mViewModel.onOpenQuizMaker() }
 
         mViewModel.eventBackFromEditor { router().back() }
         mViewModel.eventOpenImageMaker { router().openImageMaker() }

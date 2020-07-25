@@ -1,72 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/gray_light">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/gray_light">
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#fff"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:menu="@menu/menu_editor"
+            app:navigationIcon="@drawable/ic_editor_exit" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#fff"
-                app:menu="@menu/menu_editor"
-                app:navigationIcon="@drawable/ic_editor_exit" />
+        <TextView
+            android:id="@+id/courseTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_step_2"
+            android:layout_marginTop="@dimen/grid_step_vertical_1"
+            android:layout_marginBottom="@dimen/grid_step_vertical_2"
+            android:maxLines="2"
+            android:text="@string/editor_title_prompt"
+            android:textColor="#000"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/courseTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/grid_step_2"
-                android:layout_marginTop="@dimen/grid_step_vertical_1"
-                android:layout_marginBottom="@dimen/grid_step_vertical_2"
-                android:maxLines="2"
-                android:text="@string/editor_title_prompt"
-                android:textColor="#000"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/timeline"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/gray_light"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-            tools:itemCount="7"
-            tools:listitem="@layout/item_timeline_image" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:backgroundTint="@color/colorPrimary"
-        app:fabAlignmentMode="end"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/timeline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/gray_light"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/bottomMenu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/menu_editor_bottom" />
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        tools:itemCount="7"
+        tools:listitem="@layout/item_timeline_image" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/bottomMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_margin"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/addVideoButton"
+                android:layout_width="@dimen/square_button_small"
+                android:layout_height="@dimen/square_button_small"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:srcCompat="@drawable/ic_add_video" />
+
+            <ImageButton
+                android:id="@+id/addImageButton"
+                android:layout_width="@dimen/square_button_small"
+                android:layout_height="@dimen/square_button_small"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:srcCompat="@drawable/ic_add_image" />
+
+            <ImageButton
+                android:id="@+id/addQuizButton"
+                android:layout_width="@dimen/square_button_small"
+                android:layout_height="@dimen/square_button_small"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:srcCompat="@drawable/ic_add_quiz" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
