@@ -1,9 +1,12 @@
 package ru.iandreyshev.light.di
 
 import android.content.Context
+import androidx.annotation.IdRes
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
+import org.koin.core.module.Module
+import org.koin.dsl.ScopeDSL
 import org.koin.dsl.module
 import ru.iandreyshev.light.R
 import ru.iandreyshev.light.domain.course.ICourseRepository
@@ -33,8 +36,7 @@ fun Context.initDI() = startKoin {
                 CourseListViewModel(it.component1())
                     .apply { onCreate() }
             }
-            scope(flowQualifier(R.id.nav_main)) {
-            }
+            navGraphScope(R.id.nav_main) {}
 
             viewModel {
                 EditorViewModel(it.component1(), it.component2())
@@ -51,7 +53,7 @@ fun Context.initDI() = startKoin {
                 ImageMakerViewModel(it.component1())
                     .apply { onCreate() }
             }
-            scope(flowQualifier(R.id.nav_editor)) {
+            navGraphScope(R.id.nav_editor) {
                 scoped { CourseDraft(it.component1()) }
                 scoped<ISaveCourseDraftUseCase> { SaveDraftUseCase(get()) }
                 scoped<IQuizMakerRepository> { QuizMakerRepository() }
@@ -61,6 +63,10 @@ fun Context.initDI() = startKoin {
             }
 
             viewModel { PlayerViewModel() }
+            navGraphScope(R.id.nav_player) { }
         }
     ))
 }
+
+fun Module.navGraphScope(@IdRes id: Int, scopeSet: ScopeDSL.() -> Unit) =
+    scope(flowQualifier(id), scopeSet)
