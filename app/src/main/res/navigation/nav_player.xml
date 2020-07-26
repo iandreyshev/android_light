@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_player"
+    app:startDestination="@id/playerFragment">
+
+    <fragment
+        android:id="@+id/playerFragment"
+        android:name="ru.iandreyshev.light.ui.player.PlayerFragment"
+        android:label="PlayerFragment">
+        <argument
+            android:name="playerArgs"
+            app:argType="ru.iandreyshev.light.ui.player.PlayerArgs" />
+    </fragment>
+</navigation>

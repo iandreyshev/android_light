@@ -17,6 +17,7 @@ import ru.iandreyshev.light.BaseFragment
 import ru.iandreyshev.light.R
 import ru.iandreyshev.light.domain.imageMaker.ImageDuration
 import ru.iandreyshev.light.navigation.router
+import ru.iandreyshev.light.system.FeatureToggle
 import ru.iandreyshev.light.utill.dismissOnDestroy
 import ru.iandreyshev.light.utill.uiLazy
 import ru.iandreyshev.light.utill.withItemListeners
@@ -101,12 +102,13 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
                 ImageDuration.SEC_3 -> "3s"
                 ImageDuration.SEC_5 -> "5s"
                 ImageDuration.SEC_10 -> "10s"
+                ImageDuration.INFINITELY -> "..."
             }
         }
         mViewModel.picture
             .map { it != null }
             .viewObserveWith { hasPicture ->
-                durationButton.isEnabled = hasPicture
+                durationButton.isEnabled = hasPicture && FeatureToggle.isImageDurationEnabled
             }
     }
 

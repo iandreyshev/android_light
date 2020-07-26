@@ -15,12 +15,12 @@ class CourseListFragment : BaseFragment(R.layout.fragment_course_list) {
     private val mViewModel by viewModel<CourseListViewModel> {
         parametersOf(getScope(R.id.nav_main))
     }
-    private val mCourseListAdapter by uiLazy { CourseListAdapter() }
+    private val mCourseListAdapter by uiLazy {
+        CourseListAdapter(mViewModel::onCourseClickAt)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        mViewModel.onCreate()
 
         initMenu()
         initCourseList()
@@ -31,9 +31,8 @@ class CourseListFragment : BaseFragment(R.layout.fragment_course_list) {
             mViewModel.onCreateCourseClick()
         }
 
-        mViewModel.openCourseEditorEvent {
-            router().openCourseEditor()
-        }
+        mViewModel.eventOpenCourseEditor(router()::openCourseEditor)
+        mViewModel.eventOpenPlayer(router()::openPlayer)
     }
 
     private fun initCourseList() {

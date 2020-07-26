@@ -1,4 +1,4 @@
-package ru.iandreyshev.light.domain.courseList
+package ru.iandreyshev.light.domain.course
 
 import ru.iandreyshev.light.domain.editor.CourseDraft
 import ru.iandreyshev.light.domain.editor.DraftItem
@@ -15,7 +15,7 @@ class SaveDraftUseCase(
 
     override suspend fun invoke(draft: CourseDraft) {
         val course = Course(
-            id = "",
+            id = CourseId(""),
             title = draft.title,
             items = draft.items.map { item ->
                 when (item) {

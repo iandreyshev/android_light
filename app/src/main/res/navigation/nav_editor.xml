@@ -18,8 +18,8 @@
             android:id="@+id/action_editorFragment_to_videoMaker"
             app:destination="@id/videoMaker" />
         <action
-            android:id="@+id/action_editorFragment_to_viewerFragment"
-            app:destination="@id/viewerFragment" />
+            android:id="@+id/action_editorFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
     </fragment>
     <fragment
         android:id="@+id/imageMakerFragment"

@@ -1,7 +1,7 @@
-package ru.iandreyshev.light.domain.courseList
+package ru.iandreyshev.light.domain.course
 
 data class Course(
-    val id: String,
+    val id: CourseId,
     val title: String,
     val items: List<CourseItem>
 )

@@ -6,20 +6,24 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_course.view.*
-import kotlinx.android.synthetic.main.item_timeline_image.view.*
 import kotlinx.android.synthetic.main.item_timeline_image.view.title
 import ru.iandreyshev.light.R
-import ru.iandreyshev.light.domain.courseList.Course
-import ru.iandreyshev.light.ui.editor.TimelineItem
-import ru.iandreyshev.light.utill.exhaustive
+import ru.iandreyshev.light.domain.course.Course
+import ru.iandreyshev.light.utill.safelyPosition
 
-class CourseListAdapter : ListAdapter<Course, CourseViewHolder>(ItemCallback) {
+class CourseListAdapter(
+    private val onClickListener: (position: Int) -> Unit
+) : ListAdapter<Course, CourseViewHolder>(ItemCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder =
         LayoutInflater.from(parent.context)
             .inflate(R.layout.item_timeline_image, parent, false)
             .let { view -> CourseViewHolder(view) }
+            .also { holder ->
+                holder.itemView.setOnClickListener {
+                    holder.safelyPosition { pos -> onClickListener(pos) }
+                }
+            }
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
         val item = getItem(position)

@@ -28,19 +28,12 @@ class EditorViewModel(
 
     private val mTimelineItems = MutableLiveData(listOf<TimelineItem>())
 
-    private var mIsOnCreateComplete = false
     private val mDraft by uiLazy {
         scope.get<CourseDraft> { parametersOf(args.courseTitle) }
     }
     private val mSaveDraft by uiLazy { scope.get<ISaveCourseDraftUseCase>() }
 
     fun onCreate() {
-        if (mIsOnCreateComplete) {
-            return
-        }
-
-        mIsOnCreateComplete = true
-
         viewModelScope.launch {
             mDraft.getItemsObservable().collect {
                 mTimelineItems.value = mDraft.items.asTimelineItems()

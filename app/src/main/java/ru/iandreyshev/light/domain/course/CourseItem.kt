@@ -1,4 +1,4 @@
-package ru.iandreyshev.light.domain.courseList
+package ru.iandreyshev.light.domain.course
 
 sealed class CourseItem {
     class Quiz(val quiz: ru.iandreyshev.light.domain.quizMaker.Quiz) : CourseItem()

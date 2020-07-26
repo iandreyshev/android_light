@@ -9,17 +9,18 @@
         android:name="ru.iandreyshev.light.ui.courseList.CourseListFragment"
         android:label="CourseListFragment">
         <action
-            android:id="@+id/action_courseListFragment_to_viewerFragment"
-            app:destination="@id/viewerFragment" />
-        <action
             android:id="@+id/action_courseListFragment_to_nav_editor"
             app:destination="@id/nav_editor" />
+        <action
+            android:id="@+id/action_courseListFragment_to_nav_player"
+            app:destination="@id/nav_player">
+            <argument
+                android:name="playerArgs"
+                app:argType="ru.iandreyshev.light.ui.player.PlayerArgs" />
+        </action>
     </fragment>
 
-    <fragment
-        android:id="@+id/viewerFragment"
-        android:name="ru.iandreyshev.light.ui.viewer.ViewerFragment"
-        android:label="ViewerFragment" />
     <include app:graph="@navigation/nav_editor" />
+    <include app:graph="@navigation/nav_player" />
 
 </navigation>

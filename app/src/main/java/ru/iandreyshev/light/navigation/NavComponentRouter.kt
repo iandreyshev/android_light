@@ -5,6 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import ru.iandreyshev.light.ui.courseList.CourseListFragmentDirections
 import ru.iandreyshev.light.ui.editor.EditorFragmentDirections
+import ru.iandreyshev.light.ui.player.PlayerArgs
 
 class NavComponentRouter(
     private val controller: NavController
@@ -35,6 +36,12 @@ class NavComponentRouter(
     override fun openVideoMaker() {
         EditorFragmentDirections
             .actionEditorFragmentToVideoMaker()
+            .let(controller::navigate)
+    }
+
+    override fun openPlayer(args: PlayerArgs) {
+        CourseListFragmentDirections
+            .actionCourseListFragmentToNavPlayer(args)
             .let(controller::navigate)
     }
 

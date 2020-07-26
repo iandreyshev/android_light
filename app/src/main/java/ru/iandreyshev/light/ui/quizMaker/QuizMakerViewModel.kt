@@ -29,17 +29,12 @@ class QuizMakerViewModel(scope: Scope) : ViewModel() {
     val eventShowError = singleLiveEvent<String>()
 
     private lateinit var mDraft: QuizDraft
-    private var mIsFirstLoadCompleted = false
 
     fun onCreate() {
-        if (!mIsFirstLoadCompleted) {
-            mIsFirstLoadCompleted = true
-
-            viewModelScope.launch {
-                val quiz = mRepository.get()
-                mDraft = buildQuizViewState(quiz)
-                updateDraftView()
-            }
+        viewModelScope.launch {
+            val quiz = mRepository.get()
+            mDraft = buildQuizViewState(quiz)
+            updateDraftView()
         }
     }
 

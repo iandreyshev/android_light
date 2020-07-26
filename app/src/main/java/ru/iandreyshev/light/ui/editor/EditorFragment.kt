@@ -2,6 +2,7 @@ package ru.iandreyshev.light.ui.editor
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.*
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,7 @@ import org.koin.core.parameter.parametersOf
 import ru.iandreyshev.light.BaseFragment
 import ru.iandreyshev.light.R
 import ru.iandreyshev.light.navigation.router
+import ru.iandreyshev.light.system.FeatureToggle
 import ru.iandreyshev.light.utill.uiLazy
 import ru.iandreyshev.light.utill.withItemListeners
 
@@ -30,8 +32,6 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mViewModel.onCreate()
-
         initMenu()
         initTimeline()
     }
@@ -42,6 +42,7 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
             R.id.actionEditorSave { mViewModel.onSave() }
         }
 
+        addVideoButton.isVisible = FeatureToggle.isVideoEnabled
         addVideoButton.setOnClickListener { mViewModel.onOpenVideoMaker() }
         addImageButton.setOnClickListener { mViewModel.onOpenImageMaker() }
         addQuizButton.setOnClickListener { mViewModel.onOpenQuizMaker() }

@@ -25,8 +25,6 @@ class QuizMakerFragment : BaseFragment(R.layout.fragment_quiz_maker) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mViewModel.onCreate()
-
         initMenu()
         initQuestion()
         initVariantsList()

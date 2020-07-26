@@ -1,4 +1,4 @@
-package ru.iandreyshev.light.domain.courseList
+package ru.iandreyshev.light.domain.course
 
 import kotlinx.coroutines.flow.Flow
 

@@ -3,8 +3,8 @@ package ru.iandreyshev.light.infrastructure.courseList
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
-import ru.iandreyshev.light.domain.courseList.Course
-import ru.iandreyshev.light.domain.courseList.ICourseRepository
+import ru.iandreyshev.light.domain.course.Course
+import ru.iandreyshev.light.domain.course.ICourseRepository
 
 class InMemoryCourseRepository : ICourseRepository {
 

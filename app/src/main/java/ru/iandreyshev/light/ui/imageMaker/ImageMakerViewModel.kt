@@ -26,6 +26,10 @@ class ImageMakerViewModel(scope: Scope) : ViewModel() {
     private val mDraft = ImageDraft()
     private val mSaveDraft by uiLazy { scope.get<ISaveImageDraftUseCase>() }
 
+    fun onCreate() {
+        mDuration.value = mDraft.duration
+    }
+
     fun onSwitchDuration() {
         mDuration.value = mDraft.switchDuration()
     }

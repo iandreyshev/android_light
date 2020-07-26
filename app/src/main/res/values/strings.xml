@@ -12,16 +12,16 @@
     <string name="editor_action_add_video">New Video</string>
     <string name="editor_default_title">Unknown title</string>
 
-    <string name="quiz_maker_title">Quiz maker</string>
-    <string name="quiz_maker_action_save">Save</string>
+    <string name="quiz_maker_title">New Quiz</string>
+    <string name="quiz_maker_action_save">Create</string>
     <string name="quiz_maker_question_title">Question #%1$d</string>
     <string name="quiz_maker_variant_title">Variant #%1$d</string>
     <string name="quiz_maker_is_valid_check_box_title">Is valid</string>
     <string name="quiz_maker_add_variant_title">Add variant</string>
 
-    <string name="image_maker_title">Image maker</string>
-    <string name="image_maker_action_save">Save</string>
+    <string name="image_maker_title">New Image</string>
+    <string name="image_maker_action_save">Create</string>
 
-    <string name="video_maker_title">Video maker</string>
-    <string name="video_maker_action_save">Save</string>
+    <string name="video_maker_title">New Video</string>
+    <string name="video_maker_action_save">Create</string>
 </resources>
