@@ -52,6 +52,67 @@
             android:layout_height="match_parent"
             android:layout_gravity="bottom">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/pictureSourceChooserGroup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Camera"
+                    android:textAlignment="center"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@id/takePhotoButton"
+                    app:layout_constraintEnd_toEndOf="@id/takePhotoButton"
+                    app:layout_constraintStart_toStartOf="@id/takePhotoButton" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gallery"
+                    android:textAlignment="center"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@id/pickFromGalleryButton"
+                    app:layout_constraintEnd_toEndOf="@id/pickFromGalleryButton"
+                    app:layout_constraintStart_toStartOf="@id/pickFromGalleryButton" />
+
+                <ImageButton
+                    android:id="@+id/takePhotoButton"
+                    android:layout_width="@dimen/square_button_large"
+                    android:layout_height="@dimen/square_button_large"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/pickFromGalleryButton"
+                    app:layout_constraintHorizontal_chainStyle="spread"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_image_maker_take_photo" />
+
+                <ImageButton
+                    android:id="@+id/pickFromGalleryButton"
+                    android:layout_width="@dimen/square_button_large"
+                    android:layout_height="@dimen/square_button_large"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/takePhotoButton"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_image_maker_pick_from_gallery" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <FrameLayout
                 android:id="@+id/textBalloon"
                 android:layout_width="match_parent"
@@ -91,7 +152,7 @@
         android:layout_width="@dimen/square_button_normal"
         android:layout_height="@dimen/square_button_normal"
         android:background="?attr/selectableItemBackgroundBorderless"
-        app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/durationButton"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_image_maker_edit_text" />
@@ -101,8 +162,8 @@
         android:layout_width="@dimen/square_button_normal"
         android:layout_height="@dimen/square_button_normal"
         android:background="?attr/selectableItemBackgroundBorderless"
-        app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
-        app:layout_constraintEnd_toStartOf="@id/changePictureButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/changeFromCameraButton"
         app:layout_constraintStart_toEndOf="@id/editTextButton" />
 
     <LinearLayout
@@ -136,20 +197,23 @@
     </LinearLayout>
 
     <ImageButton
-        android:id="@+id/changePictureButton"
+        android:id="@+id/changeFromCameraButton"
         android:layout_width="@dimen/square_button_normal"
         android:layout_height="@dimen/square_button_normal"
         android:background="?attr/selectableItemBackgroundBorderless"
-        app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/changeFromGalleryButton"
         app:layout_constraintStart_toEndOf="@id/durationButton"
-        app:srcCompat="@drawable/ic_change_picture" />
+        app:srcCompat="@drawable/ic_image_maker_take_photo" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineBottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_end="24dp" />
+    <ImageButton
+        android:id="@+id/changeFromGalleryButton"
+        android:layout_width="@dimen/square_button_normal"
+        android:layout_height="@dimen/square_button_normal"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/changeFromCameraButton"
+        app:srcCompat="@drawable/ic_image_maker_pick_from_gallery" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
