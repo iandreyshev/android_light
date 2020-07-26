@@ -19,8 +19,15 @@ class PlayerViewModel : ViewModel() {
     private val mFeatureDisposable = Observable.wrap(mFeature)
         .subscribe(mState::setValue)
 
-    fun onPause() {
-        mFeature.accept(Wish.Pause)
+    fun onAction(uiAction: UiAction) {
+        mFeature.accept(
+            when (uiAction) {
+                UiAction.ForwardClick -> Wish.Forward
+                UiAction.BackClick -> Wish.Back
+                UiAction.ApplyAnswer -> Wish.ApplyAnswer
+                UiAction.Exit -> Wish.Exit
+            }
+        )
     }
 
     override fun onCleared() {
