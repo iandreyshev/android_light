@@ -7,7 +7,9 @@ import ru.iandreyshev.light.domain.quizMaker.draft.QuizDraft
 import ru.iandreyshev.light.domain.videoMaker.VideoDraft
 import timber.log.Timber
 
-class CourseDraft {
+class CourseDraft(
+    var title: String
+) {
 
     val items: List<DraftItem>
         get() = mItems

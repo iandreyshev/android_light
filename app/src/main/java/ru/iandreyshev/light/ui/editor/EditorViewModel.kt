@@ -5,14 +5,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
 import ru.iandreyshev.light.domain.editor.CourseDraft
 import ru.iandreyshev.light.domain.editor.DraftItem
+import ru.iandreyshev.light.domain.editor.ISaveCourseDraftUseCase
 import ru.iandreyshev.light.utill.invoke
 import ru.iandreyshev.light.utill.uiLazy
 import ru.iandreyshev.light.utill.voidSingleLiveEvent
 
-class EditorViewModel(scope: Scope) : ViewModel() {
+class EditorViewModel(
+    scope: Scope,
+    private val args: EditorArgs
+) : ViewModel() {
 
     val timelineItems by uiLazy { mTimelineItems }
 
@@ -24,7 +29,10 @@ class EditorViewModel(scope: Scope) : ViewModel() {
     private val mTimelineItems = MutableLiveData(listOf<TimelineItem>())
 
     private var mIsOnCreateComplete = false
-    private val mDraft by uiLazy { scope.get<CourseDraft>() }
+    private val mDraft by uiLazy {
+        scope.get<CourseDraft> { parametersOf(args.courseTitle) }
+    }
+    private val mSaveDraft by uiLazy { scope.get<ISaveCourseDraftUseCase>() }
 
     fun onCreate() {
         if (mIsOnCreateComplete) {
@@ -57,7 +65,10 @@ class EditorViewModel(scope: Scope) : ViewModel() {
     }
 
     fun onSave() {
-        eventBackFromEditor()
+        viewModelScope.launch {
+            mSaveDraft(mDraft)
+            eventBackFromEditor()
+        }
     }
 
     fun onMove(from: Int, to: Int) {

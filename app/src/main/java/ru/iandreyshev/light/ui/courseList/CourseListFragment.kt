@@ -8,16 +8,25 @@ import org.koin.core.parameter.parametersOf
 import ru.iandreyshev.light.BaseFragment
 import ru.iandreyshev.light.R
 import ru.iandreyshev.light.navigation.router
+import ru.iandreyshev.light.utill.uiLazy
 
 class CourseListFragment : BaseFragment(R.layout.fragment_course_list) {
 
     private val mViewModel by viewModel<CourseListViewModel> {
         parametersOf(getScope(R.id.nav_main))
     }
+    private val mCourseListAdapter by uiLazy { CourseListAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mViewModel.onCreate()
+
+        initMenu()
+        initCourseList()
+    }
+
+    private fun initMenu() {
         createCourseButton.setOnClickListener {
             mViewModel.onCreateCourseClick()
         }
@@ -25,6 +34,11 @@ class CourseListFragment : BaseFragment(R.layout.fragment_course_list) {
         mViewModel.openCourseEditorEvent {
             router().openCourseEditor()
         }
+    }
+
+    private fun initCourseList() {
+        courseList.adapter = mCourseListAdapter
+        mViewModel.courses.viewObserveWith(mCourseListAdapter::submitList)
     }
 
 }

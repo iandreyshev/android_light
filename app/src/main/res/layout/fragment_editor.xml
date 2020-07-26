@@ -31,7 +31,7 @@
             android:layout_marginTop="@dimen/grid_step_vertical_1"
             android:layout_marginBottom="@dimen/grid_step_vertical_2"
             android:maxLines="2"
-            android:text="@string/editor_title_prompt"
+            android:text="@string/editor_default_title"
             android:textColor="#000"
             android:textSize="24sp"
             android:textStyle="bold" />

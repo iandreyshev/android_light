@@ -10,7 +10,7 @@
     <string name="editor_action_add_quiz">New Quiz</string>
     <string name="editor_action_add_image">New Image</string>
     <string name="editor_action_add_video">New Video</string>
-    <string name="editor_title_prompt">Unknown title</string>
+    <string name="editor_default_title">Unknown title</string>
 
     <string name="quiz_maker_title">Quiz maker</string>
     <string name="quiz_maker_action_save">Save</string>

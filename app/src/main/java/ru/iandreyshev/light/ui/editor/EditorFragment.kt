@@ -17,7 +17,13 @@ import ru.iandreyshev.light.utill.withItemListeners
 class EditorFragment : BaseFragment(R.layout.fragment_editor) {
 
     private val mViewModel: EditorViewModel by viewModel {
-        parametersOf(getScope(R.id.nav_editor))
+        parametersOf(
+            getScope(R.id.nav_editor),
+            EditorArgs(
+                courseId = null,
+                courseTitle = resources.getString(R.string.editor_default_title)
+            )
+        )
     }
     private val mTimelineAdapter by uiLazy { TimelineAdapter() }
 
