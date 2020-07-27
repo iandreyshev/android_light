@@ -8,7 +8,8 @@ sealed class VariantViewState {
         var id: VariantId? = null,
         var text: String = "",
         var isValid: Boolean,
-        val position: Int,
+        val isFirstVariant: Boolean,
+        val isMultipleMode: Boolean,
         val onTextChanged: (String) -> Unit,
         val onValidStateChanged: (Boolean) -> Unit,
         val onDeleteVariant: () -> Unit

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineBegin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/grid_step_2" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineEnd"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/grid_step_2" />
+
+        <EditText
+            android:id="@+id/questionInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="@string/quiz_maker_question_hint"
+            android:paddingVertical="@dimen/grid_step_vertical_2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/previousQuestionButton"
+            app:layout_constraintStart_toEndOf="@id/guidelineBegin"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/previousQuestionButton"
+            android:layout_width="@dimen/square_button_small"
+            android:layout_height="@dimen/square_button_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintBottom_toBottomOf="@id/questionsCounter"
+            app:layout_constraintEnd_toStartOf="@id/questionsCounter"
+            app:layout_constraintTop_toTopOf="@id/questionsCounter"
+            app:srcCompat="@drawable/ic_quiz_maker_previous_question" />
+
+        <TextView
+            android:id="@+id/questionsCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/nextQuestionButton"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="4 / 22" />
+
+        <ImageButton
+            android:id="@+id/nextQuestionButton"
+            android:layout_width="@dimen/square_button_small"
+            android:layout_height="@dimen/square_button_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintBottom_toBottomOf="@id/questionsCounter"
+            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+            app:layout_constraintTop_toTopOf="@id/questionsCounter"
+            app:srcCompat="@drawable/ic_quiz_maker_next_question" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

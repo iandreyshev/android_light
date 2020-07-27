@@ -65,4 +65,6 @@ dependencies {
     implementation "com.github.badoo.mvicore:mvicore:$mvi_core_version"
     implementation "com.github.badoo.mvicore:mvicore-android:$mvi_core_version"
     implementation "com.github.badoo.mvicore:mvicore-diff:$mvi_core_version"
+
+    implementation "com.xwray:groupie:$groupie_version"
 }
