@@ -16,8 +16,12 @@ import ru.iandreyshev.light.domain.quizMaker.IQuizMakerRepository
 import ru.iandreyshev.light.domain.quizMaker.ISaveQuizDraftUseCase
 import ru.iandreyshev.light.domain.videoMaker.ISaveVideoDraftUseCase
 import ru.iandreyshev.light.domain.course.SaveDraftUseCase
+import ru.iandreyshev.light.domain.player.IPlayer
+import ru.iandreyshev.light.domain.player.IPlayerDataSource
+import ru.iandreyshev.light.domain.player.Player
 import ru.iandreyshev.light.infrastructure.courseList.InMemoryCourseRepository
 import ru.iandreyshev.light.infrastructure.editor.QuizMakerRepository
+import ru.iandreyshev.light.infrastructure.player.RepositoryDataSource
 import ru.iandreyshev.light.ui.courseList.CourseListViewModel
 import ru.iandreyshev.light.ui.editor.EditorViewModel
 import ru.iandreyshev.light.ui.imageMaker.ImageMakerViewModel
@@ -62,8 +66,15 @@ fun Context.initDI() = startKoin {
                 scoped<ISaveVideoDraftUseCase> { AddVideoDraftToCourseUseCase(get()) }
             }
 
-            viewModel { PlayerViewModel() }
-            navGraphScope(R.id.nav_player) { }
+            viewModel {
+                PlayerViewModel(it.component1(), it.component2())
+                    .apply { onCreate() }
+            }
+            navGraphScope(R.id.nav_player) {
+                scoped<IPlayer> {
+                    Player(dataSource = RepositoryDataSource(it.component1(), get()))
+                }
+            }
         }
     ))
 }
