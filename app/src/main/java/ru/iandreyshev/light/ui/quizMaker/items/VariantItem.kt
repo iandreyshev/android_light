@@ -12,39 +12,61 @@ import kotlinx.android.synthetic.main.item_quiz_maker_variant.view.*
 import ru.iandreyshev.light.R
 import ru.iandreyshev.light.ui.quizMaker.VariantViewState
 import ru.iandreyshev.light.utill.exhaustive
+import ru.iandreyshev.light.utill.uiLazy
 
 class VariantItem(
     private val viewState: VariantViewState,
+    private val onTextChanged: (String) -> Unit = {},
+    private val onValidStateSwitched: () -> Unit = {},
+    private val onDeleteVariant: () -> Unit = {},
     private val onAddNewVariant: () -> Unit = {}
-) : Item<VariantItem.VariantViewHolder>() {
+) : Item<VariantItem.ViewHolder>() {
+
+    private val mId: Long by uiLazy {
+        when (viewState) {
+            is VariantViewState.NewVariantButton -> ItemIds.ADD_NEW_VARIANT_BUTTON
+            is VariantViewState.Text -> ItemIds.variantIdFrom(viewState.position)
+        }
+    }
+
+    override fun getId() = mId
 
     override fun getLayout(): Int = R.layout.item_quiz_maker_variant
 
-    override fun createViewHolder(itemView: View) =
-        VariantViewHolder(
-            itemView,
+    override fun createViewHolder(itemView: View) = ViewHolder(itemView)
+
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+        viewHolder.bind(
+            viewState,
+            onTextChanged,
+            onValidStateSwitched,
+            onDeleteVariant,
             onAddNewVariant
         )
-
-    override fun bind(viewHolder: VariantViewHolder, position: Int) {
-        viewHolder.bind(viewState)
     }
 
-    class VariantViewHolder(
-        view: View,
-        private val onAddNewVariant: () -> Unit
-    ) : GroupieViewHolder(view) {
+    class ViewHolder(view: View) : GroupieViewHolder(view) {
 
         private var mTextWatcher: TextWatcher? = null
 
-        fun bind(viewState: VariantViewState) {
+        fun bind(
+            viewState: VariantViewState,
+            onTextChanged: (String) -> Unit,
+            onValidStateSwitched: () -> Unit,
+            onDeleteVariant: () -> Unit,
+            onAddNewVariant: () -> Unit
+        ) {
             when (viewState) {
-                VariantViewState.AddNew -> {
+                is VariantViewState.NewVariantButton -> {
                     itemView.addNewButton.isVisible = true
                     itemView.addNewButton.setOnClickListener { onAddNewVariant() }
 
                     itemView.rootCardView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                        topMargin = 0
+                        topMargin = when (viewState.isFirstInBlock) {
+                            true -> itemView.resources
+                                .getDimensionPixelSize(R.dimen.grid_step_vertical_4)
+                            else -> 0
+                        }
                     }
                 }
                 is VariantViewState.Text -> {
@@ -54,29 +76,29 @@ class VariantItem(
                     itemView.isValidRadiobutton.isVisible = !viewState.isMultipleMode
                     itemView.isValidRadiobutton.setOnCheckedChangeListener(null)
                     itemView.isValidRadiobutton.isChecked = viewState.isValid
-                    itemView.isValidRadiobutton.setOnCheckedChangeListener { _, isChecked ->
-                        viewState.onValidStateChanged(isChecked)
+                    itemView.isValidRadiobutton.setOnCheckedChangeListener { _, _ ->
+                        onValidStateSwitched()
                     }
 
                     itemView.isValidCheckbox.isVisible = viewState.isMultipleMode
                     itemView.isValidCheckbox.setOnCheckedChangeListener(null)
                     itemView.isValidCheckbox.isChecked = viewState.isValid
-                    itemView.isValidCheckbox.setOnCheckedChangeListener { _, isChecked ->
-                        viewState.onValidStateChanged(isChecked)
+                    itemView.isValidCheckbox.setOnCheckedChangeListener { _, _ ->
+                        onValidStateSwitched()
                     }
 
                     mTextWatcher?.let(itemView.variantInput::removeTextChangedListener)
                     itemView.variantInput.setText(viewState.text)
                     mTextWatcher = itemView.variantInput.doAfterTextChanged {
-                        viewState.onTextChanged(it.toString())
+                        onTextChanged(it.toString())
                     }
 
                     itemView.deleteButton.setOnClickListener {
-                        viewState.onDeleteVariant()
+                        onDeleteVariant()
                     }
 
                     itemView.rootCardView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                        topMargin = when (viewState.isFirstVariant) {
+                        topMargin = when (viewState.isFirstInBlock) {
                             true -> itemView.resources
                                 .getDimensionPixelSize(R.dimen.grid_step_vertical_4)
                             else -> 0

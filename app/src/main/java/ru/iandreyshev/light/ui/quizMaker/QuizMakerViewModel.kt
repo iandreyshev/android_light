@@ -55,8 +55,8 @@ class QuizMakerViewModel(scope: Scope) : ViewModel() {
             mDraft.nextQuestion()
         } else {
             mDraft.addQuestion()
-            mDraft.addVariant(mDraft.currentQuestionPosition)
             mDraft.nextQuestion()
+            mDraft.addVariant(mDraft.currentQuestionPosition)
         }
         updateDraftView()
     }
@@ -71,6 +71,11 @@ class QuizMakerViewModel(scope: Scope) : ViewModel() {
             mSaveDraft(mDraft)
             eventExit()
         }
+    }
+
+    private fun onSwitchMode() {
+        mDraft.switchQuestionMultipleMode(mDraft.currentQuestionPosition)
+        updateDraftView()
     }
 
     private fun buildQuizViewState(quiz: Quiz?): QuizDraft {
@@ -108,45 +113,45 @@ class QuizMakerViewModel(scope: Scope) : ViewModel() {
                 )
             )
             addAll(
-                currQuestion.variants.mapIndexed { pos, draft ->
+                currQuestion.variants.mapIndexed { vPos, draft ->
                     VariantItem(
                         viewState = VariantViewState.Text(
                             id = draft.id,
                             text = draft.text,
-                            isFirstVariant = pos == 0,
+                            position = vPos,
+                            isFirstInBlock = vPos == 0,
                             isValid = draft.isValid,
-                            isMultipleMode = true,
-                            onTextChanged = { text ->
-                                mDraft.updateVariant(currQuestionPosition, pos, text)
-                            },
-                            onValidStateChanged = { isValid ->
-                                mDraft.updateVariant(
-                                    currQuestionPosition,
-                                    pos,
-                                    isValid = isValid
-                                )
-                            },
-                            onDeleteVariant = {
-                                mDraft.deleteVariantAt(currQuestionPosition, pos)
-                                updateDraftView()
-                            }
-                        )
+                            isMultipleMode = currQuestion.isMultipleMode
+                        ),
+                        onTextChanged = { text ->
+                            mDraft.updateVariantText(currQuestionPosition, vPos, text)
+                        },
+                        onValidStateSwitched = {
+                            mDraft.switchVariantValidState(currQuestionPosition, vPos)
+                            updateDraftView()
+                        },
+                        onDeleteVariant = {
+                            mDraft.deleteVariantAt(currQuestionPosition, vPos)
+                            updateDraftView()
+                        }
                     )
                 }
             )
             add(
                 VariantItem(
-                    viewState = VariantViewState.AddNew,
+                    viewState = VariantViewState.NewVariantButton(
+                        isFirstInBlock = currQuestion.variants.isEmpty()
+                    ),
                     onAddNewVariant = ::onAddVariant
                 )
             )
             add(
                 QuestionSettingsItem(
                     viewState = QuestionSettingsViewState(
-                        isMultipleMode = true,
+                        isMultipleMode = currQuestion.isMultipleMode,
                         canDelete = mDraft.questionsCount > 1
                     ),
-                    onChangeMode = {},
+                    onSwitchMode = ::onSwitchMode,
                     onDeleteQuestion = ::onDeleteQuestion
                 )
             )

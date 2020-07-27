@@ -3,15 +3,16 @@ package ru.iandreyshev.light.ui.quizMaker
 import ru.iandreyshev.light.domain.quizMaker.VariantId
 
 sealed class VariantViewState {
-    object AddNew : VariantViewState()
+    data class NewVariantButton(
+        val isFirstInBlock: Boolean
+    ) : VariantViewState()
+
     data class Text(
         var id: VariantId? = null,
-        var text: String = "",
-        var isValid: Boolean,
-        val isFirstVariant: Boolean,
-        val isMultipleMode: Boolean,
-        val onTextChanged: (String) -> Unit,
-        val onValidStateChanged: (Boolean) -> Unit,
-        val onDeleteVariant: () -> Unit
+        val text: String = "",
+        val position: Int,
+        val isValid: Boolean,
+        val isFirstInBlock: Boolean,
+        val isMultipleMode: Boolean
     ) : VariantViewState()
 }

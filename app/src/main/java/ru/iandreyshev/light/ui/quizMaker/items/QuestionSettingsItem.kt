@@ -10,32 +10,33 @@ import ru.iandreyshev.light.ui.quizMaker.QuestionSettingsViewState
 
 class QuestionSettingsItem(
     private val viewState: QuestionSettingsViewState,
-    private val onChangeMode: (Boolean) -> Unit,
+    private val onSwitchMode: () -> Unit,
     private val onDeleteQuestion: () -> Unit
 ) : Item<QuestionSettingsItem.ViewHolder>() {
 
+    override fun getId() = layout.toLong()
+
     override fun getLayout() = R.layout.item_quiz_maker_question_settings
 
-    override fun createViewHolder(itemView: View) =
-        ViewHolder(itemView, onChangeMode, onDeleteQuestion)
+    override fun createViewHolder(itemView: View) = ViewHolder(itemView)
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.bind(viewState)
+        viewHolder.bind(viewState, onSwitchMode, onDeleteQuestion)
     }
 
-    class ViewHolder(
-        view: View,
-        private val onChangeMode: (Boolean) -> Unit,
-        private val onDeleteQuestion: () -> Unit
-    ) : GroupieViewHolder(view) {
+    class ViewHolder(view: View) : GroupieViewHolder(view) {
 
-        fun bind(viewState: QuestionSettingsViewState) {
+        fun bind(
+            viewState: QuestionSettingsViewState,
+            onSwitchMode: () -> Unit,
+            onDeleteQuestion: () -> Unit
+        ) {
             with(itemView) {
-                hasMultipleVariantsSwitch.onFocusChangeListener = null
-                hasMultipleVariantsSwitch.isChecked = viewState.isMultipleMode
-                hasMultipleVariantsSwitch.setOnFocusChangeListener { v, hasFocus ->
-                    onChangeMode(hasFocus)
-                }
+                multipleVariantsButton.setOnClickListener { onSwitchMode() }
+
+                multipleVariantsSwitch.setOnCheckedChangeListener(null)
+                multipleVariantsSwitch.isChecked = viewState.isMultipleMode
+                multipleVariantsSwitch.setOnCheckedChangeListener { _, _ -> onSwitchMode() }
 
                 deleteQuestionButton.isVisible = viewState.canDelete
                 deleteQuestionButton.setOnClickListener { onDeleteQuestion() }

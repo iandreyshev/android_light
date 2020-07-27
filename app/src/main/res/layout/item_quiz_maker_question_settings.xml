@@ -23,46 +23,41 @@
             android:orientation="vertical"
             app:layout_constraintGuide_end="@dimen/grid_step_2" />
 
-        <LinearLayout
-            android:id="@+id/multipleVariantsGroup"
+        <Button
+            android:id="@+id/multipleVariantsButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingVertical="@dimen/grid_step_vertical_3"
+            android:background="?attr/selectableItemBackground"
+            android:paddingHorizontal="@dimen/grid_margin"
+            android:paddingVertical="@dimen/grid_step_vertical_2"
+            android:text="Multiple variants"
+            android:textAlignment="textStart"
+            android:textColor="#000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Switch
+            android:id="@+id/multipleVariantsSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/multipleVariantsButton"
             app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/guidelineBegin"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="@id/multipleVariantsButton" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Multiple variants"
-                android:textColor="#000" />
-
-            <Switch
-                android:id="@+id/hasMultipleVariantsSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <Button
             android:id="@+id/deleteQuestionButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
-            android:paddingVertical="@dimen/grid_step_vertical_3"
-            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-            app:layout_constraintStart_toStartOf="@id/guidelineBegin"
-            app:layout_constraintTop_toBottomOf="@id/multipleVariantsGroup">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Delete question"
-                android:textColor="#a00" />
-
-        </LinearLayout>
+            android:paddingHorizontal="@dimen/grid_margin"
+            android:paddingVertical="@dimen/grid_step_vertical_2"
+            android:text="Delete question"
+            android:textAlignment="textStart"
+            android:textColor="#a00"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/multipleVariantsButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

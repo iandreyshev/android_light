@@ -12,6 +12,7 @@ class QuizDraft constructor() {
                 QuestionDraft(
                     id = question.id,
                     text = question.text,
+                    isMultipleMode = question.isMultipleMode,
                     variants = question.variants
                         .map { variant ->
                             VariantDraft(
@@ -56,6 +57,7 @@ class QuizDraft constructor() {
         val question = QuestionDraft(
             id = QuestionId(""),
             text = "",
+            isMultipleMode = false,
             variants = mutableListOf()
         )
         mQuestions.add(question)
@@ -68,25 +70,47 @@ class QuizDraft constructor() {
         question.text = text
     }
 
+    fun switchQuestionMultipleMode(position: Int) {
+        val question = mQuestions.getOrNull(position) ?: return
+        question.isMultipleMode = !question.isMultipleMode
+        question.variants.forEach {
+            it.isValid = false
+        }
+    }
+
     fun addVariant(qPosition: Int) {
         mQuestions[qPosition].variants.add(VariantDraft.empty())
     }
 
-    fun updateVariant(
+    fun updateVariantText(
         qPosition: Int,
         vPosition: Int,
-        text: String? = null,
-        isValid: Boolean? = null
+        text: String
     ) {
         val variant = mQuestions.getOrNull(qPosition)
             ?.variants?.getOrNull(vPosition) ?: return
 
-        if (text != null) {
-            variant.text = text
+        variant.text = text
+    }
+
+    fun switchVariantValidState(
+        qPosition: Int,
+        vPosition: Int
+    ) {
+        val variants = mQuestions.getOrNull(qPosition)?.variants
+        val targetVariant = variants?.getOrNull(vPosition) ?: return
+
+        if (currentQuestion.isMultipleMode) {
+            targetVariant.isValid = !targetVariant.isValid
+            return
         }
-        if (isValid != null) {
-            variant.isValid = isValid
+
+        if (targetVariant.isValid) {
+            return
         }
+
+        variants.forEach { it.isValid = false }
+        targetVariant.isValid = true
     }
 
     fun deleteQuestionAt(position: Int) {
@@ -109,6 +133,7 @@ class QuizDraft constructor() {
 data class QuestionDraft(
     val id: QuestionId,
     var text: String,
+    var isMultipleMode: Boolean,
     val variants: MutableList<VariantDraft>
 )
 

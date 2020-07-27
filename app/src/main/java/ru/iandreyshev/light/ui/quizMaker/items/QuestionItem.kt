@@ -17,30 +17,31 @@ class QuestionItem(
     private val onNextQuestion: () -> Unit
 ) : Item<QuestionItem.ViewHolder>() {
 
+    override fun getId() = layout.toLong()
+
     override fun getLayout() = R.layout.item_quiz_maker_question
 
-    override fun createViewHolder(itemView: View) =
-        ViewHolder(
-            itemView,
+    override fun createViewHolder(itemView: View) = ViewHolder(itemView)
+
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+        viewHolder.bind(
+            viewState,
             onQuestionChanged,
             onPreviousQuestion,
             onNextQuestion
         )
-
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.bind(viewState)
     }
 
-    class ViewHolder(
-        view: View,
-        private val onQuestionChanged: (String) -> Unit,
-        private val onPreviousQuestion: () -> Unit,
-        private val onNextQuestion: () -> Unit
-    ) : GroupieViewHolder(view) {
+    class ViewHolder(view: View) : GroupieViewHolder(view) {
 
         private var mQuestionInputListener: TextWatcher? = null
 
-        fun bind(viewState: CurrentQuestionViewState) {
+        fun bind(
+            viewState: CurrentQuestionViewState,
+            onQuestionChanged: (String) -> Unit,
+            onPreviousQuestion: () -> Unit,
+            onNextQuestion: () -> Unit
+        ) {
             with(itemView) {
                 questionInput.removeTextChangedListener(mQuestionInputListener)
                 questionInput.setText(viewState.question.text)
