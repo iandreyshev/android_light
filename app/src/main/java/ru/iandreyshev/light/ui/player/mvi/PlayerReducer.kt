@@ -1,32 +1,62 @@
 package ru.iandreyshev.light.ui.player.mvi
 
 import com.badoo.mvicore.element.Reducer
-import ru.iandreyshev.light.ui.player.CoursePlaybackState
 
 class PlayerReducer : Reducer<State, Effect> {
 
     override fun invoke(state: State, effect: Effect): State =
-        when (effect) {
-            is Effect.StartPlaying ->
-                state.copy(
-                    playbackItem = effect.item,
-                    playback = CoursePlaybackState.zero(),
-                    playbackItemsCount = effect.itemsCount
-                )
-            is Effect.PlayNext ->
-                state.copy(
-                    playbackItem = effect.item,
-                    playback = CoursePlaybackState.zero()
-                )
-            is Effect.PlaybackUpdated ->
-                state.copy(
-                    playback = effect.playback
-                )
-            is Effect.FinishPlaying ->
-                state.copy(
-                    result = effect.result
-                )
-            is Effect.Error -> state
+        when (state.type) {
+            State.Type.PREPARE_PLAYER -> when (effect) {
+                is Effect.Start -> state.toPlayingItemState()
+                    .copy(
+                        courseItem = effect.item,
+                        courseItemsCount = effect.itemsCount,
+                        courseItemPosition = 0
+                    )
+                is Effect.Error -> state.toPreparePlayerErrorState()
+                    .copy(error = effect.error)
+                else -> state
+            }
+            State.Type.PLAYING_ITEM -> when (effect) {
+                is Effect.Play -> state.toPlayingItemState()
+                    .copy(
+                        courseItem = effect.item,
+                        courseItemPosition = effect.itemPosition
+                    )
+                is Effect.Finish -> state.toResultState()
+                    .copy(result = effect.result)
+                is Effect.Error -> state.toPlayingItemErrorState()
+                    .copy(error = effect.error)
+                else -> state
+            }
+            State.Type.RESULT -> state
+            State.Type.PREPARE_PLAYER_ERROR -> when (effect) {
+                is Effect.PreparePlayer -> state.toPreparePlayerState()
+                else -> state
+            }
+            State.Type.PLAYING_ITEM_ERROR -> when (effect) {
+                is Effect.Play -> state.toPlayingItemState()
+                    .copy(
+                        courseItem = effect.item,
+                        courseItemPosition = effect.itemPosition
+                    )
+                else -> state
+            }
         }
+
+    private fun State.toPreparePlayerState() =
+        copy(type = State.Type.PREPARE_PLAYER)
+
+    private fun State.toPreparePlayerErrorState() =
+        copy(type = State.Type.PREPARE_PLAYER_ERROR)
+
+    private fun State.toPlayingItemState() =
+        copy(type = State.Type.PLAYING_ITEM)
+
+    private fun State.toPlayingItemErrorState() =
+        copy(type = State.Type.PLAYING_ITEM_ERROR)
+
+    private fun State.toResultState() =
+        copy(type = State.Type.RESULT)
 
 }

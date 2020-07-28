@@ -137,7 +137,7 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
                 .loggingEnabled(true)
                 .build()
                 .load(it)
-                .into(imageView)
+                .into(currentView)
         }
     }
 

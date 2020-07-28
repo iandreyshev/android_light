@@ -2,29 +2,58 @@ package ru.iandreyshev.light.ui.player.mvi
 
 import com.badoo.mvicore.element.Actor
 import io.reactivex.Observable
-import ru.iandreyshev.light.domain.player.IPlayer
-import ru.iandreyshev.light.domain.player.LoadResult
+import ru.iandreyshev.light.domain.player.ICoursePlayer
+import ru.iandreyshev.light.domain.player.PrepareResult
+import ru.iandreyshev.light.domain.player.MoveItemResult
 
 class PlayerActor(
-    private val player: IPlayer
+    private val coursePlayer: ICoursePlayer
 ) : Actor<State, Wish, Effect> {
 
     override fun invoke(state: State, wish: Wish): Observable<out Effect> =
-        when (wish) {
-            Wish.Start -> {
-                player.prepare()
-                    .map { loadResult ->
-                        when (loadResult) {
-                            is LoadResult.Success ->
-                                Effect.StartPlaying(loadResult.item, loadResult.itemsCount)
-                            LoadResult.UnknownError ->
-                                Effect.Error("Load error")
-                        }
-                    }
+        when (state.type) {
+            State.Type.PREPARE_PLAYER -> when (wish) {
+                Wish.Start -> when (val result = coursePlayer.prepare()) {
+                    is PrepareResult.Success ->
+                        Effect.Start(result.item, result.itemsCount).just()
+                    PrepareResult.ErrorGettingCourse,
+                    PrepareResult.ErrorCourseIsEmpty ->
+                        Effect.Error(result.toString()).just()
+                }
+                else -> noEffect()
             }
-            else -> Observable.empty()
+            State.Type.PREPARE_PLAYER_ERROR -> when (wish) {
+                Wish.Repeat -> when (val result = coursePlayer.prepare()) {
+                    is PrepareResult.Success ->
+                        Effect.Start(result.item, result.itemsCount).just()
+                    PrepareResult.ErrorGettingCourse,
+                    PrepareResult.ErrorCourseIsEmpty ->
+                        Effect.Error(result.toString()).just()
+                }
+                else -> noEffect()
+            }
+            State.Type.PLAYING_ITEM -> when (wish) {
+                Wish.Forward -> when (val result = coursePlayer.forward()) {
+                    is MoveItemResult.Success ->
+                        Effect.Play(result.item, result.itemPosition).just()
+                    MoveItemResult.MoveLimited ->
+                        Effect.Finish("Results").just()
+                }
+                Wish.Back -> when (val result = coursePlayer.back()) {
+                    is MoveItemResult.Success ->
+                        Effect.Play(result.item, result.itemPosition).just()
+                    MoveItemResult.MoveLimited ->
+                        noEffect()
+                }
+                Wish.ApplyAnswer -> noEffect()
+                else -> noEffect()
+            }
+            State.Type.PLAYING_ITEM_ERROR -> noEffect()
+            State.Type.RESULT -> noEffect()
         }
 
     private fun just(effect: Effect) = Observable.just(effect)
+    private fun <T> T.just() = Observable.just(this)
+    private fun noEffect() = Observable.empty<Effect>()
 
 }

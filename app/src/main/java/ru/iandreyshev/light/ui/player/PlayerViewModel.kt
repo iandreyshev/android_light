@@ -36,13 +36,13 @@ class PlayerViewModel(
         mFeature.accept(Wish.Start)
     }
 
-    fun onAction(uiAction: UiAction) {
+    operator fun invoke(uiAction: UiAction) {
         mFeature.accept(
             when (uiAction) {
-                UiAction.ForwardClick -> Wish.Next
-                UiAction.BackClick -> Wish.Previous
+                UiAction.Forward -> Wish.Forward
+                UiAction.Back -> Wish.Back
                 UiAction.ApplyAnswer -> Wish.ApplyAnswer
-                UiAction.Exit -> Wish.Exit
+                UiAction.Repeat -> Wish.Repeat
             }
         )
     }

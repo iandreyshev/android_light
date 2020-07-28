@@ -1,8 +1,8 @@
 package ru.iandreyshev.light.ui.player
 
 sealed class UiAction {
-    object ForwardClick : UiAction()
-    object BackClick : UiAction()
+    object Forward : UiAction()
+    object Back : UiAction()
     object ApplyAnswer : UiAction()
-    object Exit : UiAction()
+    object Repeat : UiAction()
 }

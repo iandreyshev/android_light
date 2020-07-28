@@ -1,14 +1,14 @@
 package ru.iandreyshev.light.ui.player.mvi
 
 import com.badoo.mvicore.feature.ActorReducerFeature
-import ru.iandreyshev.light.domain.player.IPlayer
+import ru.iandreyshev.light.domain.player.ICoursePlayer
 
 class PlayerFeature(
-    player: IPlayer
+    coursePlayer: ICoursePlayer
 ) : ActorReducerFeature<Wish, Effect, State, News>(
     initialState = State(),
     reducer = PlayerReducer(),
-    actor = PlayerActor(player),
+    actor = PlayerActor(coursePlayer),
     newsPublisher = NewsPublisher()
 ) {
 

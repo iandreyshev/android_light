@@ -2,8 +2,8 @@ package ru.iandreyshev.light.ui.player.mvi
 
 sealed class Wish {
     object Start : Wish()
-    object Next : Wish()
-    object Previous : Wish()
+    object Forward : Wish()
+    object Back : Wish()
     object ApplyAnswer : Wish()
-    object Exit : Wish()
+    object Repeat : Wish()
 }
