@@ -1,14 +1,17 @@
 package ru.iandreyshev.light.domain.imageMaker.draft
 
 import ru.iandreyshev.light.domain.imageMaker.ImageDuration
+import ru.iandreyshev.light.domain.imageMaker.ImageSource
 
 class ImageDraft {
 
     var duration = ImageDuration.INFINITELY
         private set
 
-    var text: String = ""
-        private set
+    var text: String? = null
+    var imageSource: ImageSource? = null
+    val fileName: String
+        get() = imageSource?.filePath.orEmpty()
 
     fun switchDuration(): ImageDuration {
         return when (duration) {
@@ -19,10 +22,6 @@ class ImageDraft {
         }.also {
             this.duration = it
         }
-    }
-
-    fun setText(text: String) {
-        this.text = text
     }
 
 }

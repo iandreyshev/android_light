@@ -10,7 +10,8 @@
     <string name="editor_action_add_quiz">New Quiz</string>
     <string name="editor_action_add_image">New Image</string>
     <string name="editor_action_add_video">New Video</string>
-    <string name="editor_default_title">Unknown title</string>
+    <string name="editor_default_title">New course</string>
+    <string name="editor_empty_view_text">Course is empty, insert first element</string>
 
     <string name="quiz_maker_title">New Quiz</string>
     <string name="quiz_maker_action_save">Create</string>

@@ -41,24 +41,16 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="56dp" />
 
-    <androidx.cardview.widget.CardView
+    <ImageView
+        android:id="@+id/imagePreview"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
         app:layout_constraintDimensionRatio="w,9:16"
         app:layout_constraintEnd_toStartOf="@+id/guidelineContentBegin"
         app:layout_constraintStart_toStartOf="@id/guidelineBegin"
-        app:layout_constraintTop_toTopOf="@id/guidelineTop">
-
-        <ImageView
-            android:id="@+id/imagePreview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/gray_light" />
-
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintTop_toTopOf="@id/guidelineTop"
+        app:srcCompat="@drawable/ic_add_quiz" />
 
     <TextView
         android:id="@+id/title"
@@ -67,7 +59,7 @@
         android:layout_gravity="center"
         android:layout_marginStart="@dimen/grid_step_1"
         android:layout_marginEnd="@dimen/grid_step_1"
-        android:text="Image"
+        android:text="Quiz"
         android:textColor="#000"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -84,7 +76,7 @@
         app:layout_constraintEnd_toEndOf="@+id/title"
         app:layout_constraintStart_toStartOf="@id/title"
         app:layout_constraintTop_toBottomOf="@id/title"
-        tools:text="IMG_3214.png" />
+        tools:text="42 questions" />
 
     <ImageView
         android:id="@+id/dragIcon"

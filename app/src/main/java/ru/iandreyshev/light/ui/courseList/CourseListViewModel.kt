@@ -1,9 +1,6 @@
 package ru.iandreyshev.light.ui.courseList
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.core.scope.Scope
@@ -18,6 +15,7 @@ import ru.iandreyshev.light.utill.voidSingleLiveEvent
 class CourseListViewModel(scope: Scope) : ViewModel() {
 
     val courses: LiveData<List<Course>> by uiLazy { mCourses }
+    val isListEmpty by uiLazy { courses.map { it.isEmpty() } }
 
     val eventOpenCourseEditor = voidSingleLiveEvent()
     val eventOpenPlayer = singleLiveEvent<PlayerArgs>()

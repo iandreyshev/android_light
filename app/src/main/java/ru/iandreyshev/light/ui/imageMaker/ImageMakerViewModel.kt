@@ -6,6 +6,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.scope.Scope
 import ru.iandreyshev.light.domain.imageMaker.ISaveImageDraftUseCase
 import ru.iandreyshev.light.domain.imageMaker.ImageDuration
+import ru.iandreyshev.light.domain.imageMaker.ImageSource
 import ru.iandreyshev.light.domain.imageMaker.draft.ImageDraft
 import ru.iandreyshev.light.utill.invoke
 import ru.iandreyshev.light.utill.uiLazy
@@ -35,7 +36,8 @@ class ImageMakerViewModel(scope: Scope) : ViewModel() {
     }
 
     fun onChangeText(text: String?) {
-        mTextBalloon.value = text.orEmpty()
+        mDraft.text = text
+        mTextBalloon.value = mDraft.text.orEmpty()
     }
 
     fun onSave() {
@@ -46,6 +48,7 @@ class ImageMakerViewModel(scope: Scope) : ViewModel() {
     }
 
     fun onPickFromGallery(uri: Uri) {
+        mDraft.imageSource = ImageSource(uri.toString())
         mPicture.value = uri
     }
 

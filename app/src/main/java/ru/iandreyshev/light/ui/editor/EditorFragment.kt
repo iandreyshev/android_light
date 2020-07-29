@@ -2,6 +2,7 @@ package ru.iandreyshev.light.ui.editor
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.*
@@ -13,7 +14,6 @@ import ru.iandreyshev.light.BaseFragment
 import ru.iandreyshev.light.R
 import ru.iandreyshev.light.navigation.router
 import ru.iandreyshev.light.system.FeatureToggle
-import ru.iandreyshev.light.utill.uiLazy
 import ru.iandreyshev.light.utill.withItemListeners
 
 class EditorFragment : BaseFragment(R.layout.fragment_editor) {
@@ -27,7 +27,6 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
             )
         )
     }
-    private val mTimelineAdapter by uiLazy { TimelineAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,9 +42,11 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
         }
 
         addVideoButton.isVisible = FeatureToggle.isVideoEnabled
-        addVideoButton.setOnClickListener { mViewModel.onOpenVideoMaker() }
-        addImageButton.setOnClickListener { mViewModel.onOpenImageMaker() }
-        addQuizButton.setOnClickListener { mViewModel.onOpenQuizMaker() }
+        addVideoButton.setOnClickListener { mViewModel.onCreateVideo() }
+        addImageButton.setOnClickListener { mViewModel.onCreateImage() }
+        addQuizButton.setOnClickListener { mViewModel.onCreateQuiz() }
+
+        mViewModel.isTimelineEmpty.viewObserveWith { bottomMenu.isGone = it }
 
         mViewModel.eventBackFromEditor { router().back() }
         mViewModel.eventOpenImageMaker { router().openImageMaker() }
@@ -54,10 +55,12 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
     }
 
     private fun initTimeline() {
-        timeline.adapter = mTimelineAdapter
-        buildItemTouchHelper()
-            .attachToRecyclerView(timeline)
-        mViewModel.timelineItems.viewObserveWith(mTimelineAdapter::submitList)
+        timeline.adapter = mViewModel.timelineAdapter
+        mViewModel.isTimelineEmpty.viewObserveWith { emptyView.isVisible = it }
+        emptyViewAddImageButton.setOnClickListener { mViewModel.onCreateImage() }
+        emptyViewAddQuizButton.setOnClickListener { mViewModel.onCreateQuiz() }
+//        buildItemTouchHelper()
+//            .attachToRecyclerView(timeline)
     }
 
     private fun buildItemTouchHelper() =

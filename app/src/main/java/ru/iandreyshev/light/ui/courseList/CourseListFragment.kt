@@ -2,6 +2,8 @@ package ru.iandreyshev.light.ui.courseList
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.fragment_course_list.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -31,13 +33,22 @@ class CourseListFragment : BaseFragment(R.layout.fragment_course_list) {
             mViewModel.onCreateCourseClick()
         }
 
+        mViewModel.isListEmpty.viewObserveWith { createCourseButton.isGone = it }
+
         mViewModel.eventOpenCourseEditor(router()::openCourseEditor)
         mViewModel.eventOpenPlayer(router()::openPlayer)
     }
 
     private fun initCourseList() {
         courseList.adapter = mCourseListAdapter
-        mViewModel.courses.viewObserveWith(mCourseListAdapter::submitList)
+        mViewModel.courses.viewObserveWith {
+            emptyViewTitle.isVisible = it.isEmpty()
+            emptyViewCreateCourseButton.isVisible = it.isEmpty()
+            emptyViewCreateCourseButton.setOnClickListener {
+                mViewModel.onCreateCourseClick()
+            }
+            mCourseListAdapter.submitList(it)
+        }
     }
 
 }

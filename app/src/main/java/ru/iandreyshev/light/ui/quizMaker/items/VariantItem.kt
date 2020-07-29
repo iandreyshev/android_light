@@ -87,9 +87,9 @@ class VariantItem(
                         onValidStateSwitched()
                     }
 
-                    mTextWatcher?.let(itemView.variantInput::removeTextChangedListener)
-                    itemView.variantInput.setText(viewState.text)
-                    mTextWatcher = itemView.variantInput.doAfterTextChanged {
+                    mTextWatcher?.let(itemView.variantText::removeTextChangedListener)
+                    itemView.variantText.setText(viewState.text)
+                    mTextWatcher = itemView.variantText.doAfterTextChanged {
                         onTextChanged(it.toString())
                     }
 

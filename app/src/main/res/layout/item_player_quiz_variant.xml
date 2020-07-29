@@ -45,7 +45,7 @@
 
         </FrameLayout>
 
-        <EditText
+        <TextView
             android:id="@+id/variantText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -54,19 +54,9 @@
             android:background="@null"
             android:hint="@string/quiz_maker_variant_hint"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/deleteButton"
+            app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
             app:layout_constraintStart_toEndOf="@id/isValidGroup"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/deleteButton"
-            android:layout_width="@dimen/square_button_small"
-            android:layout_height="@dimen/square_button_small"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_quiz_maker_delete" />
 
         <View
             android:id="@+id/bottomSeparator"
