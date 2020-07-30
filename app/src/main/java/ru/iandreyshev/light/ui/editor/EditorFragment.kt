@@ -1,12 +1,17 @@
 package ru.iandreyshev.light.ui.editor
 
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
+import android.widget.PopupMenu
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.*
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.input
+import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import kotlinx.android.synthetic.main.fragment_editor.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -33,6 +38,8 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
 
         initMenu()
         initTimeline()
+        initCourseTitle()
+        initSettingsMenu()
     }
 
     private fun initMenu() {
@@ -66,6 +73,33 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
 //            .attachToRecyclerView(timeline)
     }
 
+    private fun initCourseTitle() {
+        mViewModel.courseTitle.viewObserveWith {
+            courseTitle.text = it
+            courseTitle.setOnClickListener {
+                showRenameCourseDialog()
+            }
+        }
+    }
+
+    private fun initSettingsMenu() {
+        settingsButton.setOnClickListener { buttonView ->
+            val popupMenu = PopupMenu(requireContext(), buttonView)
+            popupMenu.inflate(R.menu.menu_editor_settings)
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.actionRename -> {
+                        showRenameCourseDialog()
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popupMenu.show()
+            popupMenus += popupMenu
+        }
+    }
+
     private fun buildItemTouchHelper() =
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(UP or DOWN, 0) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) = Unit
@@ -83,5 +117,23 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
                 return true
             }
         })
+
+    private fun showRenameCourseDialog() {
+        MaterialDialog(requireContext()).show {
+            title(R.string.editor_rename_dialog_title)
+            input(
+                prefill = mViewModel.courseTitle.value,
+                inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES,
+                maxLength = COURSE_MAX_NAME
+            ) { _, text ->
+                mViewModel.onRenameCourse(text.toString())
+            }
+            lifecycleOwner(this@EditorFragment)
+        }
+    }
+
+    companion object {
+        private const val COURSE_MAX_NAME = 72
+    }
 
 }

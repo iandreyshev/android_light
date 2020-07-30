@@ -1,35 +1,36 @@
 package ru.iandreyshev.light.ui.imageMaker
 
-import android.content.pm.ActivityInfo
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.LayoutInflater
+import android.text.InputType
 import android.view.View
-import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.input
+import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import kotlinx.android.synthetic.main.dialog_image_maker_edit_text.view.*
 import kotlinx.android.synthetic.main.fragment_image_maker.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.iandreyshev.light.BaseFragment
 import ru.iandreyshev.light.R
 import ru.iandreyshev.light.navigation.router
-import ru.iandreyshev.light.utill.dismissOnDestroy
+import ru.iandreyshev.light.utill.setFullScreen
+import ru.iandreyshev.light.utill.setOrientationPortrait
+import ru.iandreyshev.light.utill.setOrientationUnspecified
 import ru.iandreyshev.light.utill.uiLazy
+
 
 class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
 
     private val mViewModel by viewModel<ImageMakerViewModel> {
         parametersOf(getScope(R.id.nav_editor))
     }
-    private var mAlertDialog: AlertDialog? = null
     private val mPickFromGalleryLauncher by uiLazy {
         registerForActivityResult(
             ActivityResultContracts.GetContent(),
@@ -44,27 +45,14 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
         initEditTextControl()
         initPickerControls()
         initPictureView()
-
-        activity?.window?.addFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        setFullScreen()
+        setOrientationPortrait()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-
-        activity?.window?.clearFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mAlertDialog.dismissOnDestroy()
+        setOrientationUnspecified()
+        setFullScreen(false)
     }
 
     private fun initMenu() {
@@ -76,24 +64,17 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
 
     private fun initEditTextControl() {
         editTextButton.setOnClickListener {
-            val dialogView = LayoutInflater.from(requireContext())
-                .inflate(R.layout.dialog_image_maker_edit_text, null)
-
-            mAlertDialog.dismissOnDestroy()
-            mAlertDialog = AlertDialog.Builder(requireContext())
-                .setView(dialogView)
-                .setPositiveButton(R.string.common_dialog_ok) { _, _ ->
-                    val text = dialogView.textInput.text
+            MaterialDialog(requireContext()).show {
+                title(R.string.image_maker_text_title)
+                input(
+                    inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES,
+                    maxLength = MAX_TEXT_LENGTH
+                ) { _, text ->
                     mViewModel.onChangeText(text.toString())
-                    mAlertDialog.dismissOnDestroy()
                 }
-                .setNegativeButton(R.string.common_dialog_cancel) { _, _ ->
-                    mAlertDialog.dismissOnDestroy()
-                }
-                .setOnCancelListener {
-                    mAlertDialog.dismissOnDestroy()
-                }
-                .show()
+                negativeButton()
+                lifecycleOwner(this@ImageMakerFragment)
+            }
         }
         removeTextBalloonButton.setOnClickListener {
             mViewModel.onChangeText(null)
@@ -164,6 +145,7 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
 
     companion object {
         private const val PICK_FROM_GALLERY_INPUT = "image/*"
+        private const val MAX_TEXT_LENGTH = 500
     }
 
 }

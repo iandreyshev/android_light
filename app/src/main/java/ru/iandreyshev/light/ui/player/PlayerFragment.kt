@@ -14,6 +14,9 @@ import ru.iandreyshev.light.domain.course.CourseItem
 import ru.iandreyshev.light.ui.player.mvi.News
 import ru.iandreyshev.light.ui.player.mvi.State
 import ru.iandreyshev.light.utill.exhaustive
+import ru.iandreyshev.light.utill.setFullScreen
+import ru.iandreyshev.light.utill.setOrientationPortrait
+import ru.iandreyshev.light.utill.setOrientationUnspecified
 
 class PlayerFragment : BaseFragment(R.layout.fragment_player) {
 
@@ -35,6 +38,15 @@ class PlayerFragment : BaseFragment(R.layout.fragment_player) {
 
         forwardButton.setOnClickListener { mViewModel(UiAction.Forward) }
         backButton.setOnClickListener { mViewModel(UiAction.Back) }
+
+        setFullScreen()
+        setOrientationPortrait()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        setOrientationUnspecified()
+        setFullScreen(false)
     }
 
     private fun render(state: State) {

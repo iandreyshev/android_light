@@ -1,7 +1,9 @@
 package ru.iandreyshev.light
 
+import android.widget.PopupMenu
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -11,10 +13,20 @@ import androidx.navigation.navGraphViewModels
 import org.koin.core.scope.Scope
 import ru.iandreyshev.light.system.NavGraphScopeHolder
 import ru.iandreyshev.light.utill.Event
+import ru.iandreyshev.light.utill.dismissOnDestroy
 
 abstract class BaseFragment(
     @LayoutRes contentLayoutId: Int
 ) : Fragment(contentLayoutId) {
+
+    protected val alerts = mutableListOf<AlertDialog>()
+    protected val popupMenus = mutableListOf<PopupMenu>()
+
+    override fun onDestroy() {
+        super.onDestroy()
+        alerts.forEach { it.dismissOnDestroy() }
+        popupMenus.forEach { it.dismissOnDestroy() }
+    }
 
     protected fun getScope(@IdRes navGraphId: Int): Scope? {
         val holder by navGraphViewModels<NavGraphScopeHolder>(navGraphId) {

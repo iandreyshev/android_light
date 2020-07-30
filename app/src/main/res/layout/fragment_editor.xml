@@ -29,10 +29,11 @@
             android:layout_marginHorizontal="@dimen/grid_step_2"
             android:layout_marginTop="@dimen/grid_step_vertical_1"
             android:layout_marginBottom="@dimen/grid_step_vertical_2"
+            android:ellipsize="end"
             android:maxLines="2"
-            android:text="@string/editor_default_title"
+            android:text="Длинное название курса, которое умещается только в две строки"
             android:textColor="#000"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -139,6 +140,15 @@
                 app:srcCompat="@drawable/ic_add_quiz" />
 
         </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/settingsButton"
+            android:layout_width="@dimen/square_button_small"
+            android:layout_height="@dimen/square_button_small"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/grid_step_2"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:srcCompat="@drawable/ic_editor_settings" />
 
     </androidx.cardview.widget.CardView>
 

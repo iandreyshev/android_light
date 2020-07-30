@@ -13,6 +13,7 @@ import org.koin.core.scope.Scope
 import ru.iandreyshev.light.domain.editor.CourseDraft
 import ru.iandreyshev.light.domain.editor.DraftItem
 import ru.iandreyshev.light.domain.editor.ISaveCourseDraftUseCase
+import ru.iandreyshev.light.utill.distinctUntilChanged
 import ru.iandreyshev.light.utill.invoke
 import ru.iandreyshev.light.utill.uiLazy
 import ru.iandreyshev.light.utill.voidSingleLiveEvent
@@ -22,6 +23,7 @@ class EditorViewModel(
     private val args: EditorArgs
 ) : ViewModel() {
 
+    val courseTitle by uiLazy { mCourseName.distinctUntilChanged() }
     val timelineAdapter = GroupAdapter<GroupieViewHolder>()
     val isTimelineEmpty: LiveData<Boolean> by uiLazy { mIsTimelineEmpty }
 
@@ -30,6 +32,7 @@ class EditorViewModel(
     val eventOpenVideoMaker = voidSingleLiveEvent()
     val eventBackFromEditor = voidSingleLiveEvent()
 
+    private val mCourseName = MutableLiveData(args.courseTitle)
     private val mIsTimelineEmpty = MutableLiveData(true)
 
     private val mDraft by uiLazy {
@@ -69,6 +72,11 @@ class EditorViewModel(
 
     fun onMove(from: Int, to: Int) {
         mDraft.move(from, to)
+    }
+
+    fun onRenameCourse(newName: String) {
+        mDraft.title = newName
+        mCourseName.value = mDraft.title
     }
 
     private fun updateTimeline(items: List<DraftItem>) {

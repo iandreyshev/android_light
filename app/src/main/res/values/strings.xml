@@ -12,6 +12,8 @@
     <string name="editor_action_add_video">New Video</string>
     <string name="editor_default_title">New course</string>
     <string name="editor_empty_view_text">Insert first element</string>
+    <string name="editor_settings_action_rename">Rename</string>
+    <string name="editor_rename_dialog_title">Course name</string>
 
     <string name="quiz_maker_title">New Quiz</string>
     <string name="quiz_maker_action_save">Create</string>
@@ -21,6 +23,7 @@
     <string name="quiz_maker_add_variant_title">Add variant</string>
 
     <string name="image_maker_title">New Image</string>
+    <string name="image_maker_text_title">Image text</string>
     <string name="image_maker_action_save">Create</string>
 
     <string name="video_maker_title">New Video</string>
