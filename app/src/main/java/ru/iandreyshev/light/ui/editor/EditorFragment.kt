@@ -56,7 +56,10 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
 
     private fun initTimeline() {
         timeline.adapter = mViewModel.timelineAdapter
-        mViewModel.isTimelineEmpty.viewObserveWith { emptyView.isVisible = it }
+        mViewModel.isTimelineEmpty.viewObserveWith {
+            emptyView.isVisible = it
+            timeline.isVisible = !it
+        }
         emptyViewAddImageButton.setOnClickListener { mViewModel.onCreateImage() }
         emptyViewAddQuizButton.setOnClickListener { mViewModel.onCreateQuiz() }
 //        buildItemTouchHelper()

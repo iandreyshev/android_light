@@ -10,6 +10,7 @@
 
     <dimen name="square_button_mini">24dp</dimen>
     <dimen name="square_button_small">46dp</dimen>
+    <dimen name="square_button_small_half">23dp</dimen>
     <dimen name="square_button_normal">56dp</dimen>
     <dimen name="square_button_large">72dp</dimen>
 </resources>

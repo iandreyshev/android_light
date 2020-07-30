@@ -1,26 +1,28 @@
 package ru.iandreyshev.light.ui.imageMaker
 
+import android.content.pm.ActivityInfo
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
-import androidx.lifecycle.map
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.main.dialog_image_maker_edit_text.view.*
 import kotlinx.android.synthetic.main.fragment_image_maker.*
-import kotlinx.android.synthetic.main.fragment_quiz_maker.toolbar
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.iandreyshev.light.BaseFragment
 import ru.iandreyshev.light.R
-import ru.iandreyshev.light.domain.imageMaker.ImageDuration
 import ru.iandreyshev.light.navigation.router
-import ru.iandreyshev.light.system.FeatureToggle
 import ru.iandreyshev.light.utill.dismissOnDestroy
 import ru.iandreyshev.light.utill.uiLazy
-import ru.iandreyshev.light.utill.withItemListeners
 
 class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
 
@@ -40,9 +42,24 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
 
         initMenu()
         initEditTextControl()
-        initDurationControl()
         initPickerControls()
         initPictureView()
+
+        activity?.window?.addFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        activity?.window?.clearFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
 
     override fun onDestroy() {
@@ -51,10 +68,9 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
     }
 
     private fun initMenu() {
-        toolbar.setNavigationOnClickListener { router().back() }
-        toolbar.withItemListeners {
-            R.id.actionImageMakerSave { mViewModel.onSave() }
-        }
+        createButton.setOnClickListener { mViewModel.onCreateDraft() }
+        mViewModel.hasPicture.viewObserveWith { createButton.isVisible = it }
+        exitButton.setOnClickListener { router().back() }
         mViewModel.eventExit { router().back() }
     }
 
@@ -86,30 +102,9 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
             textBalloon.isVisible = text.isNotBlank()
             balloonText.text = text
         }
-        mViewModel.picture
-            .map { it != null }
-            .viewObserveWith { hasPicture ->
-                editTextButton.isEnabled = hasPicture
-            }
-    }
-
-    private fun initDurationControl() {
-        durationButton.setOnClickListener {
-            mViewModel.onSwitchDuration()
+        mViewModel.hasPicture.viewObserveWith { hasPicture ->
+            editTextButton.isVisible = hasPicture
         }
-        mViewModel.duration.viewObserveWith {
-            durationText.text = when (it) {
-                ImageDuration.SEC_3 -> "3s"
-                ImageDuration.SEC_5 -> "5s"
-                ImageDuration.SEC_10 -> "10s"
-                ImageDuration.INFINITELY -> "..."
-            }
-        }
-        mViewModel.picture
-            .map { it != null }
-            .viewObserveWith { hasPicture ->
-                durationButton.isEnabled = hasPicture && FeatureToggle.isImageDurationEnabled
-            }
     }
 
     private fun initPickerControls() {
@@ -122,22 +117,48 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
             mPickFromGalleryLauncher.launch(PICK_FROM_GALLERY_INPUT)
         }
 
-        mViewModel.picture
-            .map { it != null }
-            .viewObserveWith { hasPicture ->
-                pictureSourceChooserGroup.isVisible = !hasPicture
-                changeFromCameraButton.isEnabled = hasPicture
-                changeFromGalleryButton.isEnabled = hasPicture
-            }
+        mViewModel.hasPicture.viewObserveWith { hasPicture ->
+            pictureSourceChooserGroup.isVisible = !hasPicture
+            changeFromCameraButton.isVisible = hasPicture
+            changeFromGalleryButton.isVisible = hasPicture
+        }
     }
 
     private fun initPictureView() {
-        mViewModel.picture.viewObserveWith {
-            Picasso.Builder(requireContext())
-                .loggingEnabled(true)
-                .build()
-                .load(it)
-                .into(currentView)
+        mViewModel.picture.viewObserveNullableWith { picture ->
+            when (picture) {
+                null ->
+                    Glide.with(this)
+                        .clear(imageView)
+                else ->
+                    Glide.with(this)
+                        .load(picture)
+                        .centerCrop()
+                        .dontAnimate()
+                        .addListener(object : RequestListener<Drawable> {
+                            override fun onLoadFailed(
+                                e: GlideException?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                mViewModel.onPictureLoadCompleted(model, false)
+                                return false
+                            }
+
+                            override fun onResourceReady(
+                                resource: Drawable?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                dataSource: DataSource?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                mViewModel.onPictureLoadCompleted(model, true)
+                                return false
+                            }
+                        })
+                        .into(imageView)
+            }
         }
     }
 

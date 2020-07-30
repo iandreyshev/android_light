@@ -42,6 +42,7 @@ class CourseListFragment : BaseFragment(R.layout.fragment_course_list) {
     private fun initCourseList() {
         courseList.adapter = mCourseListAdapter
         mViewModel.courses.viewObserveWith {
+            courseList.isVisible = it.isNotEmpty()
             emptyViewTitle.isVisible = it.isEmpty()
             emptyViewCreateCourseButton.isVisible = it.isEmpty()
             emptyViewCreateCourseButton.setOnClickListener {

@@ -5,7 +5,6 @@ import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 import org.koin.core.scope.Scope
 import ru.iandreyshev.light.domain.imageMaker.ISaveImageDraftUseCase
-import ru.iandreyshev.light.domain.imageMaker.ImageDuration
 import ru.iandreyshev.light.domain.imageMaker.ImageSource
 import ru.iandreyshev.light.domain.imageMaker.draft.ImageDraft
 import ru.iandreyshev.light.utill.invoke
@@ -14,25 +13,19 @@ import ru.iandreyshev.light.utill.voidSingleLiveEvent
 
 class ImageMakerViewModel(scope: Scope) : ViewModel() {
 
-    val duration by uiLazy { mDuration.distinctUntilChanged() }
     val textBalloon by uiLazy { mTextBalloon.distinctUntilChanged() }
     val picture by uiLazy { mPicture.distinctUntilChanged() }
+    val hasPicture by uiLazy { picture.map { it != null } }
 
     val eventExit = voidSingleLiveEvent()
 
-    private val mDuration = MutableLiveData(ImageDuration.SEC_3)
     private val mTextBalloon = MutableLiveData("")
-    private val mPicture = MutableLiveData<Uri>(null)
+    private val mPicture = MutableLiveData<Uri?>(null)
 
     private val mDraft = ImageDraft()
     private val mSaveDraft by uiLazy { scope.get<ISaveImageDraftUseCase>() }
 
     fun onCreate() {
-        mDuration.value = mDraft.duration
-    }
-
-    fun onSwitchDuration() {
-        mDuration.value = mDraft.switchDuration()
     }
 
     fun onChangeText(text: String?) {
@@ -40,7 +33,7 @@ class ImageMakerViewModel(scope: Scope) : ViewModel() {
         mTextBalloon.value = mDraft.text.orEmpty()
     }
 
-    fun onSave() {
+    fun onCreateDraft() {
         viewModelScope.launch {
             mSaveDraft(mDraft)
             eventExit()
@@ -48,8 +41,18 @@ class ImageMakerViewModel(scope: Scope) : ViewModel() {
     }
 
     fun onPickFromGallery(uri: Uri) {
-        mDraft.imageSource = ImageSource(uri.toString())
         mPicture.value = uri
+    }
+
+    fun onPictureLoadCompleted(picture: Any?, isSuccess: Boolean) {
+        if (!isSuccess) {
+            mPicture.value = null
+            mDraft.imageSource = null
+        } else if (picture != mPicture.value) {
+            val uri = picture as? Uri
+            mDraft.imageSource = ImageSource(uri.toString())
+            mPicture.value = uri
+        }
     }
 
 }
