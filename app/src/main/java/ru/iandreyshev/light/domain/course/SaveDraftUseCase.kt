@@ -21,9 +21,12 @@ class SaveDraftUseCase(
             creationDate = Date(),
             items = draft.items.map { item ->
                 when (item) {
-                    is DraftItem.Quiz -> CourseItem.Quiz(Quiz(listOf()))
-                    is DraftItem.Image -> CourseItem.Image(Image("", ImageSource("")))
-                    is DraftItem.Video -> CourseItem.Video(Video("", VideoSource("")))
+                    is DraftItem.Quiz ->
+                        CourseItem.Quiz(Quiz(listOf()))
+                    is DraftItem.Image ->
+                        CourseItem.Image(Image("", item.draft.imageSource!!))
+                    is DraftItem.Video ->
+                        CourseItem.Video(Video("", VideoSource("")))
                 }
             }
         )

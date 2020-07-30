@@ -6,19 +6,6 @@
     android:layout_height="match_parent"
     android:background="#000">
 
-    <TextView
-        android:id="@+id/playbackView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="@dimen/grid_margin"
-        android:textAlignment="center"
-        android:textColor="#fff"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="42 / 46 (0.72)" />
-
     <ProgressBar
         android:id="@+id/preloadingProgressBar"
         android:layout_width="wrap_content"
@@ -28,19 +15,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/currentView"
+    <ImageView
+        android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:gravity="center"
-        android:padding="@dimen/grid_margin"
-        android:textColor="#fff"
-        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Current view" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/imageViewProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/quizRecyclerView"
@@ -116,5 +107,35 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Result" />
 
+    <TextView
+        android:id="@+id/playbackView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/grid_margin"
+        android:textAlignment="center"
+        android:textColor="#fff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="42 / 46 (0.72)" />
+
+    <FrameLayout
+        android:id="@+id/exitButtonWrap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/grid_step_vertical_4"
+        android:background="@drawable/background_image_maker_controls"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/exitButton"
+            android:layout_width="@dimen/square_button_small"
+            android:layout_height="@dimen/square_button_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:srcCompat="@drawable/ic_player_exit" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

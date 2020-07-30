@@ -2,6 +2,7 @@ package ru.iandreyshev.light.domain.player
 
 import ru.iandreyshev.light.domain.course.Course
 import ru.iandreyshev.light.domain.course.CourseItem
+import ru.iandreyshev.light.domain.player.quiz.Question
 
 class CoursePlayer(
     private val dataSource: IPlayerDataSource
@@ -9,7 +10,12 @@ class CoursePlayer(
 
     private lateinit var mCourse: Course
     private lateinit var mCurrentItem: CourseItem
+    private lateinit var mCurrentItemState: ItemState
     private var mCurrentItemPosition: Int = 0
+
+    override fun playerForQuizAt(position: Int): IQuizPlayer {
+        TODO("Not yet implemented")
+    }
 
     override fun prepare(): PrepareResult {
         mCourse = dataSource.getCourse()
@@ -17,9 +23,18 @@ class CoursePlayer(
         mCurrentItem = mCourse.items.firstOrNull()
             ?: return PrepareResult.ErrorCourseIsEmpty
 
+        mCurrentItemState = when (val item = mCurrentItem) {
+            is CourseItem.Quiz ->
+                TODO()
+            is CourseItem.Image ->
+                ItemState.Image(item.image.source.filePath)
+            is CourseItem.Video ->
+                TODO()
+        }
+
         val itemsCount = mCourse.items.count()
 
-        return PrepareResult.Success(mCurrentItem, itemsCount)
+        return PrepareResult.Success(mCurrentItemState, itemsCount)
     }
 
     override fun forward(): MoveItemResult {
@@ -29,9 +44,17 @@ class CoursePlayer(
 
         ++mCurrentItemPosition
         mCurrentItem = mCourse.items[mCurrentItemPosition]
+        mCurrentItemState = when (val item = mCurrentItem) {
+            is CourseItem.Quiz ->
+                TODO()
+            is CourseItem.Image ->
+                ItemState.Image(item.image.source.filePath)
+            is CourseItem.Video ->
+                TODO()
+        }
 
         return MoveItemResult.Success(
-            item = mCurrentItem,
+            item = mCurrentItemState,
             itemPosition = mCurrentItemPosition
         )
     }
@@ -43,9 +66,17 @@ class CoursePlayer(
 
         --mCurrentItemPosition
         mCurrentItem = mCourse.items[mCurrentItemPosition]
+        mCurrentItemState = when (val item = mCurrentItem) {
+            is CourseItem.Quiz ->
+                TODO()
+            is CourseItem.Image ->
+                ItemState.Image(item.image.source.filePath)
+            is CourseItem.Video ->
+                TODO()
+        }
 
         return MoveItemResult.Success(
-            item = mCurrentItem,
+            item = mCurrentItemState,
             itemPosition = mCurrentItemPosition
         )
     }

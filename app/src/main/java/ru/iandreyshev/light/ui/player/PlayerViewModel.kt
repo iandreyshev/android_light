@@ -43,6 +43,7 @@ class PlayerViewModel(
                 UiAction.Back -> Wish.Back
                 UiAction.ApplyAnswer -> Wish.ApplyAnswer
                 UiAction.Repeat -> Wish.Repeat
+                UiAction.LoadImageError -> Wish.ShowError
             }
         )
     }

@@ -42,17 +42,12 @@ class ImageMakerViewModel(scope: Scope) : ViewModel() {
 
     fun onPickFromGallery(uri: Uri) {
         mPicture.value = uri
+        mDraft.imageSource = ImageSource(uri.toString())
     }
 
-    fun onPictureLoadCompleted(picture: Any?, isSuccess: Boolean) {
-        if (!isSuccess) {
-            mPicture.value = null
-            mDraft.imageSource = null
-        } else if (picture != mPicture.value) {
-            val uri = picture as? Uri
-            mDraft.imageSource = ImageSource(uri.toString())
-            mPicture.value = uri
-        }
+    fun onPictureLoadError(picture: Any?) {
+        mPicture.value = null
+        mDraft.imageSource = null
     }
 
 }

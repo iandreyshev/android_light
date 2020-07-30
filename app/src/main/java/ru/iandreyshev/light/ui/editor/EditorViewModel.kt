@@ -91,7 +91,7 @@ class EditorViewModel(
                 is DraftItem.Image -> ImageItem(
                     id = item.draft.hashCode().toLong(),
                     imageName = item.draft.fileName,
-                    imageUrl = "",
+                    imageUrl = item.draft.fileName,
                     onClickListener = {}
                 )
                 is DraftItem.Video -> VideoItem(

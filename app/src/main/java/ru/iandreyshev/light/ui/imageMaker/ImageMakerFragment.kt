@@ -114,8 +114,6 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
                 else ->
                     Glide.with(this)
                         .load(picture)
-                        .centerCrop()
-                        .dontAnimate()
                         .addListener(object : RequestListener<Drawable> {
                             override fun onLoadFailed(
                                 e: GlideException?,
@@ -123,7 +121,7 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
                                 target: Target<Drawable>?,
                                 isFirstResource: Boolean
                             ): Boolean {
-                                mViewModel.onPictureLoadCompleted(model, false)
+                                mViewModel.onPictureLoadError(model)
                                 return false
                             }
 
@@ -133,10 +131,7 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
                                 target: Target<Drawable>?,
                                 dataSource: DataSource?,
                                 isFirstResource: Boolean
-                            ): Boolean {
-                                mViewModel.onPictureLoadCompleted(model, true)
-                                return false
-                            }
+                            ): Boolean = false
                         })
                         .into(imageView)
             }

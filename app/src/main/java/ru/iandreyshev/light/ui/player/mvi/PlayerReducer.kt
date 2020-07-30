@@ -9,9 +9,9 @@ class PlayerReducer : Reducer<State, Effect> {
             State.Type.PREPARE_PLAYER -> when (effect) {
                 is Effect.Start -> state.toPlayingItemState()
                     .copy(
-                        courseItem = effect.item,
-                        courseItemsCount = effect.itemsCount,
-                        courseItemPosition = 0
+                        itemState = effect.item,
+                        itemsCount = effect.itemsCount,
+                        itemPosition = 0
                     )
                 is Effect.Error -> state.toPreparePlayerErrorState()
                     .copy(error = effect.error)
@@ -20,8 +20,8 @@ class PlayerReducer : Reducer<State, Effect> {
             State.Type.PLAYING_ITEM -> when (effect) {
                 is Effect.Play -> state.toPlayingItemState()
                     .copy(
-                        courseItem = effect.item,
-                        courseItemPosition = effect.itemPosition
+                        itemState = effect.item,
+                        itemPosition = effect.itemPosition
                     )
                 is Effect.Finish -> state.toResultState()
                     .copy(result = effect.result)
@@ -37,8 +37,8 @@ class PlayerReducer : Reducer<State, Effect> {
             State.Type.PLAYING_ITEM_ERROR -> when (effect) {
                 is Effect.Play -> state.toPlayingItemState()
                     .copy(
-                        courseItem = effect.item,
-                        courseItemPosition = effect.itemPosition
+                        itemState = effect.item,
+                        itemPosition = effect.itemPosition
                     )
                 else -> state
             }

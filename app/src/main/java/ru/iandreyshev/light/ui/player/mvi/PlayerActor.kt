@@ -3,6 +3,7 @@ package ru.iandreyshev.light.ui.player.mvi
 import com.badoo.mvicore.element.Actor
 import io.reactivex.Observable
 import ru.iandreyshev.light.domain.player.ICoursePlayer
+import ru.iandreyshev.light.domain.player.ItemState
 import ru.iandreyshev.light.domain.player.PrepareResult
 import ru.iandreyshev.light.domain.player.MoveItemResult
 
@@ -44,6 +45,11 @@ class PlayerActor(
                         Effect.Play(result.item, result.itemPosition).just()
                     MoveItemResult.MoveLimited ->
                         noEffect()
+                }
+                Wish.ShowError -> when (val item = state.itemState) {
+                    is ItemState.Image ->
+                        Effect.Error("Error load image: ${item.uri}").just()
+                    else -> noEffect()
                 }
                 Wish.ApplyAnswer -> noEffect()
                 else -> noEffect()

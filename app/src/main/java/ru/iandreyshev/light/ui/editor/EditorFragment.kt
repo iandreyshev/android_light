@@ -128,6 +128,7 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
             ) { _, text ->
                 mViewModel.onRenameCourse(text.toString())
             }
+            negativeButton { }
             lifecycleOwner(this@EditorFragment)
         }
     }
