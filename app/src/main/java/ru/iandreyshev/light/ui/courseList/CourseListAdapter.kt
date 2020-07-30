@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_timeline_image.view.title
+import kotlinx.android.synthetic.main.item_course_list_course.view.*
 import ru.iandreyshev.light.R
 import ru.iandreyshev.light.domain.course.Course
 import ru.iandreyshev.light.utill.safelyPosition
@@ -17,7 +17,7 @@ class CourseListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder =
         LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_timeline_image, parent, false)
+            .inflate(R.layout.item_course_list_course, parent, false)
             .let { view -> CourseViewHolder(view) }
             .also { holder ->
                 holder.itemView.setOnClickListener {
@@ -27,10 +27,8 @@ class CourseListAdapter(
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
         val item = getItem(position)
-        holder.itemView.title.text = """
-            Id: ${item.id}
-            Title: ${item.title}
-        """.trimIndent()
+        holder.itemView.title.text = item.title
+        holder.itemView.subtitle.text = item.creationDate.toString()
     }
 
 }

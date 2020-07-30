@@ -8,6 +8,7 @@ import ru.iandreyshev.light.domain.imageMaker.ImageSource
 import ru.iandreyshev.light.domain.quizMaker.Quiz
 import ru.iandreyshev.light.domain.videoMaker.Video
 import ru.iandreyshev.light.domain.videoMaker.VideoSource
+import java.util.*
 
 class SaveDraftUseCase(
     private val courseRepository: ICourseRepository
@@ -17,6 +18,7 @@ class SaveDraftUseCase(
         val course = Course(
             id = CourseId(""),
             title = draft.title,
+            creationDate = Date(),
             items = draft.items.map { item ->
                 when (item) {
                     is DraftItem.Quiz -> CourseItem.Quiz(Quiz(listOf()))
