@@ -25,13 +25,27 @@
             android:orientation="vertical"
             app:layout_constraintGuide_end="@dimen/grid_step_2" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="@dimen/grid_step_vertical_3" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="@dimen/grid_step_vertical_3" />
+
         <FrameLayout
             android:id="@+id/isValidGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
             app:layout_constraintStart_toStartOf="@id/guidelineBegin"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="@id/guidelineTop">
 
             <CheckBox
                 android:id="@+id/isValidCheckbox"
@@ -39,7 +53,7 @@
                 android:layout_height="wrap_content" />
 
             <RadioButton
-                android:id="@+id/isValidRadiobutton"
+                android:id="@+id/isValidRadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -53,10 +67,10 @@
             android:layout_marginBottom="@dimen/grid_step_vertical_2"
             android:background="@null"
             android:hint="@string/quiz_maker_variant_hint"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
             app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
             app:layout_constraintStart_toEndOf="@id/isValidGroup"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/guidelineTop" />
 
         <View
             android:id="@+id/bottomSeparator"

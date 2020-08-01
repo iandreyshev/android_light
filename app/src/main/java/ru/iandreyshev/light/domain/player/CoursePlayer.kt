@@ -2,7 +2,7 @@ package ru.iandreyshev.light.domain.player
 
 import ru.iandreyshev.light.domain.course.Course
 import ru.iandreyshev.light.domain.course.CourseItem
-import ru.iandreyshev.light.domain.player.quiz.Question
+import ru.iandreyshev.light.domain.player.quiz.QuizPlayer
 
 class CoursePlayer(
     private val dataSource: IPlayerDataSource
@@ -10,12 +10,8 @@ class CoursePlayer(
 
     private lateinit var mCourse: Course
     private lateinit var mCurrentItem: CourseItem
-    private lateinit var mCurrentItemState: ItemState
+    private lateinit var mCurrentItemState: PlayerCourseItem
     private var mCurrentItemPosition: Int = 0
-
-    override fun playerForQuizAt(position: Int): IQuizPlayer {
-        TODO("Not yet implemented")
-    }
 
     override fun prepare(): PrepareResult {
         mCourse = dataSource.getCourse()
@@ -25,9 +21,11 @@ class CoursePlayer(
 
         mCurrentItemState = when (val item = mCurrentItem) {
             is CourseItem.Quiz ->
-                TODO()
+                PlayerCourseItem.Quiz(
+                    QuizPlayer()
+                )
             is CourseItem.Image ->
-                ItemState.Image(item.image.source.filePath)
+                PlayerCourseItem.Image(item.image.source.filePath)
             is CourseItem.Video ->
                 TODO()
         }
@@ -48,7 +46,7 @@ class CoursePlayer(
             is CourseItem.Quiz ->
                 TODO()
             is CourseItem.Image ->
-                ItemState.Image(item.image.source.filePath)
+                PlayerCourseItem.Image(item.image.source.filePath)
             is CourseItem.Video ->
                 TODO()
         }
@@ -70,7 +68,7 @@ class CoursePlayer(
             is CourseItem.Quiz ->
                 TODO()
             is CourseItem.Image ->
-                ItemState.Image(item.image.source.filePath)
+                PlayerCourseItem.Image(item.image.source.filePath)
             is CourseItem.Video ->
                 TODO()
         }

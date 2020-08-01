@@ -1,11 +1,11 @@
 package ru.iandreyshev.light.ui.player.mvi
 
-import ru.iandreyshev.light.domain.player.ItemState
+import ru.iandreyshev.light.ui.player.CourseItemState
 
 data class State(
     val type: Type = Type.PREPARE_PLAYER,
     val itemsCount: Int = 0,
-    val itemState: ItemState? = null,
+    val itemState: CourseItemState? = null,
     val itemPosition: Int = 0,
     val canForward: Boolean = false,
     val canBack: Boolean = false,

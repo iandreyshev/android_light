@@ -16,7 +16,7 @@ class SaveDraftUseCase(
 
     override suspend fun invoke(draft: CourseDraft) {
         val course = Course(
-            id = CourseId(""),
+            id = CourseId(Date().toString()),
             title = draft.title,
             creationDate = Date(),
             items = draft.items.map { item ->

@@ -73,10 +73,10 @@ class VariantItem(
                     itemView.addNewButton.isVisible = false
                     itemView.addNewButton.setOnClickListener(null)
 
-                    itemView.isValidRadiobutton.isVisible = !viewState.isMultipleMode
-                    itemView.isValidRadiobutton.setOnCheckedChangeListener(null)
-                    itemView.isValidRadiobutton.isChecked = viewState.isValid
-                    itemView.isValidRadiobutton.setOnCheckedChangeListener { _, _ ->
+                    itemView.isValidRadioButton.isVisible = !viewState.isMultipleMode
+                    itemView.isValidRadioButton.setOnCheckedChangeListener(null)
+                    itemView.isValidRadioButton.isChecked = viewState.isValid
+                    itemView.isValidRadioButton.setOnCheckedChangeListener { _, _ ->
                         onValidStateSwitched()
                     }
 

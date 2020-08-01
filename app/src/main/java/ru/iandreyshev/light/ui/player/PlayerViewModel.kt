@@ -7,26 +7,25 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
-import ru.iandreyshev.light.ui.player.mvi.News
-import ru.iandreyshev.light.ui.player.mvi.Wish
-import ru.iandreyshev.light.ui.player.mvi.PlayerFeature
-import ru.iandreyshev.light.ui.player.mvi.State
-import ru.iandreyshev.light.utill.distinctUntilChanged
-import ru.iandreyshev.light.utill.invoke
-import ru.iandreyshev.light.utill.singleLiveEvent
-import ru.iandreyshev.light.utill.uiLazy
+import ru.iandreyshev.light.domain.player.quiz.IQuizPlayer
+import ru.iandreyshev.light.ui.player.mvi.*
+import ru.iandreyshev.light.ui.player.quiz.mvi.QuizPlayerFeature
+import ru.iandreyshev.light.utill.*
 
 class PlayerViewModel(
     scope: Scope,
     private val playerArgs: PlayerArgs
-) : ViewModel() {
+) : ViewModel(), QuizPlayerFeatureFactory {
 
     val state by uiLazy { mState.distinctUntilChanged() }
     val eventShowNews = singleLiveEvent<News>()
 
     private val mState = MutableLiveData<State>()
 
-    private val mFeature = PlayerFeature(scope.get { parametersOf(playerArgs.courseId) })
+    private val mFeature = PlayerFeature(
+        coursePlayer = scope.get { parametersOf(playerArgs.courseId) },
+        quizPlayerFeatureFactory = this
+    )
     private val mDisposables = CompositeDisposable().apply {
         this += Observable.wrap(mFeature).subscribe(mState::setValue)
         this += Observable.wrap(mFeature.news).subscribe(eventShowNews::invoke)
@@ -52,6 +51,16 @@ class PlayerViewModel(
         super.onCleared()
         mFeature.dispose()
         mDisposables.dispose()
+    }
+
+    override fun invoke(player: IQuizPlayer): QuizPlayerFeature {
+        return QuizPlayerFeature(
+            player = player
+        ).also { quizPlayerFeature ->
+            Observable.wrap(quizPlayerFeature.news)
+                .map(QuizNewsToPlayerWish())
+                .subscribe(mFeature)
+        }
     }
 
 }
