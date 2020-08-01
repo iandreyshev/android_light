@@ -7,12 +7,7 @@ class QuizPlayerFeature(
     player: IQuizPlayer
 ) : ActorReducerFeature<Wish, Effect, State, News>(
     initialState = State(
-        questionText = player.currentQuestion.text,
-        questionIndex = player.currentQuestionPosition,
-        questionsCount = player.questionsCount,
-        variants = player.currentQuestion.variants,
-        isMultipleMode = player.currentQuestion.isMultipleMode,
-        questionResult = player.currentQuestion.result
+        questionsCount = player.questionsCount
     ),
     actor = QuizPlayerActor(player),
     reducer = QuizPlayerReducer(),

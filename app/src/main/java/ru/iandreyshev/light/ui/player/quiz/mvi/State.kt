@@ -5,7 +5,7 @@ import ru.iandreyshev.light.domain.player.quiz.QuizResult
 import ru.iandreyshev.light.domain.player.quiz.Variant
 
 data class State(
-    val type: Type = Type.QUESTION,
+    val type: Type = Type.START,
     val questionText: String = "",
     val questionIndex: Int = 0,
     val questionsCount: Int = 0,
@@ -18,6 +18,7 @@ data class State(
     fun hasNext() = questionIndex + 1 < questionsCount
 
     enum class Type {
+        START,
         QUESTION,
         RESULTS;
     }

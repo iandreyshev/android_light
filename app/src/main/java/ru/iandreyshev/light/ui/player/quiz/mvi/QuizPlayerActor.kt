@@ -11,6 +11,11 @@ class QuizPlayerActor(
 
     override fun invoke(state: State, wish: Wish): Observable<out Effect> =
         when (state.type) {
+            State.Type.START -> when (wish) {
+                Wish.Submit ->
+                    Effect.ShowQuestion(player.currentQuestion).just()
+                else -> noEffect()
+            }
             State.Type.QUESTION -> when (wish) {
                 is Wish.SwitchVariantValidState -> {
                     player.switchCurrQuestionVariantValidState(wish.variantPosition)
