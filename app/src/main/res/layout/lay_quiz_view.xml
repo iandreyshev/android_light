@@ -8,8 +8,10 @@
     app:cardCornerRadius="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/questionView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/quizAppBarLayout"
@@ -37,7 +39,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/quizAppBarLayout"
             tools:itemCount="7"
-            tools:listitem="@layout/item_player_quiz_variant" />
+            tools:listitem="@layout/item_quiz_player_variant" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/submitView"
@@ -51,6 +53,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <Button
+                android:id="@+id/submitButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -59,5 +62,31 @@
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/questionResultView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/resultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginVertical="@dimen/grid_step_vertical_4"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="Partly result" />
+
+        <Button
+            android:id="@+id/finishButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Finish" />
+
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

@@ -21,11 +21,9 @@ class CoursePlayer(
 
         mCurrentItemState = when (val item = mCurrentItem) {
             is CourseItem.Quiz ->
-                PlayerCourseItem.Quiz(
-                    QuizPlayer()
-                )
+                PlayerCourseItem.Quiz(QuizPlayer(item))
             is CourseItem.Image ->
-                PlayerCourseItem.Image(item.image.source.filePath)
+                PlayerCourseItem.Image(item.source.filePath)
             is CourseItem.Video ->
                 TODO()
         }
@@ -46,7 +44,7 @@ class CoursePlayer(
             is CourseItem.Quiz ->
                 TODO()
             is CourseItem.Image ->
-                PlayerCourseItem.Image(item.image.source.filePath)
+                PlayerCourseItem.Image(item.source.filePath)
             is CourseItem.Video ->
                 TODO()
         }
@@ -68,7 +66,7 @@ class CoursePlayer(
             is CourseItem.Quiz ->
                 TODO()
             is CourseItem.Image ->
-                PlayerCourseItem.Image(item.image.source.filePath)
+                PlayerCourseItem.Image(item.source.filePath)
             is CourseItem.Video ->
                 TODO()
         }

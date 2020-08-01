@@ -1,12 +1,11 @@
 package ru.iandreyshev.light.domain.quizMaker.draft
 
+import ru.iandreyshev.light.domain.course.CourseItem
 import ru.iandreyshev.light.domain.quizMaker.QuestionId
-import ru.iandreyshev.light.domain.quizMaker.Quiz
-import ru.iandreyshev.light.domain.quizMaker.VariantId
 
 class QuizDraft constructor() {
 
-    constructor(quiz: Quiz) : this() {
+    constructor(quiz: CourseItem.Quiz) : this() {
         mQuestions = quiz.questions
             .map { question ->
                 QuestionDraft(
@@ -27,10 +26,12 @@ class QuizDraft constructor() {
             .toMutableList()
     }
 
+    val questions: List<QuestionDraft>
+        get() = mQuestions
     val currentQuestion: QuestionDraft
-        get() = mQuestions[mCurrentQuestionCursor]
+        get() = mQuestions[mCurrentQuestionPosition]
     val currentQuestionPosition: Int
-        get() = mCurrentQuestionCursor
+        get() = mCurrentQuestionPosition
     val hasPrevious: Boolean
         get() = currentQuestionPosition > 0
     val hasNext: Boolean
@@ -39,17 +40,17 @@ class QuizDraft constructor() {
         get() = mQuestions.count()
 
     private var mQuestions = mutableListOf<QuestionDraft>()
-    private var mCurrentQuestionCursor: Int = 0
+    private var mCurrentQuestionPosition: Int = 0
 
-    fun nextQuestion() {
-        if (mCurrentQuestionCursor < mQuestions.lastIndex) {
-            mCurrentQuestionCursor++
+    fun moveToNextQuestion() {
+        if (mCurrentQuestionPosition < mQuestions.lastIndex) {
+            mCurrentQuestionPosition++
         }
     }
 
-    fun previousQuestion() {
-        if (mCurrentQuestionCursor > 0) {
-            mCurrentQuestionCursor--
+    fun moveToPreviousQuestion() {
+        if (mCurrentQuestionPosition > 0) {
+            mCurrentQuestionPosition--
         }
     }
 
@@ -65,7 +66,7 @@ class QuizDraft constructor() {
         return mQuestions.lastIndex
     }
 
-    fun updateQuestionText(position: Int, text: String) {
+    fun setQuestionText(position: Int, text: String) {
         val question = mQuestions.getOrNull(position) ?: return
         question.text = text
     }
@@ -82,7 +83,7 @@ class QuizDraft constructor() {
         mQuestions[qPosition].variants.add(VariantDraft.empty())
     }
 
-    fun updateVariantText(
+    fun setVariantText(
         qPosition: Int,
         vPosition: Int,
         text: String
@@ -119,36 +120,13 @@ class QuizDraft constructor() {
         }
 
         mQuestions.removeAt(position)
-        mCurrentQuestionCursor = mCurrentQuestionCursor.coerceIn(0, mQuestions.lastIndex)
+        mCurrentQuestionPosition = mCurrentQuestionPosition.coerceIn(0, mQuestions.lastIndex)
     }
 
     fun deleteVariantAt(qPosition: Int, vPosition: Int) {
         mQuestions.getOrNull(qPosition)
             ?.variants
             ?.removeAt(vPosition)
-    }
-
-}
-
-data class QuestionDraft(
-    val id: QuestionId,
-    var text: String,
-    var isMultipleMode: Boolean,
-    val variants: MutableList<VariantDraft>
-)
-
-data class VariantDraft(
-    val id: VariantId,
-    var text: String,
-    var isValid: Boolean
-) {
-
-    companion object {
-        fun empty() = VariantDraft(
-            id = VariantId(""),
-            text = "",
-            isValid = false
-        )
     }
 
 }

@@ -3,10 +3,10 @@ package ru.iandreyshev.light.domain.course
 import ru.iandreyshev.light.domain.editor.CourseDraft
 import ru.iandreyshev.light.domain.editor.DraftItem
 import ru.iandreyshev.light.domain.editor.ISaveCourseDraftUseCase
-import ru.iandreyshev.light.domain.imageMaker.Image
-import ru.iandreyshev.light.domain.imageMaker.ImageSource
-import ru.iandreyshev.light.domain.quizMaker.Quiz
-import ru.iandreyshev.light.domain.videoMaker.Video
+import ru.iandreyshev.light.domain.quizMaker.Question
+import ru.iandreyshev.light.domain.quizMaker.QuestionId
+import ru.iandreyshev.light.domain.quizMaker.Variant
+import ru.iandreyshev.light.domain.quizMaker.VariantId
 import ru.iandreyshev.light.domain.videoMaker.VideoSource
 import java.util.*
 
@@ -22,11 +22,26 @@ class SaveDraftUseCase(
             items = draft.items.map { item ->
                 when (item) {
                     is DraftItem.Quiz ->
-                        CourseItem.Quiz(Quiz(listOf()))
+                        CourseItem.Quiz(
+                            item.draft.questions
+                                .map { questionDraft ->
+                                    Question(
+                                        id = QuestionId(Date().toString()),
+                                        text = questionDraft.text,
+                                        variants = questionDraft.variants.map { variantDraft ->
+                                            Variant(
+                                                id = VariantId(Date().toString()),
+                                                text = variantDraft.text,
+                                                isValid = variantDraft.isValid
+                                            )
+                                        },
+                                        isMultipleMode = questionDraft.isMultipleMode
+                                    )
+                                })
                     is DraftItem.Image ->
-                        CourseItem.Image(Image("", item.draft.imageSource!!))
+                        CourseItem.Image("", "", item.draft.imageSource!!)
                     is DraftItem.Video ->
-                        CourseItem.Video(Video("", VideoSource("")))
+                        CourseItem.Video("", VideoSource(""))
                 }
             }
         )

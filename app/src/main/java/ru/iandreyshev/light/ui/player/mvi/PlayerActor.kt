@@ -4,6 +4,7 @@ import com.badoo.mvicore.element.Actor
 import io.reactivex.Observable
 import ru.iandreyshev.light.domain.player.*
 import ru.iandreyshev.light.ui.player.CourseItemState
+import ru.iandreyshev.light.utill.just
 
 class PlayerActor(
     private val quizPlayerFeatureFactory: QuizPlayerFeatureFactory,
@@ -89,8 +90,6 @@ class PlayerActor(
         }
     }
 
-    private fun just(effect: Effect) = Observable.just(effect)
-    private fun <T> T.just() = Observable.just(this)
     private fun noEffect() = Observable.empty<Effect>()
 
 }

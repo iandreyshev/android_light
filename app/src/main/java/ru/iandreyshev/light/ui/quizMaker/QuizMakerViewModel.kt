@@ -7,9 +7,9 @@ import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import kotlinx.coroutines.launch
 import org.koin.core.scope.Scope
+import ru.iandreyshev.light.domain.course.CourseItem
 import ru.iandreyshev.light.domain.quizMaker.IQuizMakerRepository
 import ru.iandreyshev.light.domain.quizMaker.ISaveQuizDraftUseCase
-import ru.iandreyshev.light.domain.quizMaker.Quiz
 import ru.iandreyshev.light.domain.quizMaker.draft.QuizDraft
 import ru.iandreyshev.light.ui.quizMaker.items.QuestionItem
 import ru.iandreyshev.light.ui.quizMaker.items.QuestionSettingsItem
@@ -37,7 +37,7 @@ class QuizMakerViewModel(scope: Scope) : ViewModel() {
     }
 
     fun onQuestionChanged(text: String) {
-        mDraft.updateQuestionText(mDraft.currentQuestionPosition, text)
+        mDraft.setQuestionText(mDraft.currentQuestionPosition, text)
     }
 
     fun onDeleteQuestion() {
@@ -52,17 +52,17 @@ class QuizMakerViewModel(scope: Scope) : ViewModel() {
 
     fun onNext() {
         if (mDraft.hasNext) {
-            mDraft.nextQuestion()
+            mDraft.moveToNextQuestion()
         } else {
             mDraft.addQuestion()
-            mDraft.nextQuestion()
+            mDraft.moveToNextQuestion()
             mDraft.addVariant(mDraft.currentQuestionPosition)
         }
         updateDraftView()
     }
 
     fun onPrevious() {
-        mDraft.previousQuestion()
+        mDraft.moveToPreviousQuestion()
         updateDraftView()
     }
 
@@ -78,7 +78,7 @@ class QuizMakerViewModel(scope: Scope) : ViewModel() {
         updateDraftView()
     }
 
-    private fun buildQuizViewState(quiz: Quiz?): QuizDraft {
+    private fun buildQuizViewState(quiz: CourseItem.Quiz?): QuizDraft {
         quiz ?: return QuizDraft().apply {
             addQuestion()
             addVariant(currentQuestionPosition)
@@ -124,7 +124,7 @@ class QuizMakerViewModel(scope: Scope) : ViewModel() {
                             isMultipleMode = currQuestion.isMultipleMode
                         ),
                         onTextChanged = { text ->
-                            mDraft.updateVariantText(currQuestionPosition, vPos, text)
+                            mDraft.setVariantText(currQuestionPosition, vPos, text)
                         },
                         onValidStateSwitched = {
                             mDraft.switchVariantValidState(currQuestionPosition, vPos)
