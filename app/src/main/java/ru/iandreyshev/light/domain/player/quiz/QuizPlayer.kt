@@ -1,32 +1,35 @@
 package ru.iandreyshev.light.domain.player.quiz
 
-import ru.iandreyshev.light.domain.course.CourseItem
+import ru.iandreyshev.light.domain.player.PlayerItem
 
-class QuizPlayer(
-    quiz: CourseItem.Quiz
-) : IQuizPlayer {
+class QuizPlayer : IQuizPlayer {
 
     override val currentQuestion: Question
-        get() = mQuestions[mCurrentQuestionPosition]
-    override val currentQuestionPosition: Int
-        get() = mCurrentQuestionPosition
+        get() = mQuestions[currentQuestionPosition]
+    override var currentQuestionPosition: Int = 0
+        private set
     override val questionsCount: Int
         get() = mQuestions.count()
+    override var result: QuizResult? = null
+        private set
 
-    private val mQuestions = quiz.questions
-        .mapIndexed { index, question ->
-            question.asPlayerQuestion(index)
-        }
-        .toMutableList()
-    private var mCurrentQuestionPosition = 0
+    private var mQuestions = mutableListOf<Question>()
 
-    override fun getQuizResult(): QuizResult {
-        return QuizResult("Result")
+    override fun prepare(playerQuiz: PlayerItem.Quiz) {
+        mQuestions.clear()
+
+        playerQuiz.quiz
+            .questions
+            .mapIndexedTo(mQuestions) { index, question ->
+                question.asPlayerQuestion(index)
+            }
+
+        result = playerQuiz.result
     }
 
     override fun moveToNextQuestion() {
-        if (mCurrentQuestionPosition < mQuestions.lastIndex) {
-            mCurrentQuestionPosition++
+        if (currentQuestionPosition < mQuestions.lastIndex) {
+            currentQuestionPosition++
         }
     }
 
@@ -56,6 +59,13 @@ class QuizPlayer(
 
         mQuestions[currentQuestionPosition] = currentQuestion
             .copy(result = currentQuestion.measureResult())
+
+        if (mQuestions.all { it.result != null }) {
+            result = QuizResult("Result")
+        }
+    }
+
+    override fun onFinish() {
     }
 
     private fun ru.iandreyshev.light.domain.quizMaker.Question.asPlayerQuestion(

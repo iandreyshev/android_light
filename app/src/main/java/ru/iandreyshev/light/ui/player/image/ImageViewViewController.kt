@@ -9,7 +9,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.main.lay_image_view.view.*
-import ru.iandreyshev.light.ui.player.CourseItemState
+import ru.iandreyshev.light.ui.player.PlayerItemState
 import ru.iandreyshev.light.ui.player.UiAction
 
 class ImageViewViewController(
@@ -22,7 +22,7 @@ class ImageViewViewController(
         view.backButton.setOnClickListener { onAction(UiAction.Back) }
     }
 
-    fun update(state: CourseItemState.Image) {
+    fun render(state: PlayerItemState.Image) {
         view.isVisible = true
         view.imageViewProgressBar.isVisible = true
 

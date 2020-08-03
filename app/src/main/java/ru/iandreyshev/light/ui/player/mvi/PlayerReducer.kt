@@ -1,15 +1,22 @@
 package ru.iandreyshev.light.ui.player.mvi
 
 import com.badoo.mvicore.element.Reducer
+import ru.iandreyshev.light.ui.player.PlayerItemState
 
 class PlayerReducer : Reducer<State, Effect> {
 
     override fun invoke(state: State, effect: Effect): State =
         when (state.type) {
             State.Type.PREPARE_PLAYER -> when (effect) {
-                is Effect.Start -> state.toPlayingItemState()
+                is Effect.PlayImage -> state.toPlayingItemState()
                     .copy(
-                        itemState = effect.item,
+                        itemState = PlayerItemState.Image(effect.uri),
+                        itemsCount = effect.itemsCount,
+                        itemPosition = 0
+                    )
+                is Effect.PlayQuiz -> state.toPlayingItemState()
+                    .copy(
+                        itemState = PlayerItemState.Quiz,
                         itemsCount = effect.itemsCount,
                         itemPosition = 0
                     )
@@ -18,9 +25,14 @@ class PlayerReducer : Reducer<State, Effect> {
                 else -> state
             }
             State.Type.PLAYING_ITEM -> when (effect) {
-                is Effect.Play -> state.toPlayingItemState()
+                is Effect.PlayImage -> state.toPlayingItemState()
                     .copy(
-                        itemState = effect.item,
+                        itemState = PlayerItemState.Image(effect.uri),
+                        itemPosition = effect.itemPosition
+                    )
+                is Effect.PlayQuiz -> state.toPlayingItemState()
+                    .copy(
+                        itemState = PlayerItemState.Quiz,
                         itemPosition = effect.itemPosition
                     )
                 is Effect.Finish -> state.toResultState()
@@ -35,9 +47,14 @@ class PlayerReducer : Reducer<State, Effect> {
                 else -> state
             }
             State.Type.PLAYING_ITEM_ERROR -> when (effect) {
-                is Effect.Play -> state.toPlayingItemState()
+                is Effect.PlayImage -> state.toPlayingItemState()
                     .copy(
-                        itemState = effect.item,
+                        itemState = PlayerItemState.Image(effect.uri),
+                        itemPosition = effect.itemPosition
+                    )
+                is Effect.PlayQuiz -> state.toPlayingItemState()
+                    .copy(
+                        itemState = PlayerItemState.Quiz,
                         itemPosition = effect.itemPosition
                     )
                 else -> state

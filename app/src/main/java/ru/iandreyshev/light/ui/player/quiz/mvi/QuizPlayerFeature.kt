@@ -6,9 +6,7 @@ import ru.iandreyshev.light.domain.player.quiz.IQuizPlayer
 class QuizPlayerFeature(
     player: IQuizPlayer
 ) : ActorReducerFeature<Wish, Effect, State, News>(
-    initialState = State(
-        questionsCount = player.questionsCount
-    ),
+    initialState = QuizPlayerState(),
     actor = QuizPlayerActor(player),
     reducer = QuizPlayerReducer(),
     newsPublisher = QuizPlayerNewsPublisher()

@@ -2,7 +2,7 @@ package ru.iandreyshev.light.domain.player
 
 sealed class PrepareResult {
     class Success(
-        val item: PlayerCourseItem,
+        val item: PlayerItem,
         val itemsCount: Int
     ) : PrepareResult()
 

@@ -4,8 +4,11 @@ import ru.iandreyshev.light.domain.player.quiz.QuestionResult
 import ru.iandreyshev.light.domain.player.quiz.QuizResult
 import ru.iandreyshev.light.domain.player.quiz.Variant
 
+typealias QuizPlayerState = State
+typealias QuizPlayerStateType = State.Type
+
 data class State(
-    val type: Type = Type.START,
+    val type: Type = Type.DISABLED,
     val questionText: String = "",
     val questionIndex: Int = 0,
     val questionsCount: Int = 0,
@@ -18,7 +21,8 @@ data class State(
     fun hasNext() = questionIndex + 1 < questionsCount
 
     enum class Type {
-        START,
+        DISABLED,
+        PREVIEW,
         QUESTION,
         RESULTS;
     }

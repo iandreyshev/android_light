@@ -33,17 +33,24 @@ class PlayerFragment : BaseFragment(R.layout.fragment_player) {
             mViewModel::invoke
         )
     }
-    private val mQuizViewViewController by uiLazy { QuizViewViewController(quizView) }
+    private val mQuizViewViewController by uiLazy {
+        QuizViewViewController(
+            quizView,
+            mViewModel::invoke
+        )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewModel.state.viewObserveWith(::render)
+        mViewModel.playerState.viewObserveWith(::render)
         mViewModel.eventShowNews { news ->
             when (news) {
                 is News.ToastNews ->
                     Toast.makeText(requireContext(), news.text, Toast.LENGTH_SHORT).show()
             }
         }
+
+        mViewModel.quizPlayerState.viewObserveWith(mQuizViewViewController::render)
 
         exitButton.setOnClickListener { router().back() }
 
@@ -53,7 +60,6 @@ class PlayerFragment : BaseFragment(R.layout.fragment_player) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        mQuizViewViewController.dispose()
         setOrientationUnspecified()
         setFullScreen(false)
     }
@@ -63,7 +69,6 @@ class PlayerFragment : BaseFragment(R.layout.fragment_player) {
             State.Type.PREPARE_PLAYER -> {
                 playbackView.isVisible = false
                 mImageViewViewController.hide()
-                mQuizViewViewController.hide()
                 resultView.isVisible = false
                 errorText.isVisible = false
                 errorRepeatButton.isVisible = false
@@ -85,7 +90,6 @@ class PlayerFragment : BaseFragment(R.layout.fragment_player) {
             State.Type.RESULT -> {
                 preloadingProgressBar.isVisible = false
                 mImageViewViewController.hide()
-                mQuizViewViewController.hide()
                 playbackView.isVisible = false
                 errorText.isVisible = false
                 errorRepeatButton.isVisible = false
@@ -98,7 +102,6 @@ class PlayerFragment : BaseFragment(R.layout.fragment_player) {
                 preloadingProgressBar.isVisible = false
                 playbackView.isVisible = false
                 mImageViewViewController.hide()
-                mQuizViewViewController.hide()
                 resultView.isVisible = false
 
                 errorText.isVisible = true
@@ -109,15 +112,13 @@ class PlayerFragment : BaseFragment(R.layout.fragment_player) {
         }.exhaustive
     }
 
-    private fun renderItemState(state: CourseItemState?) {
+    private fun renderItemState(state: PlayerItemState?) {
         when (state) {
-            is CourseItemState.Image -> {
-                mQuizViewViewController.hide()
-                mImageViewViewController.update(state)
+            is PlayerItemState.Image -> {
+                mImageViewViewController.render(state)
             }
-            is CourseItemState.Quiz -> {
+            is PlayerItemState.Quiz -> {
                 mImageViewViewController.hide()
-                mQuizViewViewController.update(state)
             }
             null -> Unit
         }.exhaustive

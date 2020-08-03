@@ -6,7 +6,15 @@ class QuizPlayerReducer : Reducer<State, Effect> {
 
     override fun invoke(state: State, effect: Effect): State =
         when (state.type) {
-            State.Type.START -> when (effect) {
+            State.Type.DISABLED -> when (effect) {
+                is Effect.ShowPreview ->
+                    state.copy(
+                        type = State.Type.PREVIEW,
+                        questionsCount = effect.questionsCount
+                    )
+                else -> state
+            }
+            State.Type.PREVIEW -> when (effect) {
                 is Effect.ShowQuestion ->
                     state.copy(
                         type = State.Type.QUESTION,
@@ -35,7 +43,13 @@ class QuizPlayerReducer : Reducer<State, Effect> {
                     )
                 else -> state
             }
-            State.Type.RESULTS -> state
+            State.Type.RESULTS -> when (effect) {
+                Effect.Finish ->
+                    state.copy(
+                        type = State.Type.DISABLED
+                    )
+                else -> state
+            }
         }
 
 }

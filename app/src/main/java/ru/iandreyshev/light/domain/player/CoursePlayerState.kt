@@ -1,10 +1,10 @@
 package ru.iandreyshev.light.domain.player
 
-import ru.iandreyshev.light.ui.player.CourseItemState
+import ru.iandreyshev.light.ui.player.PlayerItemState
 
 sealed class CoursePlayerState {
     class Play(
-        val item: CourseItemState,
+        val item: PlayerItemState,
         val itemsCount: Int
     ) : CoursePlayerState()
 

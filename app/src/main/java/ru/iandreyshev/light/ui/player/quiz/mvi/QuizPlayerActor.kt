@@ -11,7 +11,18 @@ class QuizPlayerActor(
 
     override fun invoke(state: State, wish: Wish): Observable<out Effect> =
         when (state.type) {
-            State.Type.START -> when (wish) {
+            State.Type.DISABLED -> when (wish) {
+                is Wish.Start -> when (wish.quiz.result) {
+                    null -> {
+                        player.prepare(wish.quiz)
+                        Effect.ShowPreview(player.questionsCount).just()
+                    }
+                    else ->
+                        Effect.ShowResult(wish.quiz.result).just()
+                }
+                else -> noEffect()
+            }
+            State.Type.PREVIEW -> when (wish) {
                 Wish.Submit ->
                     Effect.ShowQuestion(player.currentQuestion).just()
                 else -> noEffect()
@@ -31,14 +42,19 @@ class QuizPlayerActor(
                             player.moveToNextQuestion()
                             Effect.ShowQuestion(player.currentQuestion).just()
                         }
-                        else -> {
-                            Effect.ShowResult(player.getQuizResult()).just()
+                        else -> when (val playerResult = player.result) {
+                            null -> noEffect()
+                            else -> Effect.ShowResult(playerResult).just()
                         }
                     }
                 }
+                else -> noEffect()
             }
             State.Type.RESULTS -> when (wish) {
-                Wish.Submit -> Effect.Finish.just()
+                Wish.Submit -> {
+                    player.onFinish()
+                    Effect.Finish.just()
+                }
                 else -> noEffect()
             }
         }

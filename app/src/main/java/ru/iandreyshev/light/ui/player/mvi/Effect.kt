@@ -1,19 +1,21 @@
 package ru.iandreyshev.light.ui.player.mvi
 
-import ru.iandreyshev.light.ui.player.CourseItemState
+import ru.iandreyshev.light.domain.player.PlayerItem
 
 sealed class Effect {
 
     object PreparePlayer : Effect()
 
-    class Start(
-        val item: CourseItemState,
+    class PlayImage(
+        val uri: String,
+        val itemPosition: Int,
         val itemsCount: Int
     ) : Effect()
 
-    class Play(
-        val item: CourseItemState,
-        val itemPosition: Int
+    class PlayQuiz(
+        val quiz: PlayerItem.Quiz,
+        val itemPosition: Int,
+        val itemsCount: Int
     ) : Effect()
 
     class Finish(val result: String) : Effect()

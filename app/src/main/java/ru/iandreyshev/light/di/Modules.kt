@@ -18,6 +18,8 @@ import ru.iandreyshev.light.domain.videoMaker.ISaveVideoDraftUseCase
 import ru.iandreyshev.light.domain.course.SaveDraftUseCase
 import ru.iandreyshev.light.domain.player.ICoursePlayer
 import ru.iandreyshev.light.domain.player.CoursePlayer
+import ru.iandreyshev.light.domain.player.quiz.IQuizPlayer
+import ru.iandreyshev.light.domain.player.quiz.QuizPlayer
 import ru.iandreyshev.light.infrastructure.courseList.InMemoryCourseRepository
 import ru.iandreyshev.light.infrastructure.editor.QuizMakerRepository
 import ru.iandreyshev.light.infrastructure.player.RepositoryDataSource
@@ -72,6 +74,9 @@ fun Context.initDI() = startKoin {
             navGraphScope(R.id.nav_player) {
                 scoped<ICoursePlayer> {
                     CoursePlayer(dataSource = RepositoryDataSource(it.component1(), get()))
+                }
+                scoped<IQuizPlayer> {
+                    QuizPlayer()
                 }
             }
         }

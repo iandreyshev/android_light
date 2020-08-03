@@ -2,79 +2,86 @@ package ru.iandreyshev.light.domain.player
 
 import ru.iandreyshev.light.domain.course.Course
 import ru.iandreyshev.light.domain.course.CourseItem
-import ru.iandreyshev.light.domain.player.quiz.QuizPlayer
+import ru.iandreyshev.light.utill.exhaustive
 
 class CoursePlayer(
     private val dataSource: IPlayerDataSource
 ) : ICoursePlayer {
 
-    private lateinit var mCourse: Course
-    private lateinit var mCurrentItem: CourseItem
-    private lateinit var mCurrentItemState: PlayerCourseItem
-    private var mCurrentItemPosition: Int = 0
+    private val mCourseItems = mutableListOf<PlayerItem>()
+    private var mCurrentPosition: Int = 0
+    private val mCurrentPlayerItem: PlayerItem
+        get() = mCourseItems[mCurrentPosition]
 
     override fun prepare(): PrepareResult {
-        mCourse = dataSource.getCourse()
+        val course = dataSource.getCourse()
             ?: return PrepareResult.ErrorGettingCourse
-        mCurrentItem = mCourse.items.firstOrNull()
-            ?: return PrepareResult.ErrorCourseIsEmpty
 
-        mCurrentItemState = when (val item = mCurrentItem) {
-            is CourseItem.Quiz ->
-                PlayerCourseItem.Quiz(QuizPlayer(item))
-            is CourseItem.Image ->
-                PlayerCourseItem.Image(item.source.filePath)
-            is CourseItem.Video ->
-                TODO()
-        }
+        mCourseItems.clear()
+        mCourseItems.addAll(parseItems(course))
 
-        val itemsCount = mCourse.items.count()
-
-        return PrepareResult.Success(mCurrentItemState, itemsCount)
+        return PrepareResult.Success(mCurrentPlayerItem, mCourseItems.count())
     }
 
     override fun forward(): MoveItemResult {
-        if (mCourse.items.lastIndex == mCurrentItemPosition) {
+        if (mCourseItems.lastIndex == mCurrentPosition) {
             return MoveItemResult.MoveLimited
         }
 
-        ++mCurrentItemPosition
-        mCurrentItem = mCourse.items[mCurrentItemPosition]
-        mCurrentItemState = when (val item = mCurrentItem) {
-            is CourseItem.Quiz ->
-                TODO()
-            is CourseItem.Image ->
-                PlayerCourseItem.Image(item.source.filePath)
-            is CourseItem.Video ->
-                TODO()
-        }
+        when (val currentItem = mCurrentPlayerItem) {
+            is PlayerItem.Image -> {
+                mCourseItems[mCurrentPosition] = currentItem.copy(isComplete = true)
+            }
+            is PlayerItem.Video -> {
+                mCourseItems[mCurrentPosition] = currentItem.copy(isComplete = true)
+            }
+            is PlayerItem.Quiz -> Unit
+        }.exhaustive
+
+        ++mCurrentPosition
 
         return MoveItemResult.Success(
-            item = mCurrentItemState,
-            itemPosition = mCurrentItemPosition
+            item = mCurrentPlayerItem,
+            itemPosition = mCurrentPosition,
+            itemsCount = mCourseItems.count()
         )
     }
 
     override fun back(): MoveItemResult {
-        if (mCurrentItemPosition == 0) {
+        if (mCurrentPosition == 0) {
             return MoveItemResult.MoveLimited
         }
 
-        --mCurrentItemPosition
-        mCurrentItem = mCourse.items[mCurrentItemPosition]
-        mCurrentItemState = when (val item = mCurrentItem) {
-            is CourseItem.Quiz ->
-                TODO()
-            is CourseItem.Image ->
-                PlayerCourseItem.Image(item.source.filePath)
-            is CourseItem.Video ->
-                TODO()
-        }
+        --mCurrentPosition
 
         return MoveItemResult.Success(
-            item = mCurrentItemState,
-            itemPosition = mCurrentItemPosition
+            item = mCurrentPlayerItem,
+            itemPosition = mCurrentPosition,
+            itemsCount = mCourseItems.count()
         )
     }
+
+    private fun parseItems(course: Course) =
+        course.items
+            .map { courseItem ->
+                when (courseItem) {
+                    is CourseItem.Quiz -> {
+                        PlayerItem.Quiz(
+                            quiz = courseItem,
+                            result = null
+                        )
+                    }
+                    is CourseItem.Image ->
+                        PlayerItem.Image(
+                            uri = courseItem.source.filePath,
+                            isComplete = false
+                        )
+                    is CourseItem.Video ->
+                        PlayerItem.Video(
+                            uri = courseItem.source.filePath,
+                            isComplete = false
+                        )
+                }
+            }
 
 }
