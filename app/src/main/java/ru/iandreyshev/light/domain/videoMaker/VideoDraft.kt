@@ -1,3 +1,7 @@
 package ru.iandreyshev.light.domain.videoMaker
 
-class VideoDraft
+class VideoDraft {
+
+    var source: VideoSource? = null
+
+}

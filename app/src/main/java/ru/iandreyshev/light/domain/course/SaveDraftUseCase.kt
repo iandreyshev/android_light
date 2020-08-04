@@ -7,7 +7,7 @@ import ru.iandreyshev.light.domain.quizMaker.Question
 import ru.iandreyshev.light.domain.quizMaker.QuestionId
 import ru.iandreyshev.light.domain.quizMaker.Variant
 import ru.iandreyshev.light.domain.quizMaker.VariantId
-import ru.iandreyshev.light.domain.videoMaker.VideoSource
+import java.lang.IllegalArgumentException
 import java.util.*
 
 class SaveDraftUseCase(
@@ -39,9 +39,16 @@ class SaveDraftUseCase(
                                     )
                                 })
                     is DraftItem.Image ->
-                        CourseItem.Image("", "", item.draft.imageSource!!)
+                        CourseItem.Image(
+                            item.draft.text,
+                            item.draft.source
+                                ?: throw IllegalArgumentException("Image draft source is null")
+                        )
                     is DraftItem.Video ->
-                        CourseItem.Video("", VideoSource(""))
+                        CourseItem.Video(
+                            item.draft.source
+                                ?: throw IllegalArgumentException("Video draft source is null")
+                        )
                 }
             }
         )

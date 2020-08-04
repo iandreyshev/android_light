@@ -50,6 +50,10 @@ dependencies {
 
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.11.7'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.11.7'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.7'
+
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-android-scope:$koin_version"
     implementation "org.koin:koin-android-viewmodel:$koin_version"

@@ -25,9 +25,6 @@ class ImageMakerViewModel(scope: Scope) : ViewModel() {
     private val mDraft = ImageDraft()
     private val mSaveDraft by uiLazy { scope.get<ISaveImageDraftUseCase>() }
 
-    fun onCreate() {
-    }
-
     fun onChangeText(text: String?) {
         mDraft.text = text
         mTextBalloon.value = mDraft.text.orEmpty()
@@ -42,12 +39,12 @@ class ImageMakerViewModel(scope: Scope) : ViewModel() {
 
     fun onPickFromGallery(uri: Uri) {
         mPicture.value = uri
-        mDraft.imageSource = ImageSource(uri.toString())
+        mDraft.source = ImageSource(uri.toString())
     }
 
     fun onPictureLoadError(picture: Any?) {
         mPicture.value = null
-        mDraft.imageSource = null
+        mDraft.source = null
     }
 
 }

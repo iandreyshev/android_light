@@ -21,7 +21,7 @@
         app:layout_constraintGuide_end="@dimen/grid_step_2" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/pictureCard"
+        android:id="@+id/videoCard"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:cardBackgroundColor="@android:color/transparent"
@@ -82,7 +82,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/pictureSourceChooserGroup"
+        android:id="@+id/sourceChooserGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -91,7 +91,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/takePhotoButton"
+            android:id="@+id/takeVideoButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -115,7 +115,7 @@
             android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/takePhotoButton"
+            app:layout_constraintStart_toEndOf="@id/takeVideoButton"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

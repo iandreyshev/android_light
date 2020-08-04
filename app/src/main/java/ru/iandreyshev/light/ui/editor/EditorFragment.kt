@@ -67,10 +67,9 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
             emptyView.isVisible = it
             timeline.isVisible = !it
         }
+        emptyViewAddVideoButton.setOnClickListener { mViewModel.onCreateVideo() }
         emptyViewAddImageButton.setOnClickListener { mViewModel.onCreateImage() }
         emptyViewAddQuizButton.setOnClickListener { mViewModel.onCreateQuiz() }
-//        buildItemTouchHelper()
-//            .attachToRecyclerView(timeline)
     }
 
     private fun initCourseTitle() {

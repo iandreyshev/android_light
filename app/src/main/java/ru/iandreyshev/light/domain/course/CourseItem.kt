@@ -11,13 +11,11 @@ sealed class CourseItem {
     ) : CourseItem()
 
     class Image(
-        val id: String,
-        val text: String,
+        val text: String?,
         val source: ImageSource
     ) : CourseItem()
 
     class Video(
-        val id: String,
         val source: VideoSource
     ) : CourseItem()
 

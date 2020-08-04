@@ -89,7 +89,7 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
     }
 
     private fun initPickerControls() {
-        takePhotoButton.setOnClickListener {}
+        takeVideoButton.setOnClickListener {}
         pickFromGalleryButton.setOnClickListener {
             mPickFromGalleryLauncher.launch(PICK_FROM_GALLERY_INPUT)
         }
@@ -99,7 +99,7 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
         }
 
         mViewModel.hasPicture.viewObserveWith { hasPicture ->
-            pictureSourceChooserGroup.isVisible = !hasPicture
+            sourceChooserGroup.isVisible = !hasPicture
             changeFromCameraButton.isVisible = hasPicture
             changeFromGalleryButton.isVisible = hasPicture
         }

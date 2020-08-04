@@ -76,16 +76,29 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/emptyViewAddImageButton"
+            android:id="@+id/emptyViewAddVideoButton"
             android:layout_width="@dimen/square_button_small"
             android:layout_height="@dimen/square_button_small"
             android:layout_marginEnd="@dimen/grid_step_2"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:drawableTop="@drawable/ic_add_video"
+            android:text="Video"
+            app:layout_constraintEnd_toStartOf="@id/emptyViewAddImageButton"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/emptyViewTitle" />
+
+        <Button
+            android:id="@+id/emptyViewAddImageButton"
+            android:layout_width="@dimen/square_button_small"
+            android:layout_height="@dimen/square_button_small"
+            android:layout_marginHorizontal="@dimen/grid_step_vertical_4"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:drawableTop="@drawable/ic_add_image"
             android:text="Image"
             app:layout_constraintEnd_toStartOf="@id/emptyViewAddQuizButton"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/emptyViewAddVideoButton"
             app:layout_constraintTop_toBottomOf="@id/emptyViewTitle" />
 
         <Button

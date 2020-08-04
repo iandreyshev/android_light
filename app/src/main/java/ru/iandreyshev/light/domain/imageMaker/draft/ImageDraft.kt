@@ -5,8 +5,8 @@ import ru.iandreyshev.light.domain.imageMaker.ImageSource
 class ImageDraft {
 
     var text: String? = null
-    var imageSource: ImageSource? = null
+    var source: ImageSource? = null
     val fileName: String
-        get() = imageSource?.filePath.orEmpty()
+        get() = source?.filePath.orEmpty()
 
 }
