@@ -13,7 +13,6 @@ import ru.iandreyshev.light.domain.videoMaker.ISaveVideoDraftUseCase
 import ru.iandreyshev.light.domain.videoMaker.VideoDraft
 import ru.iandreyshev.light.domain.videoMaker.VideoSource
 import ru.iandreyshev.light.utill.invoke
-import ru.iandreyshev.light.utill.singleLiveEvent
 import ru.iandreyshev.light.utill.uiLazy
 import ru.iandreyshev.light.utill.voidSingleLiveEvent
 
@@ -29,7 +28,6 @@ class VideoMakerViewModel(
     private val mDraft = VideoDraft()
 
     val eventExit = voidSingleLiveEvent()
-    val eventShowError = singleLiveEvent<String>()
 
     private val mSaveDraft by uiLazy { scope.get<ISaveVideoDraftUseCase>() }
 

@@ -18,12 +18,16 @@ import ru.iandreyshev.light.ui.player.image.ImageViewViewController
 import ru.iandreyshev.light.ui.player.mvi.News
 import ru.iandreyshev.light.ui.player.mvi.State
 import ru.iandreyshev.light.ui.player.quiz.QuizViewViewController
+import ru.iandreyshev.light.ui.player.video.VideoPlayerViewModel
 import ru.iandreyshev.light.utill.*
 
 class PlayerFragment : BaseFragment(R.layout.fragment_player) {
 
     private val mArgs: PlayerFragmentArgs by navArgs()
     private val mViewModel by viewModel<PlayerViewModel> {
+        parametersOf(getScope(R.id.nav_player), mArgs.playerArgs)
+    }
+    private val mVideoPlayerViewModel by viewModel<VideoPlayerViewModel> {
         parametersOf(getScope(R.id.nav_player), mArgs.playerArgs)
     }
 
@@ -119,6 +123,10 @@ class PlayerFragment : BaseFragment(R.layout.fragment_player) {
             }
             is PlayerItemState.Quiz -> {
                 mImageViewViewController.hide()
+            }
+            is PlayerItemState.Video -> {
+                mImageViewViewController.hide()
+                mVideoPlayerViewModel.render(state)
             }
             null -> Unit
         }.exhaustive

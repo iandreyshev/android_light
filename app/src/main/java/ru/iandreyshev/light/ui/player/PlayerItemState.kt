@@ -6,4 +6,6 @@ sealed class PlayerItemState {
 
     object Quiz : PlayerItemState()
 
+    data class Video(val uri: String) : PlayerItemState()
+
 }
