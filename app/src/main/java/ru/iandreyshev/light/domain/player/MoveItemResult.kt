@@ -3,8 +3,8 @@ package ru.iandreyshev.light.domain.player
 sealed class MoveItemResult {
     class Success(
         val item: PlayerItem,
-        val itemPosition: Int,
-        val itemsCount: Int
+        val itemsCount: Int,
+        val position: Int,
     ) : MoveItemResult()
 
     object MoveLimited : MoveItemResult()

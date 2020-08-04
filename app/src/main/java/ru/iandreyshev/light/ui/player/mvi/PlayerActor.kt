@@ -16,18 +16,20 @@ class PlayerActor(
                 Wish.Start -> when (val result = player.prepare()) {
                     is PrepareResult.Success -> when (val item = result.item) {
                         is PlayerItem.Image ->
-                            Effect.PlayImage(
-                                uri = item.uri,
-                                itemsCount = result.itemsCount,
-                                itemPosition = 0
-                            ).just()
+                            Observable.just(
+                                Effect.PlaybackStateChanged(result.itemsCount, 0),
+                                Effect.PlayImage(item.uri)
+                            )
                         is PlayerItem.Quiz ->
-                            Effect.PlayQuiz(
-                                quiz = item,
-                                itemsCount = result.itemsCount,
-                                itemPosition = 0
-                            ).just()
-                        is PlayerItem.Video -> TODO()
+                            Observable.just(
+                                Effect.PlaybackStateChanged(result.itemsCount, 0),
+                                Effect.PlayQuiz(item)
+                            )
+                        is PlayerItem.Video ->
+                            Observable.just(
+                                Effect.PlaybackStateChanged(result.itemsCount, 0),
+                                Effect.PlayVideo(item.uri)
+                            )
                     }
                     PrepareResult.ErrorGettingCourse,
                     PrepareResult.ErrorCourseIsEmpty ->
@@ -39,18 +41,20 @@ class PlayerActor(
                 Wish.Repeat -> when (val result = player.prepare()) {
                     is PrepareResult.Success -> when (val item = result.item) {
                         is PlayerItem.Image ->
-                            Effect.PlayImage(
-                                uri = item.uri,
-                                itemsCount = result.itemsCount,
-                                itemPosition = 0
-                            ).just()
+                            Observable.just(
+                                Effect.PlaybackStateChanged(result.itemsCount, 0),
+                                Effect.PlayImage(item.uri)
+                            )
                         is PlayerItem.Quiz ->
-                            Effect.PlayQuiz(
-                                quiz = item,
-                                itemsCount = result.itemsCount,
-                                itemPosition = 0
-                            ).just()
-                        is PlayerItem.Video -> TODO()
+                            Observable.just(
+                                Effect.PlaybackStateChanged(result.itemsCount, 0),
+                                Effect.PlayQuiz(item)
+                            )
+                        is PlayerItem.Video ->
+                            Observable.just(
+                                Effect.PlaybackStateChanged(result.itemsCount, 0),
+                                Effect.PlayVideo(item.uri)
+                            )
                     }
                     PrepareResult.ErrorGettingCourse,
                     PrepareResult.ErrorCourseIsEmpty ->
@@ -62,18 +66,20 @@ class PlayerActor(
                 Wish.Forward -> when (val result = player.forward()) {
                     is MoveItemResult.Success -> when (val item = result.item) {
                         is PlayerItem.Image ->
-                            Effect.PlayImage(
-                                uri = item.uri,
-                                itemPosition = result.itemPosition,
-                                itemsCount = result.itemPosition
-                            ).just()
+                            Observable.just(
+                                Effect.PlaybackStateChanged(result.itemsCount, result.position),
+                                Effect.PlayImage(item.uri)
+                            )
                         is PlayerItem.Quiz ->
-                            Effect.PlayQuiz(
-                                quiz = item,
-                                itemPosition = result.itemPosition,
-                                itemsCount = result.itemPosition
-                            ).just()
-                        is PlayerItem.Video -> TODO()
+                            Observable.just(
+                                Effect.PlaybackStateChanged(result.itemsCount, result.position),
+                                Effect.PlayQuiz(item)
+                            )
+                        is PlayerItem.Video ->
+                            Observable.just(
+                                Effect.PlaybackStateChanged(result.itemsCount, result.position),
+                                Effect.PlayVideo(item.uri)
+                            )
                     }
                     MoveItemResult.MoveLimited ->
                         Effect.Finish("Results").just()
@@ -81,18 +87,20 @@ class PlayerActor(
                 Wish.Back -> when (val result = player.back()) {
                     is MoveItemResult.Success -> when (val item = result.item) {
                         is PlayerItem.Image ->
-                            Effect.PlayImage(
-                                uri = item.uri,
-                                itemPosition = result.itemPosition,
-                                itemsCount = result.itemPosition
-                            ).just()
+                            Observable.just(
+                                Effect.PlaybackStateChanged(result.itemsCount, result.position),
+                                Effect.PlayImage(item.uri)
+                            )
                         is PlayerItem.Quiz ->
-                            Effect.PlayQuiz(
-                                quiz = item,
-                                itemPosition = result.itemPosition,
-                                itemsCount = result.itemPosition
-                            ).just()
-                        is PlayerItem.Video -> TODO()
+                            Observable.just(
+                                Effect.PlaybackStateChanged(result.itemsCount, result.position),
+                                Effect.PlayQuiz(item)
+                            )
+                        is PlayerItem.Video ->
+                            Observable.just(
+                                Effect.PlaybackStateChanged(result.itemsCount, result.position),
+                                Effect.PlayVideo(item.uri)
+                            )
                     }
                     else -> noEffect()
                 }

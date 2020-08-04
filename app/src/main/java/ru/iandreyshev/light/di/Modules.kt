@@ -30,6 +30,7 @@ import ru.iandreyshev.light.ui.courseList.CourseListViewModel
 import ru.iandreyshev.light.ui.editor.EditorViewModel
 import ru.iandreyshev.light.ui.imageMaker.ImageMakerViewModel
 import ru.iandreyshev.light.ui.player.PlayerViewModel
+import ru.iandreyshev.light.ui.player.video.VideoPlayerViewModel
 import ru.iandreyshev.light.ui.quizMaker.QuizMakerViewModel
 import ru.iandreyshev.light.ui.videoMaker.VideoMakerViewModel
 
@@ -79,7 +80,13 @@ fun Context.initDI() = startKoin {
                 PlayerViewModel(it.component1(), it.component2())
                     .apply { onCreate() }
             }
+            viewModel {
+                VideoPlayerViewModel(it.component1())
+            }
             navGraphScope(R.id.nav_player) {
+                factory<ExoPlayer> {
+                    SimpleExoPlayer.Builder(applicationContext).build()
+                }
                 scoped<ICoursePlayer> {
                     CoursePlayer(dataSource = RepositoryDataSource(it.component1(), get()))
                 }

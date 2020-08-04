@@ -37,7 +37,7 @@ class VideoMakerViewModel(
 
     fun onCreateDraft() {
         viewModelScope.launch {
-            mSaveDraft(VideoDraft())
+            mSaveDraft(mDraft)
             eventExit()
         }
     }

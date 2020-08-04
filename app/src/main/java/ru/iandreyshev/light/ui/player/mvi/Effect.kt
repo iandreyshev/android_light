@@ -6,16 +6,21 @@ sealed class Effect {
 
     object PreparePlayer : Effect()
 
+    class PlaybackStateChanged(
+        val itemsCount: Int,
+        val itemPosition: Int
+    ) : Effect()
+
     class PlayImage(
-        val uri: String,
-        val itemPosition: Int,
-        val itemsCount: Int
+        val uri: String
     ) : Effect()
 
     class PlayQuiz(
-        val quiz: PlayerItem.Quiz,
-        val itemPosition: Int,
-        val itemsCount: Int
+        val quiz: PlayerItem.Quiz
+    ) : Effect()
+
+    class PlayVideo(
+        val uri: String
     ) : Effect()
 
     class Finish(val result: String) : Effect()

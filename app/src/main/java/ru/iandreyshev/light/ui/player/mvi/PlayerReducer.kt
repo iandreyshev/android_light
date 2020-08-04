@@ -8,37 +8,52 @@ class PlayerReducer : Reducer<State, Effect> {
     override fun invoke(state: State, effect: Effect): State =
         when (state.type) {
             State.Type.PREPARE_PLAYER -> when (effect) {
-                is Effect.PlayImage -> state.toPlayingItemState()
-                    .copy(
-                        itemState = PlayerItemState.Image(effect.uri),
+                is Effect.PlayImage ->
+                    state.toPlayingItemState()
+                        .copy(itemState = PlayerItemState.Image(effect.uri))
+                is Effect.PlayQuiz ->
+                    state.toPlayingItemState()
+                        .copy(itemState = PlayerItemState.Quiz)
+                is Effect.PlayVideo ->
+                    state.toPlayingItemState()
+                        .copy(itemState = PlayerItemState.Video(effect.uri))
+                is Effect.Error ->
+                    state.toPreparePlayerErrorState()
+                        .copy(error = effect.error)
+                is Effect.PlaybackStateChanged ->
+                    state.copy(
                         itemsCount = effect.itemsCount,
-                        itemPosition = 0
+                        itemPosition = effect.itemPosition
                     )
-                is Effect.PlayQuiz -> state.toPlayingItemState()
-                    .copy(
-                        itemState = PlayerItemState.Quiz,
-                        itemsCount = effect.itemsCount,
-                        itemPosition = 0
-                    )
-                is Effect.Error -> state.toPreparePlayerErrorState()
-                    .copy(error = effect.error)
                 else -> state
             }
             State.Type.PLAYING_ITEM -> when (effect) {
-                is Effect.PlayImage -> state.toPlayingItemState()
-                    .copy(
-                        itemState = PlayerItemState.Image(effect.uri),
+                is Effect.PlayImage ->
+                    state.toPlayingItemState()
+                        .copy(itemState = PlayerItemState.Image(effect.uri))
+                is Effect.PlayQuiz ->
+                    state.toPlayingItemState()
+                        .copy(itemState = PlayerItemState.Quiz)
+                is Effect.PlayVideo ->
+                    state.toPlayingItemState()
+                        .copy(itemState = PlayerItemState.Video(effect.uri))
+                is Effect.Finish ->
+                    state.toResultState()
+                        .copy(
+                            result = effect.result,
+                            itemState = null
+                        )
+                is Effect.PlaybackStateChanged ->
+                    state.copy(
+                        itemsCount = effect.itemsCount,
                         itemPosition = effect.itemPosition
                     )
-                is Effect.PlayQuiz -> state.toPlayingItemState()
-                    .copy(
-                        itemState = PlayerItemState.Quiz,
-                        itemPosition = effect.itemPosition
-                    )
-                is Effect.Finish -> state.toResultState()
-                    .copy(result = effect.result)
-                is Effect.Error -> state.toPlayingItemErrorState()
-                    .copy(error = effect.error)
+                is Effect.Error ->
+                    state.toPlayingItemErrorState()
+                        .copy(
+                            error = effect.error,
+                            itemState = null
+                        )
                 else -> state
             }
             State.Type.RESULT -> state
@@ -47,14 +62,18 @@ class PlayerReducer : Reducer<State, Effect> {
                 else -> state
             }
             State.Type.PLAYING_ITEM_ERROR -> when (effect) {
-                is Effect.PlayImage -> state.toPlayingItemState()
-                    .copy(
-                        itemState = PlayerItemState.Image(effect.uri),
-                        itemPosition = effect.itemPosition
-                    )
-                is Effect.PlayQuiz -> state.toPlayingItemState()
-                    .copy(
-                        itemState = PlayerItemState.Quiz,
+                is Effect.PlayImage ->
+                    state.toPlayingItemState()
+                        .copy(itemState = PlayerItemState.Image(effect.uri))
+                is Effect.PlayQuiz ->
+                    state.toPlayingItemState()
+                        .copy(itemState = PlayerItemState.Quiz)
+                is Effect.PlayVideo ->
+                    state.toPlayingItemState()
+                        .copy(itemState = PlayerItemState.Video(effect.uri))
+                is Effect.PlaybackStateChanged ->
+                    state.copy(
+                        itemsCount = effect.itemsCount,
                         itemPosition = effect.itemPosition
                     )
                 else -> state

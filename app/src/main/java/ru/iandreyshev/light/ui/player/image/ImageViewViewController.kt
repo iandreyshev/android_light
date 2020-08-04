@@ -8,7 +8,7 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import kotlinx.android.synthetic.main.lay_image_view.view.*
+import kotlinx.android.synthetic.main.lay_player_image_view.view.*
 import ru.iandreyshev.light.ui.player.PlayerItemState
 import ru.iandreyshev.light.ui.player.UiAction
 

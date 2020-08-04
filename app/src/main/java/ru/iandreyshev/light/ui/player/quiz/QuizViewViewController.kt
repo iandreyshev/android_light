@@ -5,7 +5,7 @@ import androidx.core.view.isVisible
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
-import kotlinx.android.synthetic.main.lay_quiz_view.view.*
+import kotlinx.android.synthetic.main.lay_player_quiz_view.view.*
 import ru.iandreyshev.light.ui.player.quiz.mvi.QuizPlayerState
 import ru.iandreyshev.light.ui.player.quiz.mvi.State
 import ru.iandreyshev.light.ui.player.quiz.mvi.Wish

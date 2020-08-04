@@ -7,8 +7,9 @@ import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_player.*
 import kotlinx.android.synthetic.main.fragment_player.exitButton
-import kotlinx.android.synthetic.main.lay_image_view.*
-import kotlinx.android.synthetic.main.lay_quiz_view.*
+import kotlinx.android.synthetic.main.lay_player_image_view.*
+import kotlinx.android.synthetic.main.lay_player_quiz_view.*
+import kotlinx.android.synthetic.main.lay_player_video_view.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.iandreyshev.light.BaseFragment
@@ -19,6 +20,7 @@ import ru.iandreyshev.light.ui.player.mvi.News
 import ru.iandreyshev.light.ui.player.mvi.State
 import ru.iandreyshev.light.ui.player.quiz.QuizViewViewController
 import ru.iandreyshev.light.ui.player.video.VideoPlayerViewModel
+import ru.iandreyshev.light.ui.player.video.VideoViewViewController
 import ru.iandreyshev.light.utill.*
 
 class PlayerFragment : BaseFragment(R.layout.fragment_player) {
@@ -33,14 +35,8 @@ class PlayerFragment : BaseFragment(R.layout.fragment_player) {
 
     private val mImageViewViewController by uiLazy {
         ImageViewViewController(
-            imageView,
-            mViewModel::invoke
-        )
-    }
-    private val mQuizViewViewController by uiLazy {
-        QuizViewViewController(
-            quizView,
-            mViewModel::invoke
+            view = imageView,
+            onAction = mViewModel::invoke
         )
     }
 
@@ -54,7 +50,20 @@ class PlayerFragment : BaseFragment(R.layout.fragment_player) {
             }
         }
 
-        mViewModel.quizPlayerState.viewObserveWith(mQuizViewViewController::render)
+        QuizViewViewController(
+            view = quizView,
+            onWish = mViewModel::invoke
+        ).apply {
+            mViewModel.quizPlayerState.viewObserveWith(::render)
+        }
+
+        VideoViewViewController(
+            view = videoView,
+            onBack = { mViewModel(UiAction.Back) },
+            onForward = { mViewModel(UiAction.Forward) }
+        ).apply {
+            mVideoPlayerViewModel.player.viewObserveNullableWith(::render)
+        }
 
         exitButton.setOnClickListener { router().back() }
 
@@ -72,7 +81,6 @@ class PlayerFragment : BaseFragment(R.layout.fragment_player) {
         when (state.type) {
             State.Type.PREPARE_PLAYER -> {
                 playbackView.isVisible = false
-                mImageViewViewController.hide()
                 resultView.isVisible = false
                 errorText.isVisible = false
                 errorRepeatButton.isVisible = false
@@ -88,12 +96,9 @@ class PlayerFragment : BaseFragment(R.layout.fragment_player) {
                 playbackView.isVisible = true
                 playbackView.text = "${state.itemPosition + 1} / " +
                         "${state.itemsCount} "
-
-                renderItemState(state.itemState)
             }
             State.Type.RESULT -> {
                 preloadingProgressBar.isVisible = false
-                mImageViewViewController.hide()
                 playbackView.isVisible = false
                 errorText.isVisible = false
                 errorRepeatButton.isVisible = false
@@ -105,7 +110,6 @@ class PlayerFragment : BaseFragment(R.layout.fragment_player) {
             State.Type.PREPARE_PLAYER_ERROR -> {
                 preloadingProgressBar.isVisible = false
                 playbackView.isVisible = false
-                mImageViewViewController.hide()
                 resultView.isVisible = false
 
                 errorText.isVisible = true
@@ -114,21 +118,24 @@ class PlayerFragment : BaseFragment(R.layout.fragment_player) {
                 errorRepeatButton.setOnClickListener { mViewModel(UiAction.Repeat) }
             }
         }.exhaustive
+
+        renderItemState(state.itemState)
     }
 
     private fun renderItemState(state: PlayerItemState?) {
         when (state) {
             is PlayerItemState.Image -> {
+                mVideoPlayerViewModel.hide()
                 mImageViewViewController.render(state)
-            }
-            is PlayerItemState.Quiz -> {
-                mImageViewViewController.hide()
             }
             is PlayerItemState.Video -> {
                 mImageViewViewController.hide()
                 mVideoPlayerViewModel.render(state)
             }
-            null -> Unit
+            else -> {
+                mVideoPlayerViewModel.hide()
+                mImageViewViewController.hide()
+            }
         }.exhaustive
     }
 

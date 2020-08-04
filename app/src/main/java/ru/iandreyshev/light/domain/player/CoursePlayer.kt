@@ -42,7 +42,7 @@ class CoursePlayer(
 
         return MoveItemResult.Success(
             item = mCurrentPlayerItem,
-            itemPosition = mCurrentPosition,
+            position = mCurrentPosition,
             itemsCount = mCourseItems.count()
         )
     }
@@ -56,7 +56,7 @@ class CoursePlayer(
 
         return MoveItemResult.Success(
             item = mCurrentPlayerItem,
-            itemPosition = mCurrentPosition,
+            position = mCurrentPosition,
             itemsCount = mCourseItems.count()
         )
     }
