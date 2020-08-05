@@ -5,7 +5,7 @@ import io.reactivex.Observable
 import ru.iandreyshev.player_core.course.*
 import ru.iandreyshev.player_core.utils.just
 
-class PlayerActor(
+internal class PlayerActor(
     private val player: ICoursePlayer
 ) : Actor<State, Wish, Effect> {
 

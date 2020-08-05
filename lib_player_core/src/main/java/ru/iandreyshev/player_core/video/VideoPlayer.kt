@@ -3,7 +3,7 @@ package ru.iandreyshev.player_core.video
 import com.google.android.exoplayer2.ExoPlayer
 import ru.iandreyshev.player_core.course.PlayerItemState
 
-class VideoPlayer(
+internal class VideoPlayer(
     private val playerProvider: PlayerProvider
 ) {
 

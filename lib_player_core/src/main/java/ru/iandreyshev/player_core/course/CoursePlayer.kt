@@ -2,7 +2,7 @@ package ru.iandreyshev.player_core.course
 
 import ru.iandreyshev.core_utils.exhaustive
 
-class CoursePlayer(
+internal class CoursePlayer(
     private val dataSource: IPlayerDataSource
 ) : ICoursePlayer {
 

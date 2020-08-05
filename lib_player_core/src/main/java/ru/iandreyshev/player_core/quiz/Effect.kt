@@ -1,6 +1,6 @@
 package ru.iandreyshev.player_core.quiz
 
-sealed class Effect {
+internal sealed class Effect {
 
     class ShowPreview(val questionsCount: Int) : Effect()
 

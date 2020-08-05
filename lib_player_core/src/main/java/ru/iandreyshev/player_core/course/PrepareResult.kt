@@ -1,6 +1,6 @@
 package ru.iandreyshev.player_core.course
 
-sealed class PrepareResult {
+internal sealed class PrepareResult {
     class Success(
         val item: PlayerItem,
         val itemsCount: Int

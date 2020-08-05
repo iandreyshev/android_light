@@ -1,8 +1,10 @@
-package ru.iandreyshev.player_core.quiz
+package ru.iandreyshev.player_core
 
 import ru.iandreyshev.player_core.player.News
+import ru.iandreyshev.player_core.quiz.QuizWish
+import ru.iandreyshev.player_core.quiz.Wish
 
-class PlayerNewsToQuizWish : (News) -> QuizWish? {
+internal class PlayerNewsToQuizWish : (News) -> QuizWish? {
 
     override fun invoke(news: News): QuizWish? {
         return when (news) {

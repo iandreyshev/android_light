@@ -2,7 +2,7 @@ package ru.iandreyshev.player_core.player
 
 import ru.iandreyshev.player_core.course.PlayerItem
 
-sealed class Effect {
+internal sealed class Effect {
 
     object PreparePlayer : Effect()
 

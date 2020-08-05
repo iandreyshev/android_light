@@ -18,7 +18,6 @@ import ru.iandreyshev.player_core.player.News
 import ru.iandreyshev.player_core.player.PlayerFeature
 import ru.iandreyshev.player_core.player.State
 import ru.iandreyshev.player_core.player.Wish
-import ru.iandreyshev.player_core.quiz.PlayerNewsToQuizWish
 import ru.iandreyshev.player_core.quiz.QuizPlayerFeature
 import ru.iandreyshev.player_core.quiz.QuizPlayerState
 import ru.iandreyshev.player_core.quiz.QuizWish

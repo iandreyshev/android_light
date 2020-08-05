@@ -4,7 +4,7 @@ import com.badoo.mvicore.element.Actor
 import io.reactivex.Observable
 import ru.iandreyshev.player_core.utils.just
 
-class QuizPlayerActor(
+internal class QuizPlayerActor(
     private val player: IQuizPlayer
 ) : Actor<State, Wish, Effect> {
 

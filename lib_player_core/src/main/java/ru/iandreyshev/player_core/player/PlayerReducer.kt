@@ -3,7 +3,7 @@ package ru.iandreyshev.player_core.player
 import com.badoo.mvicore.element.Reducer
 import ru.iandreyshev.player_core.course.PlayerItemState
 
-class PlayerReducer : Reducer<State, Effect> {
+internal class PlayerReducer : Reducer<State, Effect> {
 
     override fun invoke(state: State, effect: Effect): State =
         when (state.type) {

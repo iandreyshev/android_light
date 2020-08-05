@@ -1,6 +1,6 @@
 package ru.iandreyshev.player_core.course
 
-sealed class MoveItemResult {
+internal sealed class MoveItemResult {
     class Success(
         val item: PlayerItem,
         val itemsCount: Int,
