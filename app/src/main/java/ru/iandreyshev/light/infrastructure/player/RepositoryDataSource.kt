@@ -1,9 +1,9 @@
 package ru.iandreyshev.light.infrastructure.player
 
-import ru.iandreyshev.light.domain.course.Course
-import ru.iandreyshev.light.domain.course.CourseId
-import ru.iandreyshev.light.domain.course.ICourseRepository
-import ru.iandreyshev.light.domain.player.IPlayerDataSource
+import ru.iandreyshev.player_core.course.Course
+import ru.iandreyshev.player_core.course.CourseId
+import ru.iandreyshev.player_core.course.ICourseRepository
+import ru.iandreyshev.player_core.course.IPlayerDataSource
 
 class RepositoryDataSource(
     private val courseId: CourseId,

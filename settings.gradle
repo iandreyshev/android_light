@@ -1,2 +1,8 @@
-include ':app'
 rootProject.name = "Light"
+include ':app'
+include ':feature_constructor'
+include ':core_arch'
+include ':core_ui'
+include ':core_utils'
+include ':lib_player_core'
+include ':lib_player_ui'

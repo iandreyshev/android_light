@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_course_list_course.view.*
+import ru.iandreyshev.core_ui.safelyPosition
 import ru.iandreyshev.light.R
-import ru.iandreyshev.light.domain.course.Course
-import ru.iandreyshev.light.utill.safelyPosition
+import ru.iandreyshev.player_core.course.Course
 
 class CourseListAdapter(
     private val onClickListener: (position: Int) -> Unit

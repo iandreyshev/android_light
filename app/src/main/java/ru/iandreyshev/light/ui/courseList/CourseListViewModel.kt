@@ -4,13 +4,13 @@ import androidx.lifecycle.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.core.scope.Scope
-import ru.iandreyshev.light.domain.course.Course
-import ru.iandreyshev.light.domain.course.ICourseRepository
+import ru.iandreyshev.core_ui.singleLiveEvent
+import ru.iandreyshev.core_ui.voidSingleLiveEvent
+import ru.iandreyshev.core_utils.uiLazy
 import ru.iandreyshev.light.ui.player.PlayerArgs
-import ru.iandreyshev.light.utill.invoke
-import ru.iandreyshev.light.utill.singleLiveEvent
-import ru.iandreyshev.light.utill.uiLazy
-import ru.iandreyshev.light.utill.voidSingleLiveEvent
+import ru.iandreyshev.core_ui.invoke
+import ru.iandreyshev.player_core.course.Course
+import ru.iandreyshev.player_core.course.ICourseRepository
 
 class CourseListViewModel(scope: Scope) : ViewModel() {
 

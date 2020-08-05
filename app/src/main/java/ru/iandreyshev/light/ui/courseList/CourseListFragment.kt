@@ -7,10 +7,10 @@ import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.fragment_course_list.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import ru.iandreyshev.light.BaseFragment
+import ru.iandreyshev.core_app.BaseFragment
+import ru.iandreyshev.core_utils.uiLazy
 import ru.iandreyshev.light.R
 import ru.iandreyshev.light.navigation.router
-import ru.iandreyshev.light.utill.uiLazy
 
 class CourseListFragment : BaseFragment(R.layout.fragment_course_list) {
 

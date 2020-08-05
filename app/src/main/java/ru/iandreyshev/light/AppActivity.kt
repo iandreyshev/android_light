@@ -2,7 +2,6 @@ package ru.iandreyshev.light
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import timber.log.Timber
 
 class AppActivity : AppCompatActivity() {
 

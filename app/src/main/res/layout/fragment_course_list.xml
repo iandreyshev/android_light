@@ -31,7 +31,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout"
         tools:itemCount="7"
-        tools:listitem="@layout/item_course"
+        tools:listitem="@layout/item_course_list_course"
         tools:visibility="gone" />
 
     <TextView

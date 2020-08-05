@@ -3,9 +3,9 @@ package ru.iandreyshev.light.infrastructure.courseList
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
-import ru.iandreyshev.light.domain.course.Course
-import ru.iandreyshev.light.domain.course.CourseId
-import ru.iandreyshev.light.domain.course.ICourseRepository
+import ru.iandreyshev.player_core.course.Course
+import ru.iandreyshev.player_core.course.CourseId
+import ru.iandreyshev.player_core.course.ICourseRepository
 
 class InMemoryCourseRepository : ICourseRepository {
 

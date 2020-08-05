@@ -3,29 +3,4 @@
 
     <string name="common_dialog_ok">OK</string>
     <string name="common_dialog_cancel">Cancel</string>
-
-    <string name="editor_action_save">Save</string>
-    <string name="editor_action_start_preview">Start preview</string>
-    <string name="editor_action_edit_title">Edit title</string>
-    <string name="editor_action_add_quiz">New Quiz</string>
-    <string name="editor_action_add_image">New Image</string>
-    <string name="editor_action_add_video">New Video</string>
-    <string name="editor_default_title">New course</string>
-    <string name="editor_empty_view_text">Insert first element</string>
-    <string name="editor_settings_action_rename">Rename</string>
-    <string name="editor_rename_dialog_title">Course name</string>
-
-    <string name="quiz_maker_title">New Quiz</string>
-    <string name="quiz_maker_action_save">Create</string>
-    <string name="quiz_maker_question_hint">Question</string>
-    <string name="quiz_maker_variant_hint">Variant</string>
-    <string name="quiz_maker_is_valid_check_box_title">Is valid</string>
-    <string name="quiz_maker_add_variant_title">Add variant</string>
-
-    <string name="image_maker_title">New Image</string>
-    <string name="image_maker_text_title">Image text</string>
-    <string name="image_maker_action_save">Create</string>
-
-    <string name="video_maker_title">New Video</string>
-    <string name="video_maker_action_save">Create</string>
 </resources>
