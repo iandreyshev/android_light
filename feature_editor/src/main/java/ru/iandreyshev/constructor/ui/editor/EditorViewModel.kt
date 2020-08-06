@@ -7,52 +7,77 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
+import ru.iandreyshev.constructor.domain.course.ICourseDraftRepository
 import ru.iandreyshev.constructor.domain.editor.CourseDraft
 import ru.iandreyshev.constructor.domain.editor.DraftItem
-import ru.iandreyshev.constructor.domain.editor.ISaveCourseDraftUseCase
-import ru.iandreyshev.core_ui.voidSingleLiveEvent
+import ru.iandreyshev.constructor.domain.image.ImageDraftId
+import ru.iandreyshev.constructor.domain.quiz.QuizDraftId
+import ru.iandreyshev.constructor.domain.video.VideoDraftId
+import ru.iandreyshev.constructor.ui.imageMaker.ImageMakerArgs
+import ru.iandreyshev.constructor.ui.quizMaker.QuizMakerArgs
+import ru.iandreyshev.constructor.ui.videoMaker.VideoMakerArgs
+import ru.iandreyshev.constructor.utils.newUID
 import ru.iandreyshev.core_ui.invoke
+import ru.iandreyshev.core_ui.singleLiveEvent
+import ru.iandreyshev.core_ui.voidSingleLiveEvent
 import ru.iandreyshev.core_utils.uiLazy
 
 class EditorViewModel(
     scope: Scope,
-    private val args: EditorArgs
+    editorArgs: EditorArgs
 ) : ViewModel() {
 
     val courseTitle by uiLazy { mCourseName.distinctUntilChanged() }
     val timelineAdapter = GroupAdapter<GroupieViewHolder>()
     val isTimelineEmpty: LiveData<Boolean> by uiLazy { mIsTimelineEmpty }
 
-    val eventOpenQuizMaker = voidSingleLiveEvent()
-    val eventOpenImageMaker = voidSingleLiveEvent()
-    val eventOpenVideoMaker = voidSingleLiveEvent()
+    val eventOpenQuizMaker = singleLiveEvent<QuizMakerArgs>()
+    val eventOpenImageMaker = singleLiveEvent<ImageMakerArgs>()
+    val eventOpenVideoMaker = singleLiveEvent<VideoMakerArgs>()
     val eventBackFromEditor = voidSingleLiveEvent()
 
-    private val mCourseName = MutableLiveData(args.courseTitle)
-    private val mIsTimelineEmpty = MutableLiveData(true)
-
-    private val mDraft by uiLazy {
-        scope.get<CourseDraft> { parametersOf(args.courseTitle) }
+    private val mRepository by uiLazy {
+        scope.get<ICourseDraftRepository> {
+            parametersOf(editorArgs)
+        }
     }
-    private val mSaveDraft by uiLazy { scope.get<ISaveCourseDraftUseCase>() }
+    private lateinit var mDraft: CourseDraft
+
+    private val mCourseName = MutableLiveData(editorArgs.courseTitle)
+    private val mIsTimelineEmpty = MutableLiveData(true)
 
     fun onCreate() {
         viewModelScope.launch {
-            mDraft.getItemsObservable()
+            mDraft = mRepository.get()
+            mRepository.observeItems()
                 .collect { updateTimeline(it) }
         }
     }
 
     fun onCreateQuiz() {
-        eventOpenQuizMaker()
+        eventOpenQuizMaker(
+            QuizMakerArgs(
+                quizDraftId = QuizDraftId(newUID())
+            )
+        )
     }
 
     fun onCreateImage() {
-        eventOpenImageMaker()
+        eventOpenImageMaker(
+            ImageMakerArgs(
+                courseDraftId = mDraft.id,
+                imageDraftId = ImageDraftId(newUID())
+            )
+        )
     }
 
     fun onCreateVideo() {
-        eventOpenVideoMaker()
+        eventOpenVideoMaker(
+            VideoMakerArgs(
+                courseDraftId = mDraft.id,
+                videoDraftId = VideoDraftId(newUID())
+            )
+        )
     }
 
     fun onExit() {
@@ -61,17 +86,16 @@ class EditorViewModel(
 
     fun onSave() {
         viewModelScope.launch {
-            mSaveDraft(mDraft)
+            mRepository.save(mDraft)
             eventBackFromEditor()
         }
     }
 
     fun onMove(from: Int, to: Int) {
-        mDraft.move(from, to)
     }
 
     fun onRenameCourse(newName: String) {
-        mDraft.title = newName
+        mDraft = mDraft.copy(title = newName)
         mCourseName.value = mDraft.title
     }
 
@@ -86,13 +110,13 @@ class EditorViewModel(
                 )
                 is DraftItem.Image -> ImageItem(
                     id = item.draft.hashCode().toLong(),
-                    imageName = item.draft.fileName,
-                    imageUrl = item.draft.fileName,
+                    imageName = item.draft.source?.filePath.orEmpty(),
+                    imageUrl = item.draft.source?.filePath.orEmpty(),
                     onClickListener = {}
                 )
                 is DraftItem.Video -> VideoItem(
                     id = item.draft.hashCode().toLong(),
-                    videoName = "",
+                    videoName = item.draft.source?.filePath.orEmpty(),
                     duration = "",
                     onClickListener = {}
                 )

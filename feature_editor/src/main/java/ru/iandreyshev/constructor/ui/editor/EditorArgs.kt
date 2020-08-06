@@ -1,6 +1,8 @@
 package ru.iandreyshev.constructor.ui.editor
 
+import ru.iandreyshev.constructor.domain.course.CourseDraftId
+
 data class EditorArgs(
-    val courseId: String?,
+    val courseDraftId: CourseDraftId?,
     val courseTitle: String
 )

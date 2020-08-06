@@ -6,32 +6,38 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import kotlinx.coroutines.launch
+import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
-import ru.iandreyshev.constructor.domain.course.CourseItem
-import ru.iandreyshev.constructor.domain.quiz.ISaveQuizDraftUseCase
+import ru.iandreyshev.constructor.domain.quiz.IQuizDraftRepository
 import ru.iandreyshev.constructor.domain.quiz.draft.QuizDraft
-import ru.iandreyshev.core_utils.uiLazy
 import ru.iandreyshev.constructor.ui.quizMaker.items.QuestionItem
 import ru.iandreyshev.constructor.ui.quizMaker.items.QuestionSettingsItem
 import ru.iandreyshev.constructor.ui.quizMaker.items.VariantItem
+import ru.iandreyshev.core_ui.invoke
 import ru.iandreyshev.core_ui.singleLiveEvent
 import ru.iandreyshev.core_ui.voidSingleLiveEvent
-import ru.iandreyshev.core_ui.invoke
+import ru.iandreyshev.core_utils.uiLazy
 
-class QuizMakerViewModel(scope: Scope) : ViewModel() {
-
-    private val mSaveDraft by uiLazy { scope.get<ISaveQuizDraftUseCase>() }
+class QuizMakerViewModel(
+    scope: Scope,
+    private val args: QuizMakerArgs
+) : ViewModel() {
 
     val adapter = GroupAdapter<GroupieViewHolder>()
 
     val eventExit = voidSingleLiveEvent()
     val eventShowError = singleLiveEvent<String>()
 
+    private val mRepository by uiLazy {
+        scope.get<IQuizDraftRepository> {
+            parametersOf(args)
+        }
+    }
     private lateinit var mDraft: QuizDraft
 
     fun onCreate() {
         viewModelScope.launch {
-            mDraft = buildQuizViewState(null)
+            mDraft = buildQuizViewState()
             updateDraftView()
         }
     }
@@ -68,7 +74,7 @@ class QuizMakerViewModel(scope: Scope) : ViewModel() {
 
     fun onSave() {
         viewModelScope.launch {
-            mSaveDraft(mDraft)
+            mRepository.save(mDraft)
             eventExit()
         }
     }
@@ -78,13 +84,11 @@ class QuizMakerViewModel(scope: Scope) : ViewModel() {
         updateDraftView()
     }
 
-    private fun buildQuizViewState(quiz: CourseItem.Quiz?): QuizDraft {
-        quiz ?: return QuizDraft().apply {
+    private fun buildQuizViewState(): QuizDraft {
+        return QuizDraft(args.quizDraftId).apply {
             addQuestion()
             addVariant(currentQuestionPosition)
         }
-
-        return QuizDraft(quiz)
     }
 
     private fun updateDraftView() {

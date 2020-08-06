@@ -1,8 +1,8 @@
 package ru.iandreyshev.constructor.ui.quizMaker
 
-import ru.iandreyshev.constructor.domain.quiz.QuestionId
+import ru.iandreyshev.constructor.domain.quiz.QuestionDraftId
 
 data class QuestionViewState(
-    var id: QuestionId,
+    var id: QuestionDraftId,
     var text: String = ""
 )

@@ -21,13 +21,25 @@
     <fragment
         android:id="@+id/imageMakerFragment"
         android:name="ru.iandreyshev.constructor.ui.imageMaker.ImageMakerFragment"
-        android:label="ImageMakerFragment" />
+        android:label="ImageMakerFragment">
+        <argument
+            android:name="imageMakerArgs"
+            app:argType="ru.iandreyshev.constructor.ui.imageMaker.ImageMakerArgs" />
+    </fragment>
     <fragment
         android:id="@+id/quizMakerFragment"
         android:name="ru.iandreyshev.constructor.ui.quizMaker.QuizMakerFragment"
-        android:label="QuizMakerFragment" />
+        android:label="QuizMakerFragment">
+        <argument
+            android:name="quizMakerArgs"
+            app:argType="ru.iandreyshev.constructor.ui.quizMaker.QuizMakerArgs" />
+    </fragment>
     <fragment
         android:id="@+id/videoMaker"
         android:name="ru.iandreyshev.constructor.ui.videoMaker.VideoMakerFragment"
-        android:label="VideoMaker" />
+        android:label="VideoMaker">
+        <argument
+            android:name="videoMakerArgs"
+            app:argType="ru.iandreyshev.constructor.ui.videoMaker.VideoMakerArgs" />
+    </fragment>
 </navigation>

@@ -1,10 +1,10 @@
 package ru.iandreyshev.constructor.domain.image.draft
 
-class ImageDraft {
+import ru.iandreyshev.constructor.domain.image.ImageDraftId
+import ru.iandreyshev.constructor.domain.image.ImageSource
 
-    var text: String? = null
-    var source: ImageSource? = null
-    val fileName: String
-        get() = source?.filePath.orEmpty()
-
-}
+data class ImageDraft(
+    val id: ImageDraftId,
+    val text: String? = null,
+    val source: ImageSource? = null
+)

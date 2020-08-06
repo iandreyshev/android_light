@@ -1,6 +1,6 @@
 package ru.iandreyshev.constructor.ui.quizMaker
 
-import ru.iandreyshev.constructor.domain.quiz.VariantId
+import ru.iandreyshev.constructor.domain.quiz.VariantDraftId
 
 sealed class VariantViewState {
     data class NewVariantButton(
@@ -8,7 +8,7 @@ sealed class VariantViewState {
     ) : VariantViewState()
 
     data class Text(
-        var id: VariantId? = null,
+        var id: VariantDraftId? = null,
         val text: String = "",
         val position: Int,
         val isValid: Boolean,

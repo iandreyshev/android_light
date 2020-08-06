@@ -10,7 +10,7 @@ import ru.iandreyshev.constructor.R
 class ImageItem(
     private val id: Long,
     private val imageName: String,
-    private val imageUrl: String,
+    private val imageUrl: String?,
     private val onClickListener: () -> Unit
 ) : Item<ImageItem.ViewHolder>() {
 
@@ -28,14 +28,14 @@ class ImageItem(
             .load(imageUrl)
             .centerCrop()
             .dontAnimate()
-            .into(viewHolder.itemView.imagePreview)
+            .into(viewHolder.itemView.videoPreview)
     }
 
     override fun unbind(viewHolder: ViewHolder) {
         super.unbind(viewHolder)
 
         Glide.with(viewHolder.itemView)
-            .clear(viewHolder.itemView.imagePreview)
+            .clear(viewHolder.itemView.videoPreview)
     }
 
     class ViewHolder(view: View) : GroupieViewHolder(view)

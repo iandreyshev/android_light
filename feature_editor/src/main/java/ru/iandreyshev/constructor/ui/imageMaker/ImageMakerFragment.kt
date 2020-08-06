@@ -12,6 +12,7 @@ import androidx.camera.core.ImageCaptureException
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
@@ -39,13 +40,13 @@ import java.io.File
 class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
 
     private val mViewModel by viewModel<ImageMakerViewModel> {
-        parametersOf(getScope(R.id.nav_editor))
+        val navArgs by navArgs<ImageMakerFragmentArgs>()
+        parametersOf(getScope(R.id.nav_editor), navArgs.imageMakerArgs)
     }
     private val mPickFromGalleryLauncher by uiLazy {
-        registerForActivityResult(
-            ActivityResultContracts.GetContent(),
-            mViewModel::onPickFromGallery
-        )
+        registerForActivityResult(ActivityResultContracts.GetContent()) {
+            mViewModel.onPickFromGallery(it.toString())
+        }
     }
     private val mRequestCameraPermissionLauncher by uiLazy {
         registerForActivityResult(
@@ -188,7 +189,7 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
                     }
 
                     cameraView.bindToLifecycle(this)
-                    takePhotoButton.setOnClickListener { mViewModel.onTakePhoto() }
+                    takePhotoButton.setOnClickListener { mViewModel.onTakePhotoClick() }
                 }
             }.exhaustive
         }
@@ -206,7 +207,7 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     lifecycleScope.launch {
-                        mViewModel.onTakePhotoSuccess(outputFileResults.savedUri)
+                        mViewModel.onTakePhotoSuccess(filePath)
                     }
                 }
 

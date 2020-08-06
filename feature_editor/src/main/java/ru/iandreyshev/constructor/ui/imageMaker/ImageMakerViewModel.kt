@@ -1,21 +1,24 @@
 package ru.iandreyshev.constructor.ui.imageMaker
 
-import android.net.Uri
 import androidx.camera.core.ImageCaptureException
 import androidx.lifecycle.*
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
-import ru.iandreyshev.constructor.domain.image.ISaveImageDraftUseCase
+import ru.iandreyshev.constructor.domain.image.IImageDraftRepository
 import ru.iandreyshev.constructor.domain.image.draft.ImageDraft
-import ru.iandreyshev.constructor.domain.image.draft.ImageSource
+import ru.iandreyshev.constructor.domain.image.ImageSource
 import ru.iandreyshev.core_ui.singleLiveEvent
 import ru.iandreyshev.core_ui.voidSingleLiveEvent
 import ru.iandreyshev.core_ui.invoke
 import ru.iandreyshev.core_utils.uiLazy
 import timber.log.Timber
 
-// TODO: 8/5/2020 Перевести состояние экрана в один data-класс
-class ImageMakerViewModel(scope: Scope) : ViewModel() {
+class ImageMakerViewModel(
+    scope: Scope,
+    imageMakerArgs: ImageMakerArgs
+) : ViewModel() {
 
     val cameraAvailability by uiLazy { mCameraAvailability.distinctUntilChanged() }
     val textBalloon by uiLazy { mTextBalloon.distinctUntilChanged() }
@@ -27,10 +30,26 @@ class ImageMakerViewModel(scope: Scope) : ViewModel() {
 
     private val mCameraAvailability = MutableLiveData(CameraState.AWAIT_PERMISSION)
     private val mTextBalloon = MutableLiveData("")
-    private val mPicture = MutableLiveData<Uri?>(null)
+    private val mPicture = MutableLiveData<String?>(null)
 
-    private val mDraft by uiLazy { scope.get<ImageDraft>() }
-    private val mSaveDraft by uiLazy { scope.get<ISaveImageDraftUseCase>() }
+    private val mRepository by uiLazy {
+        scope.get<IImageDraftRepository> {
+            parametersOf(imageMakerArgs)
+        }
+    }
+    private lateinit var mDraft: ImageDraft
+
+    override fun onCleared() {
+        GlobalScope.launch {
+            mRepository.release()
+        }
+    }
+
+    fun onCreate() {
+        viewModelScope.launch {
+            mDraft = mRepository.get()
+        }
+    }
 
     fun onCameraPermissionGranted(isGranted: Boolean) {
         mCameraAvailability.value = when (isGranted) {
@@ -39,12 +58,32 @@ class ImageMakerViewModel(scope: Scope) : ViewModel() {
         }
     }
 
-    fun onTakePhoto() {
-        eventTakePhoto("file.temp")
+    fun onTakePhotoClick() {
+        viewModelScope.launch {
+            eventTakePhoto(mRepository.getImageFilePath())
+        }
     }
 
-    fun onTakePhotoSuccess(uri: Uri?) {
-        Timber.d("Photo captured")
+    fun onChangeText(text: String?) {
+        mDraft = mDraft.copy(text = text)
+        mTextBalloon.value = mDraft.text.orEmpty()
+    }
+
+    fun onCreateDraft() {
+        viewModelScope.launch {
+            mRepository.save(mDraft)
+            eventExit()
+        }
+    }
+
+    fun onTakePhotoSuccess(filePath: String) {
+        mPicture.value = filePath
+        mDraft = mDraft.copy(source = ImageSource(filePath))
+    }
+
+    fun onPickFromGallery(uriString: String) {
+        mPicture.value = uriString
+        mDraft = mDraft.copy(source = ImageSource(uriString))
     }
 
     fun onTakePhotoError(exception: ImageCaptureException) {
@@ -52,27 +91,9 @@ class ImageMakerViewModel(scope: Scope) : ViewModel() {
         Timber.d(exception)
     }
 
-    fun onChangeText(text: String?) {
-        mDraft.text = text
-        mTextBalloon.value = mDraft.text.orEmpty()
-    }
-
-    fun onCreateDraft() {
-        viewModelScope.launch {
-            mSaveDraft(mDraft)
-            eventExit()
-        }
-    }
-
-    fun onPickFromGallery(uri: Uri) {
-        mPicture.value = uri
-        mDraft.source =
-            ImageSource(uri.toString())
-    }
-
     fun onPictureLoadError(picture: Any?) {
         mPicture.value = null
-        mDraft.source = null
+        mDraft = mDraft.copy(source = null)
     }
 
 }

@@ -34,26 +34,21 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_end="@dimen/grid_step_vertical_2" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineContentBegin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="56dp" />
-
     <androidx.cardview.widget.CardView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:id="@+id/videoPreviewCard"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
         app:layout_constraintDimensionRatio="w,9:16"
         app:layout_constraintEnd_toStartOf="@+id/guidelineContentBegin"
         app:layout_constraintStart_toStartOf="@id/guidelineBegin"
-        app:layout_constraintTop_toTopOf="@id/guidelineTop">
+        app:layout_constraintTop_toTopOf="@id/guidelineTop"
+        app:layout_constraintVertical_bias="1">
 
         <ImageView
-            android:id="@+id/imagePreview"
+            android:id="@+id/videoPreview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/gray_light" />
@@ -72,7 +67,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/dragIcon"
-        app:layout_constraintStart_toStartOf="@id/guidelineContentBegin"
+        app:layout_constraintStart_toEndOf="@id/videoPreviewCard"
         app:layout_constraintTop_toTopOf="@id/guidelineTop" />
 
     <TextView
@@ -80,9 +75,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginStart="@dimen/grid_step_1"
         android:textColor="@color/gray"
         app:layout_constraintEnd_toEndOf="@+id/title"
-        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintStart_toEndOf="@id/videoPreviewCard"
         app:layout_constraintTop_toBottomOf="@id/title"
         tools:text="3m 42s" />
 
@@ -91,9 +87,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginStart="@dimen/grid_step_1"
+        android:ellipsize="middle"
+        android:maxLines="2"
         android:textColor="@color/gray"
         app:layout_constraintEnd_toEndOf="@+id/title"
-        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintStart_toEndOf="@id/videoPreviewCard"
         app:layout_constraintTop_toBottomOf="@id/subtitle"
         tools:text="VID_3214.mp4" />
 
@@ -113,7 +112,7 @@
         android:background="@color/gray_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@id/guidelineContentBegin" />
+        app:layout_constraintStart_toEndOf="@id/videoPreviewCard" />
 
     <FrameLayout
         android:id="@+id/clickableArea"

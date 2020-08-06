@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import ru.iandreyshev.player_core.course.Course
 import ru.iandreyshev.player_core.course.CourseId
-import ru.iandreyshev.player_core.course.ICourseRepository
+import ru.iandreyshev.light.domain.ICourseRepository
 
 class InMemoryCourseRepository : ICourseRepository {
 

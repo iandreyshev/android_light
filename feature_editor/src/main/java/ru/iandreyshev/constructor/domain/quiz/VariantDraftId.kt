@@ -1,3 +1,3 @@
 package ru.iandreyshev.constructor.domain.quiz
 
-inline class VariantId(val value: String)
+inline class VariantDraftId(val value: String)

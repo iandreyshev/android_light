@@ -2,7 +2,7 @@ package ru.iandreyshev.light.infrastructure.player
 
 import ru.iandreyshev.player_core.course.Course
 import ru.iandreyshev.player_core.course.CourseId
-import ru.iandreyshev.player_core.course.ICourseRepository
+import ru.iandreyshev.light.domain.ICourseRepository
 import ru.iandreyshev.player_core.course.IPlayerDataSource
 
 class RepositoryDataSource(

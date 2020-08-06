@@ -6,40 +6,55 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidApplication
+import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
-import ru.iandreyshev.constructor.domain.videoMaker.ISaveVideoDraftUseCase
-import ru.iandreyshev.constructor.domain.videoMaker.VideoDraft
-import ru.iandreyshev.constructor.domain.videoMaker.VideoSource
-import ru.iandreyshev.core_ui.voidSingleLiveEvent
+import ru.iandreyshev.constructor.domain.video.IVideoDraftRepository
+import ru.iandreyshev.constructor.domain.video.VideoSource
+import ru.iandreyshev.constructor.domain.video.draft.VideoDraft
 import ru.iandreyshev.core_ui.invoke
+import ru.iandreyshev.core_ui.voidSingleLiveEvent
 import ru.iandreyshev.core_utils.uiLazy
 
 class VideoMakerViewModel(
-    private val scope: Scope
+    private val scope: Scope,
+    private val args: VideoMakerArgs
 ) : ViewModel() {
 
     val player by uiLazy { mPlayer.distinctUntilChanged() }
     val hasVideo by uiLazy {
-        player.map { it != null }.distinctUntilChanged()
+        player.map { it != null }
+            .distinctUntilChanged()
     }
-
-    private val mPlayer = MutableLiveData<ExoPlayer?>(null)
-
-    private val mDraft = VideoDraft()
 
     val eventExit = voidSingleLiveEvent()
 
-    private val mSaveDraft by uiLazy { scope.get<ISaveVideoDraftUseCase>() }
+    private val mRepository by uiLazy {
+        scope.get<IVideoDraftRepository> {
+            parametersOf(args)
+        }
+    }
+    private lateinit var mDraft: VideoDraft
+    private val mPlayer = MutableLiveData<ExoPlayer?>(null)
 
     override fun onCleared() {
-        mPlayer.value?.release()
+        GlobalScope.launch {
+            mRepository.release()
+            mPlayer.value?.release()
+        }
+    }
+
+    fun onCreate() {
+        viewModelScope.launch {
+            mDraft = mRepository.get()
+        }
     }
 
     fun onCreateDraft() {
         viewModelScope.launch {
-            mSaveDraft(mDraft)
+            mRepository.save(mDraft)
             eventExit()
         }
     }
@@ -60,8 +75,7 @@ class VideoMakerViewModel(
 
         mPlayer.value = player
 
-        mDraft.source =
-            VideoSource(uri.toString())
+        mDraft = mDraft.copy(source = VideoSource(uri.toString()))
     }
 
 }

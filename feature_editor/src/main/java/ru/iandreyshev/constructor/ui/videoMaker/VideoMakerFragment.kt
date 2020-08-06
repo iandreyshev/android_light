@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_video_maker.*
 import kotlinx.android.synthetic.main.fragment_video_maker.changeFromCameraButton
 import kotlinx.android.synthetic.main.fragment_video_maker.changeFromGalleryButton
@@ -25,7 +26,8 @@ import ru.iandreyshev.core_utils.uiLazy
 class VideoMakerFragment : BaseFragment(R.layout.fragment_video_maker) {
 
     private val mViewModel by viewModel<VideoMakerViewModel> {
-        parametersOf(getScope(R.id.nav_editor))
+        val navArgs by navArgs<VideoMakerFragmentArgs>()
+        parametersOf(getScope(R.id.nav_editor), navArgs.videoMakerArgs)
     }
     private val mPickFromGalleryLauncher by uiLazy {
         registerForActivityResult(

@@ -1,1 +1,5 @@
-<manifest package="ru.iandreyshev.constructor" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ru.iandreyshev.constructor">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+</manifest>

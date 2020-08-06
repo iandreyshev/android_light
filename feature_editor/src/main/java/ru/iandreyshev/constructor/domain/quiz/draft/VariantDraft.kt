@@ -1,16 +1,16 @@
 package ru.iandreyshev.constructor.domain.quiz.draft
 
-import ru.iandreyshev.constructor.domain.quiz.VariantId
+import ru.iandreyshev.constructor.domain.quiz.VariantDraftId
 
 data class VariantDraft(
-    val id: VariantId,
+    val id: VariantDraftId,
     var text: String,
     var isValid: Boolean
 ) {
 
     companion object {
         fun empty() = VariantDraft(
-            id = VariantId(""),
+            id = VariantDraftId(""),
             text = "",
             isValid = false
         )

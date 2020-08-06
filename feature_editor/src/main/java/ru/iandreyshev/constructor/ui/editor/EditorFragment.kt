@@ -26,7 +26,7 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
         parametersOf(
             getScope(R.id.nav_editor),
             EditorArgs(
-                courseId = null,
+                courseDraftId = null,
                 courseTitle = resources.getString(R.string.editor_default_title)
             )
         )
@@ -53,10 +53,10 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
 
         mViewModel.isTimelineEmpty.viewObserveWith { bottomMenu.isGone = it }
 
-        mViewModel.eventBackFromEditor { router().back() }
-        mViewModel.eventOpenImageMaker { router().openImageMaker() }
-        mViewModel.eventOpenVideoMaker { router().openVideoMaker() }
-        mViewModel.eventOpenQuizMaker { router().openQuizMaker() }
+        mViewModel.eventBackFromEditor(router()::back)
+        mViewModel.eventOpenImageMaker(router()::openImageMaker)
+        mViewModel.eventOpenVideoMaker(router()::openVideoMaker)
+        mViewModel.eventOpenQuizMaker(router()::openQuizMaker)
     }
 
     private fun initTimeline() {

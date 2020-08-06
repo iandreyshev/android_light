@@ -1,30 +1,9 @@
 package ru.iandreyshev.constructor.domain.quiz.draft
 
-import ru.iandreyshev.constructor.domain.course.CourseItem
-import ru.iandreyshev.constructor.domain.quiz.QuestionId
+import ru.iandreyshev.constructor.domain.quiz.QuestionDraftId
+import ru.iandreyshev.constructor.domain.quiz.QuizDraftId
 
-class QuizDraft constructor() {
-
-    constructor(quiz: CourseItem.Quiz) : this() {
-        mQuestions = quiz.questions
-            .map { question ->
-                QuestionDraft(
-                    id = question.id,
-                    text = question.text,
-                    isMultipleMode = question.isMultipleMode,
-                    variants = question.variants
-                        .map { variant ->
-                            VariantDraft(
-                                id = variant.id,
-                                text = variant.text,
-                                isValid = variant.isValid
-                            )
-                        }
-                        .toMutableList()
-                )
-            }
-            .toMutableList()
-    }
+class QuizDraft(val id: QuizDraftId) {
 
     val questions: List<QuestionDraft>
         get() = mQuestions
@@ -56,7 +35,7 @@ class QuizDraft constructor() {
 
     fun addQuestion(): Int {
         val question = QuestionDraft(
-            id = QuestionId(""),
+            id = QuestionDraftId(""),
             text = "",
             isMultipleMode = false,
             variants = mutableListOf()

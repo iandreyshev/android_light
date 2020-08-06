@@ -10,7 +10,7 @@ import ru.iandreyshev.core_utils.uiLazy
 import ru.iandreyshev.light.ui.player.PlayerArgs
 import ru.iandreyshev.core_ui.invoke
 import ru.iandreyshev.player_core.course.Course
-import ru.iandreyshev.player_core.course.ICourseRepository
+import ru.iandreyshev.light.domain.ICourseRepository
 
 class CourseListViewModel(scope: Scope) : ViewModel() {
 

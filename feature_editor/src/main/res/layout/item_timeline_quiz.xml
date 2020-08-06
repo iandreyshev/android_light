@@ -34,17 +34,10 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_end="@dimen/grid_step_vertical_2" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineContentBegin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="56dp" />
-
     <ImageView
-        android:id="@+id/imagePreview"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:id="@+id/videoPreview"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
         app:layout_constraintDimensionRatio="w,9:16"
         app:layout_constraintEnd_toStartOf="@+id/guidelineContentBegin"
@@ -53,6 +46,7 @@
         app:srcCompat="@drawable/ic_add_quiz" />
 
     <TextView
+
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -64,7 +58,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/dragIcon"
-        app:layout_constraintStart_toStartOf="@id/guidelineContentBegin"
+        app:layout_constraintStart_toEndOf="@id/videoPreview"
         app:layout_constraintTop_toTopOf="@id/guidelineTop" />
 
     <TextView
@@ -94,7 +88,7 @@
         android:background="@color/gray_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@id/guidelineContentBegin" />
+        app:layout_constraintStart_toEndOf="@id/videoPreview" />
 
     <FrameLayout
         android:id="@+id/clickableArea"
