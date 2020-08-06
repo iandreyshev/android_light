@@ -15,7 +15,7 @@
             <option value="$PROJECT_DIR$/core_arch" />
             <option value="$PROJECT_DIR$/core_ui" />
             <option value="$PROJECT_DIR$/core_utils" />
-            <option value="$PROJECT_DIR$/feature_constructor" />
+            <option value="$PROJECT_DIR$/feature_editor" />
             <option value="$PROJECT_DIR$/lib_player_core" />
             <option value="$PROJECT_DIR$/lib_player_ui" />
           </set>

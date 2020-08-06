@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-    implementation project(':feature_constructor')
+    implementation project(':feature_editor')
 
     implementation project(':core_arch')
     implementation project(':core_ui')

@@ -1,6 +1,6 @@
 rootProject.name = "Light"
 include ':app'
-include ':feature_constructor'
+include ':feature_editor'
 include ':core_arch'
 include ':core_ui'
 include ':core_utils'
