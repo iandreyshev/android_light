@@ -77,15 +77,6 @@
 
             </FrameLayout>
 
-            <ImageButton
-                android:id="@+id/removeTextBalloonButton"
-                android:layout_width="@dimen/square_button_mini"
-                android:layout_height="@dimen/square_button_mini"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:layout_constraintEnd_toEndOf="@id/textBalloon"
-                app:layout_constraintTop_toTopOf="@id/textBalloon"
-                app:srcCompat="@drawable/ic_remove_text_balloon" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
@@ -189,6 +180,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/grid_step_vertical_4"
         android:backgroundTint="@android:color/white"
+        app:borderWidth="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_image_maker_save" />

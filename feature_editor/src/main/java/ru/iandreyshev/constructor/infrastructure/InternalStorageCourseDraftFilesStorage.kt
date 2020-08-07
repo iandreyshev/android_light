@@ -3,25 +3,28 @@ package ru.iandreyshev.constructor.infrastructure
 import android.content.Context
 import java.io.File
 import ru.iandreyshev.constructor.domain.course.CourseDraftId
-import ru.iandreyshev.constructor.domain.editor.files.ICourseDraftFilesProvider
+import ru.iandreyshev.constructor.domain.editor.files.ICourseDraftFilesStorage
 import ru.iandreyshev.constructor.domain.editor.files.ImageFiles
 import ru.iandreyshev.constructor.domain.editor.files.VideoFiles
 import ru.iandreyshev.constructor.domain.image.ImageDraftId
 import ru.iandreyshev.constructor.domain.video.VideoDraftId
+import timber.log.Timber
+import java.lang.Exception
 
-class InternalStorageCourseDraftFilesProvider(
+class InternalStorageCourseDraftFilesStorage(
     private val context: Context,
     private val courseId: CourseDraftId
-) : ICourseDraftFilesProvider {
+) : ICourseDraftFilesStorage {
 
     override fun getImageFiles(id: ImageDraftId): ImageFiles {
-        val imageFolder = File(getOrCreateCourseFolder(), "image_${id.value}")
-        imageFolder.mkdirs()
+        val folder = File(getOrCreateCourseFolder(), "image_${id.value}")
+        folder.mkdirs()
 
-        val imageSourceFile = File(imageFolder, "source.PNG")
+        val sourceFile = File(folder, "source.PNG")
 
         return ImageFiles(
-            imageSourceFilePath = imageSourceFile.path
+            folderPath = folder.path,
+            sourceFilePath = sourceFile.path
         )
     }
 
@@ -43,6 +46,14 @@ class InternalStorageCourseDraftFilesProvider(
         }
 
         return draftFolder
+    }
+
+    override fun delete(path: String) {
+        try {
+            File(path).deleteRecursively()
+        } catch (ex: Exception) {
+            Timber.d(ex)
+        }
     }
 
     companion object {

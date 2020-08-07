@@ -9,7 +9,6 @@ import ru.iandreyshev.constructor.domain.editor.DraftItem
 import ru.iandreyshev.constructor.domain.image.ImageSource
 import ru.iandreyshev.constructor.domain.video.VideoSource
 import ru.iandreyshev.constructor.utils.newUID
-import ru.iandreyshev.light.domain.DraftDataSource
 import ru.iandreyshev.light.domain.ICourseRepository
 import ru.iandreyshev.player_core.course.Course
 import ru.iandreyshev.player_core.course.CourseId
@@ -19,7 +18,6 @@ import ru.iandreyshev.player_core.quiz.QuestionId
 import ru.iandreyshev.player_core.quiz.Variant
 import ru.iandreyshev.player_core.quiz.VariantId
 import timber.log.Timber
-import java.lang.IllegalArgumentException
 import java.util.*
 
 class CourseDraftRepository(
@@ -115,7 +113,12 @@ class CourseDraftRepository(
 
 
     private fun ImageSource.asPlayerImageSource() =
-        ru.iandreyshev.player_core.image.ImageSource(filePath)
+        ru.iandreyshev.player_core.image.ImageSource(
+            when (this) {
+                is ImageSource.Gallery -> filePath
+                is ImageSource.Photo -> filePath
+            }
+        )
 
     private fun VideoSource.asPlayerVideoSource() =
         ru.iandreyshev.player_core.video.VideoSource(filePath)

@@ -8,11 +8,11 @@ import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import ru.iandreyshev.constructor.di.FEATURE_EDITOR_MODULE
 import ru.iandreyshev.constructor.domain.course.ICourseDraftRepository
-import ru.iandreyshev.constructor.domain.editor.files.ICourseDraftFilesProvider
+import ru.iandreyshev.constructor.domain.editor.files.ICourseDraftFilesStorage
 import ru.iandreyshev.constructor.domain.image.IImageDraftRepository
 import ru.iandreyshev.constructor.domain.quiz.IQuizDraftRepository
 import ru.iandreyshev.constructor.domain.video.IVideoDraftRepository
-import ru.iandreyshev.constructor.infrastructure.InternalStorageCourseDraftFilesProvider
+import ru.iandreyshev.constructor.infrastructure.InternalStorageCourseDraftFilesStorage
 import ru.iandreyshev.constructor.ui.editor.EditorArgs
 import ru.iandreyshev.constructor.ui.editor.EditorViewModel
 import ru.iandreyshev.constructor.ui.imageMaker.ImageMakerArgs
@@ -68,8 +68,8 @@ private val MAIN_MODULE = module {
             .apply { onCreate() }
     }
     navGraphScope(R.id.nav_editor) {
-        factory<ICourseDraftFilesProvider> {
-            InternalStorageCourseDraftFilesProvider(
+        factory<ICourseDraftFilesStorage> {
+            InternalStorageCourseDraftFilesStorage(
                 context = androidContext(),
                 courseId = it.component1()
             )
@@ -97,7 +97,7 @@ private val MAIN_MODULE = module {
             ImageDraftRepository(
                 id = args.imageDraftId,
                 courseRepository = get(),
-                filesProvider = get { parametersOf(args.courseDraftId) }
+                filesStorage = get { parametersOf(args.courseDraftId) }
             )
         }
         scoped<IVideoDraftRepository> {

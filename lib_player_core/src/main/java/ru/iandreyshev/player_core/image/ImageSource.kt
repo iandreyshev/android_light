@@ -1,3 +1,3 @@
 package ru.iandreyshev.player_core.image
 
-data class ImageSource(val filePath: String)
+data class ImageSource(val uri: String)

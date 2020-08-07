@@ -42,15 +42,15 @@
         android:id="@+id/timeline"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/gray_light"
+        android:background="#fff"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@id/bottomMenu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-        tools:itemCount="7"
+        tools:itemCount="2"
         tools:listitem="@layout/item_timeline_image"
-        tools:visibility="gone" />
+        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/emptyView"

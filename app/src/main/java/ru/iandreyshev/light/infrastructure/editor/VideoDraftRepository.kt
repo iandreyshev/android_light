@@ -2,7 +2,7 @@ package ru.iandreyshev.light.infrastructure.editor
 
 import ru.iandreyshev.constructor.domain.course.ICourseDraftRepository
 import ru.iandreyshev.constructor.domain.editor.DraftItem
-import ru.iandreyshev.constructor.domain.editor.files.ICourseDraftFilesProvider
+import ru.iandreyshev.constructor.domain.editor.files.ICourseDraftFilesStorage
 import ru.iandreyshev.constructor.domain.video.IVideoDraftRepository
 import ru.iandreyshev.constructor.domain.video.VideoDraftId
 import ru.iandreyshev.constructor.domain.video.draft.VideoDraft
@@ -12,7 +12,7 @@ import timber.log.Timber
 class VideoDraftRepository(
     private val id: VideoDraftId,
     private val courseRepository: ICourseDraftRepository,
-    private val courseDraftFilesProvider: ICourseDraftFilesProvider
+    private val courseDraftFilesProvider: ICourseDraftFilesStorage
 ) : IVideoDraftRepository {
 
     private val mFiles by lazy {

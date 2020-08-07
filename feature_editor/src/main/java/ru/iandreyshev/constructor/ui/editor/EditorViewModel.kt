@@ -11,6 +11,7 @@ import ru.iandreyshev.constructor.domain.course.ICourseDraftRepository
 import ru.iandreyshev.constructor.domain.editor.CourseDraft
 import ru.iandreyshev.constructor.domain.editor.DraftItem
 import ru.iandreyshev.constructor.domain.image.ImageDraftId
+import ru.iandreyshev.constructor.domain.image.ImageSource
 import ru.iandreyshev.constructor.domain.quiz.QuizDraftId
 import ru.iandreyshev.constructor.domain.video.VideoDraftId
 import ru.iandreyshev.constructor.ui.imageMaker.ImageMakerArgs
@@ -21,6 +22,7 @@ import ru.iandreyshev.core_ui.invoke
 import ru.iandreyshev.core_ui.singleLiveEvent
 import ru.iandreyshev.core_ui.voidSingleLiveEvent
 import ru.iandreyshev.core_utils.uiLazy
+import java.lang.IllegalStateException
 
 class EditorViewModel(
     scope: Scope,
@@ -108,12 +110,20 @@ class EditorViewModel(
                     questionsCount = item.draft.questionsCount,
                     onClickListener = {}
                 )
-                is DraftItem.Image -> ImageItem(
-                    id = item.draft.hashCode().toLong(),
-                    imageName = item.draft.source?.filePath.orEmpty(),
-                    imageUrl = item.draft.source?.filePath.orEmpty(),
-                    onClickListener = {}
-                )
+                is DraftItem.Image -> {
+                    val filePath = when (val source = item.draft.source) {
+                        is ImageSource.Gallery -> source.filePath
+                        is ImageSource.Photo -> source.filePath
+                        null -> throw IllegalStateException("Image source is null")
+                    }
+
+                    ImageItem(
+                        id = item.draft.id.hashCode().toLong(),
+                        imageName = filePath,
+                        imageUrl = filePath,
+                        onClickListener = {}
+                    )
+                }
                 is DraftItem.Video -> VideoItem(
                     id = item.draft.hashCode().toLong(),
                     videoName = item.draft.source?.filePath.orEmpty(),

@@ -74,7 +74,7 @@ internal class CoursePlayer(
                     }
                     is CourseItem.Image ->
                         PlayerItem.Image(
-                            uri = courseItem.source.filePath,
+                            uri = courseItem.source.uri,
                             isComplete = false
                         )
                     is CourseItem.Video ->

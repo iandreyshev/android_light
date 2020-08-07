@@ -18,6 +18,7 @@ import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
@@ -45,7 +46,7 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
     }
     private val mPickFromGalleryLauncher by uiLazy {
         registerForActivityResult(ActivityResultContracts.GetContent()) {
-            mViewModel.onPickFromGallery(it.toString())
+            mViewModel.onPickFromGallerySuccess(it.toString())
         }
     }
     private val mRequestCameraPermissionLauncher by uiLazy {
@@ -59,10 +60,11 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
         super.onViewCreated(view, savedInstanceState)
 
         initMenu()
-        initEditTextControl()
         initPickerControls()
-        initPictureView()
         initCameraView()
+
+        mViewModel.state.viewObserveWith(::render)
+
         setFullScreen()
         setOrientationPortrait()
     }
@@ -74,149 +76,157 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
     }
 
     private fun initMenu() {
-        createButton.setOnClickListener { mViewModel.onCreateDraft() }
-        mViewModel.hasPicture.viewObserveWith { createButton.isVisible = it }
+        createButton.setOnClickListener { mViewModel.onSaveDraft() }
         exitButton.setOnClickListener { router().back() }
-        mViewModel.eventExit { router().back() }
-    }
-
-    private fun initEditTextControl() {
-        editTextButton.setOnClickListener {
-            MaterialDialog(requireContext()).show {
-                title(R.string.image_maker_text_title)
-                input(
-                    inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES,
-                    maxLength = MAX_TEXT_LENGTH
-                ) { _, text ->
-                    mViewModel.onChangeText(text.toString())
-                }
-                negativeButton()
-                lifecycleOwner(this@ImageMakerFragment)
-            }
-        }
-        removeTextBalloonButton.setOnClickListener {
-            mViewModel.onChangeText(null)
-        }
-        mViewModel.textBalloon.viewObserveWith { text ->
-            textBalloon.isVisible = text.isNotBlank()
-            balloonText.text = text
-        }
-        mViewModel.hasPicture.viewObserveWith { hasPicture ->
-            editTextButton.isVisible = hasPicture
-        }
+        mViewModel.eventExit(router()::back)
     }
 
     private fun initPickerControls() {
         pickFromGalleryButton.setOnClickListener {
             mPickFromGalleryLauncher.launch(PICK_FROM_GALLERY_INPUT)
         }
-        changeFromCameraButton.setOnClickListener { }
+        changeFromCameraButton.setOnClickListener {
+            mViewModel.onOpenCameraClick()
+        }
         changeFromGalleryButton.setOnClickListener {
             mPickFromGalleryLauncher.launch(PICK_FROM_GALLERY_INPUT)
-        }
-
-        mViewModel.hasPicture.viewObserveWith { hasPicture ->
-            sourceChooserGroup.isVisible = !hasPicture
-            changeFromCameraButton.isVisible = hasPicture
-            changeFromGalleryButton.isVisible = hasPicture
-        }
-    }
-
-    private fun initPictureView() {
-        mViewModel.picture.viewObserveNullableWith { picture ->
-            when (picture) {
-                null ->
-                    Glide.with(this)
-                        .clear(imageView)
-                else ->
-                    Glide.with(this)
-                        .load(picture)
-                        .addListener(object : RequestListener<Drawable> {
-                            override fun onLoadFailed(
-                                e: GlideException?,
-                                model: Any?,
-                                target: Target<Drawable>?,
-                                isFirstResource: Boolean
-                            ): Boolean {
-                                mViewModel.onPictureLoadError(model)
-                                return false
-                            }
-
-                            override fun onResourceReady(
-                                resource: Drawable?,
-                                model: Any?,
-                                target: Target<Drawable>?,
-                                dataSource: DataSource?,
-                                isFirstResource: Boolean
-                            ): Boolean = false
-                        })
-                        .into(imageView)
-            }
         }
     }
 
     private fun initCameraView() {
         mRequestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
 
-        mViewModel.eventTakePhoto(::onTakePhoto)
-        mViewModel.cameraAvailability.viewObserveWith {
-            when (it) {
-                CameraState.AWAIT_PERMISSION -> {
-                    cameraView.isVisible = false
-                    needCameraPermissionText.isVisible = false
-                    needCameraPermissionButton.isVisible = false
-                }
-                CameraState.DISABLED -> {
-                    cameraView.isVisible = false
-                    needCameraPermissionText.isVisible = true
-                    needCameraPermissionButton.isVisible = true
-                    needCameraPermissionButton.setOnClickListener {
-                        mRequestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
-                    }
-                }
-                CameraState.AVAILABLE -> {
-                    cameraView.isVisible = true
-                    needCameraPermissionText.isVisible = false
-                    needCameraPermissionButton.isVisible = false
+        mViewModel.eventTakePhoto { filePath ->
+            val outputFile = File(filePath)
+            val outputOptions = ImageCapture.OutputFileOptions
+                .Builder(outputFile)
+                .build()
 
-                    val hasPermission = ActivityCompat.checkSelfPermission(
-                        requireContext(),
-                        Manifest.permission.CAMERA
-                    )
-                    if (hasPermission != PackageManager.PERMISSION_GRANTED) {
-                        mViewModel.onCameraPermissionGranted(false)
-                        return@viewObserveWith
+            cameraView.takePicture(
+                outputOptions,
+                Dispatchers.IO.asExecutor(),
+                object : ImageCapture.OnImageSavedCallback {
+                    override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                        lifecycleScope.launch {
+                            mViewModel.onTakePhotoSuccess(filePath)
+                        }
                     }
 
-                    cameraView.bindToLifecycle(this)
-                    takePhotoButton.setOnClickListener { mViewModel.onTakePhotoClick() }
-                }
-            }.exhaustive
+                    override fun onError(exception: ImageCaptureException) {
+                        lifecycleScope.launch {
+                            mViewModel.onTakePhotoError(exception)
+                        }
+                    }
+                })
         }
     }
 
-    private fun onTakePhoto(filePath: String) {
-        val outputFile = File(filePath)
-        val outputOptions = ImageCapture.OutputFileOptions
-            .Builder(outputFile)
-            .build()
+    private fun render(state: ImageMakerViewState) {
+        createButton.isVisible = state.hasPicture
+        editTextButton.isVisible = state.hasPicture
 
-        cameraView.takePicture(
-            outputOptions,
-            Dispatchers.IO.asExecutor(),
-            object : ImageCapture.OnImageSavedCallback {
-                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    lifecycleScope.launch {
-                        mViewModel.onTakePhotoSuccess(filePath)
-                    }
+        sourceChooserGroup.isVisible = !state.hasPicture
+        changeFromCameraButton.isVisible = state.hasPicture
+        changeFromGalleryButton.isVisible = state.hasPicture
+
+        textBalloon.isVisible = state.hasText
+        balloonText.text = state.text
+
+        renderEditTextDialog(state.text)
+        renderPicture(state.picture)
+        renderCameraView(state.cameraState)
+    }
+
+    private fun renderEditTextDialog(text: String) {
+        editTextButton.setOnClickListener {
+            MaterialDialog(requireContext()).show {
+                var newText = ""
+                title(R.string.image_maker_text_title)
+                input(
+                    prefill = text,
+                    inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES,
+                    maxLength = MAX_TEXT_LENGTH
+                ) { _, text ->
+                    newText = text.toString()
+                }
+                positiveButton(text = "Save") {
+                    mViewModel.onChangeText(newText)
+                }
+                neutralButton(text = "Delete") {
+                    mViewModel.onChangeText(null)
+                }
+                negativeButton(text = "Cancel")
+                lifecycleOwner(this@ImageMakerFragment)
+            }
+        }
+    }
+
+    private fun renderPicture(picture: String?) {
+        when (picture) {
+            null ->
+                Glide.with(this)
+                    .clear(imageView)
+            else ->
+                Glide.with(this)
+                    .load(picture)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .addListener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            mViewModel.onPictureLoadError(e)
+                            return false
+                        }
+
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean = false
+                    })
+                    .into(imageView)
+        }
+    }
+
+    private fun renderCameraView(state: CameraState) {
+        when (state) {
+            CameraState.AWAIT_PERMISSION -> {
+                cameraView.isVisible = false
+                needCameraPermissionText.isVisible = true
+                needCameraPermissionButton.isVisible = true
+                needCameraPermissionButton.setOnClickListener {
+                    mRequestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                }
+            }
+            CameraState.DISABLED -> {
+                cameraView.isVisible = false
+                needCameraPermissionText.isVisible = false
+                needCameraPermissionButton.isVisible = false
+            }
+            CameraState.AVAILABLE -> {
+                cameraView.isVisible = true
+                needCameraPermissionText.isVisible = false
+                needCameraPermissionButton.isVisible = false
+
+                val hasPermission = ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.CAMERA
+                )
+                if (hasPermission != PackageManager.PERMISSION_GRANTED) {
+                    mViewModel.onCameraPermissionGranted(false)
+                    return
                 }
 
-                override fun onError(exception: ImageCaptureException) {
-                    lifecycleScope.launch {
-                        mViewModel.onTakePhotoError(exception)
-                    }
-                }
-            })
+                cameraView.bindToLifecycle(this)
+                takePhotoButton.setOnClickListener { mViewModel.onTakePhotoClick() }
+            }
+        }.exhaustive
     }
 
     companion object {
