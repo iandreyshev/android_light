@@ -1,6 +1,6 @@
 package ru.iandreyshev.constructor.ui.quizMaker
 
-class CurrentQuestionViewState(
+data class CurrentQuestionViewState(
     val hasNext: Boolean,
     val hasPrevious: Boolean,
     val question: QuestionViewState,

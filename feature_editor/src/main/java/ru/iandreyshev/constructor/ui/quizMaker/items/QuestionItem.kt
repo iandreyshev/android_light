@@ -23,6 +23,9 @@ class QuestionItem(
 
     override fun createViewHolder(itemView: View) = ViewHolder(itemView)
 
+    override fun hasSameContentAs(other: Item<*>): Boolean =
+        other is QuestionItem && other.viewState == viewState
+
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.bind(
             viewState,

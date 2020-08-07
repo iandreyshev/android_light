@@ -16,7 +16,10 @@ class QuizDraftRepository(
         return courseRepository.getItems()
             .mapNotNull { it.asTypeOrNull<DraftItem.Quiz>()?.draft }
             .firstOrNull { it.id == id }
-            ?: QuizDraft(QuizDraftId(newUID()))
+            ?: QuizDraft(
+                QuizDraftId(newUID()),
+                listOf()
+            )
     }
 
     override suspend fun save(draft: QuizDraft) {

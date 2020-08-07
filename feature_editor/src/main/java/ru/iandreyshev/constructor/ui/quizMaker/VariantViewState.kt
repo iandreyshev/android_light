@@ -13,6 +13,7 @@ sealed class VariantViewState {
         val position: Int,
         val isValid: Boolean,
         val isFirstInBlock: Boolean,
-        val isMultipleMode: Boolean
+        val isMultipleMode: Boolean,
+        val canDelete: Boolean
     ) : VariantViewState()
 }

@@ -35,6 +35,9 @@ class VariantItem(
 
     override fun createViewHolder(itemView: View) = ViewHolder(itemView)
 
+    override fun hasSameContentAs(other: Item<*>): Boolean =
+        other is VariantItem && other.viewState == viewState
+
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.bind(
             viewState,
@@ -93,6 +96,7 @@ class VariantItem(
                         onTextChanged(it.toString())
                     }
 
+                    itemView.deleteButton.isVisible = viewState.canDelete
                     itemView.deleteButton.setOnClickListener {
                         onDeleteVariant()
                     }

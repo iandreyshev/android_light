@@ -1,7 +1,7 @@
 package ru.iandreyshev.core_ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.MutableLiveData
 
-fun <T> LiveData<T>.distinctUntilChanged() =
-    Transformations.distinctUntilChanged(this)
+fun <T> MutableLiveData<T>.modify(modifier: T.() -> T) {
+    postValue(value?.let(modifier))
+}

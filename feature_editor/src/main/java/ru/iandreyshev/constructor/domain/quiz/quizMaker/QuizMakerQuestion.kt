@@ -1,10 +1,10 @@
-package ru.iandreyshev.constructor.domain.quiz.draft
+package ru.iandreyshev.constructor.domain.quiz.quizMaker
 
 import ru.iandreyshev.constructor.domain.quiz.QuestionDraftId
 
-data class QuestionDraft(
+data class QuizMakerQuestion(
     val id: QuestionDraftId,
     var text: String,
     var isMultipleMode: Boolean,
-    val variants: List<VariantDraft>
+    val variants: MutableList<QuizMakerVariant>
 )

@@ -107,7 +107,7 @@ class EditorViewModel(
             when (item) {
                 is DraftItem.Quiz -> QuizItem(
                     id = item.draft.hashCode().toLong(),
-                    questionsCount = item.draft.questionsCount,
+                    questionsCount = item.draft.questions.count(),
                     onClickListener = {}
                 )
                 is DraftItem.Image -> {

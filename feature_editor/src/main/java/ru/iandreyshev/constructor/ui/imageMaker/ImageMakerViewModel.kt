@@ -15,6 +15,7 @@ import ru.iandreyshev.constructor.domain.image.ImageSource
 import ru.iandreyshev.core_ui.singleLiveEvent
 import ru.iandreyshev.core_ui.voidSingleLiveEvent
 import ru.iandreyshev.core_ui.invoke
+import ru.iandreyshev.core_ui.modify
 import ru.iandreyshev.core_utils.exhaustive
 import ru.iandreyshev.core_utils.uiLazy
 import timber.log.Timber
@@ -61,7 +62,7 @@ class ImageMakerViewModel(
     }
 
     fun onCameraPermissionGranted(isGranted: Boolean) {
-        modifyState {
+        mState.modify {
             copy(
                 cameraState = when (isGranted) {
                     true -> CameraState.AVAILABLE
@@ -79,7 +80,7 @@ class ImageMakerViewModel(
 
     fun onOpenCameraClick() {
         mDraft = mDraft.copy(source = null)
-        modifyState {
+        mState.modify {
             copy(
                 cameraState = CameraState.AVAILABLE,
                 picture = null
@@ -89,14 +90,14 @@ class ImageMakerViewModel(
 
     fun onChangeText(text: String?) {
         mDraft = mDraft.copy(text = text)
-        modifyState { copy(text = mDraft.text.orEmpty()) }
+        mState.modify { copy(text = mDraft.text.orEmpty()) }
     }
 
     fun onSaveDraft() {
         viewModelScope.launch {
             when (val saveResult = mRepository.save(mDraft)) {
                 ImageDraftResult.Success -> {
-                    modifyState { copy(isSaved = true) }
+                    mState.modify { copy(isSaved = true) }
                     eventExit()
                 }
                 is ImageDraftResult.Error -> when (saveResult.error) {
@@ -110,7 +111,7 @@ class ImageMakerViewModel(
 
     fun onTakePhotoSuccess(filePath: String) {
         mDraft = mDraft.copy(source = ImageSource.Photo(filePath))
-        modifyState {
+        mState.modify {
             copy(
                 picture = filePath,
                 cameraState = CameraState.DISABLED
@@ -120,7 +121,7 @@ class ImageMakerViewModel(
 
     fun onPickFromGallerySuccess(uriString: String) {
         mDraft = mDraft.copy(source = ImageSource.Gallery(uriString))
-        modifyState {
+        mState.modify {
             copy(
                 picture = uriString,
                 cameraState = CameraState.DISABLED
@@ -132,7 +133,7 @@ class ImageMakerViewModel(
         Timber.d(exception)
 
         mDraft = mDraft.copy(source = null)
-        modifyState {
+        mState.modify {
             copy(
                 picture = null,
                 cameraState = CameraState.AVAILABLE
@@ -144,16 +145,12 @@ class ImageMakerViewModel(
         Timber.d(exception)
 
         mDraft = mDraft.copy(source = null)
-        modifyState {
+        mState.modify {
             copy(
                 picture = null,
                 cameraState = CameraState.AVAILABLE
             )
         }
-    }
-
-    private fun modifyState(stateModifier: ImageMakerViewState.() -> ImageMakerViewState) {
-        mState.value = mState.value?.let(stateModifier)
     }
 
 }
