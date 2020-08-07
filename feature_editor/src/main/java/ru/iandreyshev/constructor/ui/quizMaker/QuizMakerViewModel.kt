@@ -9,7 +9,8 @@ import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
 import ru.iandreyshev.constructor.domain.quiz.IQuizDraftRepository
-import ru.iandreyshev.constructor.domain.quiz.draft.QuizMaker
+import ru.iandreyshev.constructor.domain.quiz.quizMaker.CreateResult
+import ru.iandreyshev.constructor.domain.quiz.quizMaker.QuizMaker
 import ru.iandreyshev.constructor.ui.quizMaker.items.QuestionItem
 import ru.iandreyshev.constructor.ui.quizMaker.items.SettingsItem
 import ru.iandreyshev.constructor.ui.quizMaker.items.VariantItem
@@ -40,7 +41,9 @@ class QuizMakerViewModel(
     fun onCreate() {
         viewModelScope.launch {
             val draft = mRepository.get()
-            mQuizMaker = QuizMaker(draft)
+            mQuizMaker = QuizMaker(
+                draft
+            )
                 .apply {
                     addQuestion()
                     addVariant()
@@ -52,8 +55,15 @@ class QuizMakerViewModel(
 
     fun onSave() {
         viewModelScope.launch {
-            mRepository.save(mQuizMaker.createDraft())
-            eventExit()
+            when (val result = mQuizMaker.createDraft()) {
+                is CreateResult.Success -> {
+                    mRepository.save(result.draft)
+                    eventExit()
+                }
+                is CreateResult.ErrorInvalidQuestion -> {
+                    eventShowError("Invalid question at position: ${result.position.inc()}")
+                }
+            }
         }
     }
 
@@ -77,6 +87,7 @@ class QuizMakerViewModel(
         } else {
             mQuizMaker.addQuestion()
             mQuizMaker.moveToNextQuestion()
+            mQuizMaker.addVariant()
             mQuizMaker.addVariant()
         }
         updateDraftView()
@@ -130,7 +141,8 @@ class QuizMakerViewModel(
                                         isFirstInBlock = vPos == 0,
                                         isValid = draft.isValid,
                                         isMultipleMode = currQuestion.isMultipleMode,
-                                        canDelete = currQuestion.variants.count() > 2
+                                        canDelete = currQuestion.variants.count()
+                                                > QuizMaker.MIN_VARIANTS_COUNT
                                     ),
                                     onTextChanged = { text ->
                                         mQuizMaker.setVariantText(currQuestionPosition, vPos, text)

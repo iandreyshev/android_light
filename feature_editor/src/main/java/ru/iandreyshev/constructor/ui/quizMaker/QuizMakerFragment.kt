@@ -2,6 +2,7 @@ package ru.iandreyshev.constructor.ui.quizMaker
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import com.xwray.groupie.GroupAdapter
@@ -30,6 +31,9 @@ class QuizMakerFragment : BaseFragment(R.layout.fragment_quiz_maker) {
         initVariantsList()
 
         mViewModel.state.viewObserveWith(::render)
+        mViewModel.eventShowError {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun initMenu() {

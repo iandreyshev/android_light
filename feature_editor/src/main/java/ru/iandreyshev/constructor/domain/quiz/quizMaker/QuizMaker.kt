@@ -1,8 +1,9 @@
-package ru.iandreyshev.constructor.domain.quiz.draft
+package ru.iandreyshev.constructor.domain.quiz.quizMaker
 
 import ru.iandreyshev.constructor.domain.quiz.QuestionDraftId
-import ru.iandreyshev.constructor.domain.quiz.quizMaker.QuizMakerQuestion
-import ru.iandreyshev.constructor.domain.quiz.quizMaker.QuizMakerVariant
+import ru.iandreyshev.constructor.domain.quiz.draft.QuestionDraft
+import ru.iandreyshev.constructor.domain.quiz.draft.QuizDraft
+import ru.iandreyshev.constructor.domain.quiz.draft.VariantDraft
 
 class QuizMaker(
     private val mStartDraft: QuizDraft
@@ -21,24 +22,31 @@ class QuizMaker(
 
     private var mQuestions = mutableListOf<QuizMakerQuestion>()
 
-    fun createDraft() =
-        mStartDraft.copy(
-            questions = mQuestions.map { quizMakerQuestion ->
-                QuestionDraft(
-                    id = quizMakerQuestion.id,
-                    text = quizMakerQuestion.text,
-                    isMultipleMode = quizMakerQuestion.isMultipleMode,
-                    variants = quizMakerQuestion.variants
-                        .map {
-                            VariantDraft(
-                                id = it.id,
-                                isValid = it.isValid,
-                                text = it.text
-                            )
-                        }
-                )
-            }
+    fun createDraft(): CreateResult {
+        return CreateResult.Success(
+            mStartDraft.copy(
+                questions = mQuestions.mapIndexed { index, quizMakerQuestion ->
+                    if (!quizMakerQuestion.isValid()) {
+                        return CreateResult.ErrorInvalidQuestion(index)
+                    }
+
+                    QuestionDraft(
+                        id = quizMakerQuestion.id,
+                        text = quizMakerQuestion.text,
+                        isMultipleMode = quizMakerQuestion.isMultipleMode,
+                        variants = quizMakerQuestion.variants
+                            .map {
+                                VariantDraft(
+                                    id = it.id,
+                                    isValid = it.isValid,
+                                    text = it.text
+                                )
+                            }
+                    )
+                }
+            )
         )
+    }
 
     fun moveToNextQuestion() {
         if (currentQuestionPosition < mQuestions.lastIndex) {
@@ -126,7 +134,15 @@ class QuizMaker(
     fun deleteVariantAt(qPosition: Int, vPosition: Int) {
         mQuestions.getOrNull(qPosition)
             ?.variants
-            ?.removeAt(vPosition)
+            ?.apply {
+                if (count() > MIN_VARIANTS_COUNT) {
+                    removeAt(vPosition)
+                }
+            }
+    }
+
+    companion object {
+        const val MIN_VARIANTS_COUNT = 2
     }
 
 }
