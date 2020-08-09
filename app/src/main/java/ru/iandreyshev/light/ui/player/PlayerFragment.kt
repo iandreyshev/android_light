@@ -14,6 +14,7 @@ import ru.iandreyshev.core_ui.setOrientationUnspecified
 import ru.iandreyshev.light.R
 import ru.iandreyshev.light.navigation.router
 import ru.iandreyshev.player_core.player.News
+import ru.iandreyshev.player_core.player.Wish
 
 class PlayerFragment : BaseFragment(R.layout.fragment_player) {
 
@@ -25,13 +26,11 @@ class PlayerFragment : BaseFragment(R.layout.fragment_player) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mViewModel.playerState.viewObserveWith(playerView::render)
-        mViewModel.quizPlayerState.viewObserveWith(playerView::render)
-        mViewModel.videoPlayerState.viewObserveWith(playerView::render)
-        mViewModel.eventShowNews(::onNews)
+        mViewModel.liveData.subscribe(viewLifecycleOwner, playerView)
+        mViewModel.liveData.eventShowNews(::onNews)
 
-        playerView.onPlayerWish(mViewModel::invoke)
-        playerView.onQuizPlayerWish(mViewModel::invoke)
+        playerView.subscribe(mViewModel.wishListener)
+        playerView.setLifecycle(viewLifecycleOwner)
         playerView.onExitClick(router()::back)
 
         setFullScreen()

@@ -22,11 +22,16 @@ internal class ImageViewViewController(
         view.backButton.setOnClickListener { onAction(UiAction.Back) }
     }
 
-    fun render(state: PlayerItemState.Image) {
+    fun render(state: PlayerItemState.Image?) {
+        state ?: kotlin.run {
+            view.isVisible = false
+            return
+        }
+
         view.isVisible = true
         view.imageViewProgressBar.isVisible = true
 
-        Glide.with(view)
+        Glide.with(view.imageViewForImage)
             .load(state.uri)
             .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
@@ -52,10 +57,6 @@ internal class ImageViewViewController(
                 }
             })
             .into(view.imageViewForImage)
-    }
-
-    fun hide() {
-        view.isVisible = false
     }
 
 }

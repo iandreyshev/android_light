@@ -4,6 +4,10 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.OnLifecycleEvent
 import kotlinx.android.synthetic.main.lay_player_image_view.view.*
 import kotlinx.android.synthetic.main.lay_player_quiz_view.view.*
 import kotlinx.android.synthetic.main.lay_player_video_view.view.*
@@ -11,66 +15,60 @@ import kotlinx.android.synthetic.main.view_player.view.*
 import ru.iandreyshev.core_utils.exhaustive
 import ru.iandreyshev.core_utils.uiLazy
 import ru.iandreyshev.player.image.ImageViewViewController
-import ru.iandreyshev.player_core.player.State
 import ru.iandreyshev.player.quiz.QuizViewViewController
-import ru.iandreyshev.player_core.quiz.Wish
 import ru.iandreyshev.player.video.VideoViewViewController
+import ru.iandreyshev.player_core.IWishListener
 import ru.iandreyshev.player_core.course.PlayerItemState
-import ru.iandreyshev.player_core.player.PlayerWish
+import ru.iandreyshev.player_core.player.State
 import ru.iandreyshev.player_core.quiz.QuizPlayerState
-import ru.iandreyshev.player_core.video.VideoPlayerState
+
 
 class PlayerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr) {
+) : ConstraintLayout(context, attrs, defStyleAttr), LifecycleObserver {
 
     init {
         inflate(getContext(), R.layout.view_player, this)
+        exitButton.setOnClickListener { mOnExitClickListener() }
     }
 
     private var mOnExitClickListener: () -> Unit = {}
-    private var mPlayerWishListener: (PlayerWish) -> Unit = {}
-    private var mQuizPlayerWishListener: (Wish) -> Unit = {}
-
-    fun onPlayerWish(listener: (PlayerWish) -> Unit) {
-        mPlayerWishListener = listener
-    }
-
-    fun onQuizPlayerWish(listener: (Wish) -> Unit) {
-        mQuizPlayerWishListener = listener
-    }
-
-    fun onExitClick(listener: () -> Unit) {
-        mOnExitClickListener = listener
-    }
+    private var mWishListener: IWishListener = object : IWishListener {}
 
     private val mImageViewViewController by uiLazy {
         ImageViewViewController(
             view = imageView,
-            onAction = { mPlayerWishListener(it.asWish()) }
+            onAction = { mWishListener(it.asWish()) }
         )
     }
 
     private val mQuizViewViewController by uiLazy {
         QuizViewViewController(
             view = quizView,
-            onWish = mQuizPlayerWishListener
+            onWish = mWishListener::invoke
         )
     }
 
     private val mVideoViewViewController by uiLazy {
         VideoViewViewController(
             view = videoView,
-            onBack = { mPlayerWishListener(UiAction.Back.asWish()) },
-            onForward = { mPlayerWishListener(UiAction.Forward.asWish()) }
+            onBack = { mWishListener(UiAction.Back.asWish()) },
+            onForward = { mWishListener(UiAction.Forward.asWish()) }
         )
     }
 
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        exitButton.setOnClickListener { mOnExitClickListener() }
+    fun setLifecycle(lifecycleOwner: LifecycleOwner) {
+        lifecycleOwner.lifecycle.addObserver(this)
+    }
+
+    fun subscribe(listener: IWishListener) {
+        mWishListener = listener
+    }
+
+    fun onExitClick(listener: () -> Unit) {
+        mOnExitClickListener = listener
     }
 
     fun render(state: State) {
@@ -112,7 +110,7 @@ class PlayerView @JvmOverloads constructor(
                 errorText.text = state.error
                 errorRepeatButton.isVisible = true
                 errorRepeatButton.setOnClickListener {
-                    mPlayerWishListener(UiAction.Repeat.asWish())
+                    mWishListener(UiAction.Repeat.asWish())
                 }
             }
         }.exhaustive
@@ -124,26 +122,26 @@ class PlayerView @JvmOverloads constructor(
         mQuizViewViewController.render(state)
     }
 
-    fun render(state: VideoPlayerState) {
-        mVideoViewViewController.render(state.player)
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    fun pauseVideo() {
+        mVideoViewViewController.pause()
     }
 
     private fun renderItemState(state: PlayerItemState?) {
         when (state) {
             is PlayerItemState.Image -> {
-//                mVideoPlayerViewModel.hide()
+                mVideoViewViewController.render(null)
                 mImageViewViewController.render(state)
             }
             is PlayerItemState.Video -> {
-                mImageViewViewController.hide()
-//                mVideoPlayerViewModel.render(state)
+                mImageViewViewController.render(null)
+                mVideoViewViewController.render(state)
             }
             else -> {
-//                mVideoPlayerViewModel.hide()
-                mImageViewViewController.hide()
+                mImageViewViewController.render(null)
+                mVideoViewViewController.render(null)
             }
         }.exhaustive
     }
-
 
 }

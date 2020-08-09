@@ -1,54 +1,56 @@
 package ru.iandreyshev.player_core
 
-import android.content.Context
-import android.net.Uri
 import com.badoo.mvicore.binder.Binder
 import com.badoo.mvicore.binder.using
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
-import com.google.android.exoplayer2.util.Util
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposables
 import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.subjects.BehaviorSubject
 import ru.iandreyshev.player_core.course.CoursePlayer
 import ru.iandreyshev.player_core.course.IPlayerDataSource
-import ru.iandreyshev.player_core.quiz.QuizPlayer
 import ru.iandreyshev.player_core.player.News
 import ru.iandreyshev.player_core.player.PlayerFeature
+import ru.iandreyshev.player_core.player.PlayerWish
 import ru.iandreyshev.player_core.player.State
-import ru.iandreyshev.player_core.player.Wish
+import ru.iandreyshev.player_core.quiz.QuizPlayer
 import ru.iandreyshev.player_core.quiz.QuizPlayerFeature
 import ru.iandreyshev.player_core.quiz.QuizPlayerState
 import ru.iandreyshev.player_core.quiz.QuizWish
-import ru.iandreyshev.player_core.video.VideoPlayer
 
 class Player(
-    private val context: Context,
     dataSource: IPlayerDataSource
-) {
+) : IWishListener {
 
-    private var mPlayerStateListener: (State) -> Unit = {}
-    private var mPlayerNewsListener: (News) -> Unit = {}
-    private var mQuizStateListener: (QuizPlayerState) -> Unit = {}
+    private var mPlayerStateListener = BehaviorSubject.create<State>()
+    private var mPlayerStateListenerDisposable = Disposables.empty()
+
+    private var mPlayerNewsListener = BehaviorSubject.create<News>()
+    private var mPlayerNewsListenerDisposable = Disposables.empty()
+
+    private var mQuizStateListener = BehaviorSubject.create<QuizPlayerState>()
+    private var mQuizStateListenerDisposable = Disposables.empty()
 
     fun onPlayerState(listener: (State) -> Unit) {
-        mPlayerStateListener = listener
+        mPlayerStateListenerDisposable.dispose()
+        mPlayerStateListenerDisposable = mPlayerStateListener.subscribe(listener)
     }
 
     fun onPlayerNews(listener: (News) -> Unit) {
-        mPlayerNewsListener = listener
+        mPlayerNewsListenerDisposable.dispose()
+        mPlayerNewsListenerDisposable = mPlayerNewsListener.subscribe(listener)
     }
 
     fun onQuizState(listener: (QuizPlayerState) -> Unit) {
-        mQuizStateListener = listener
+        mQuizStateListenerDisposable.dispose()
+        mQuizStateListenerDisposable = mQuizStateListener.subscribe(listener)
     }
 
-    fun accept(wish: Wish) {
+    override fun invoke(wish: PlayerWish) {
         mPlayerFeature.accept(wish)
     }
 
-    fun accept(wish: QuizWish) {
+    override fun invoke(wish: QuizWish) {
         mQuizPlayerFeature.accept(wish)
     }
 
@@ -65,23 +67,6 @@ class Player(
             player = QuizPlayer()
         )
 
-    private val mVideoPlayer = VideoPlayer(
-        playerProvider = { uri ->
-            SimpleExoPlayer.Builder(context)
-                .build()
-                .apply {
-                    val dataSourceFactory = DefaultDataSourceFactory(
-                        context,
-                        Util.getUserAgent(context, "Light")
-                    )
-                    val videoSource = ProgressiveMediaSource.Factory(dataSourceFactory)
-                        .createMediaSource(Uri.parse(uri.uri))
-
-                    prepare(videoSource)
-                }
-        }
-    )
-
     private val mBinders = mutableListOf<Binder>().apply {
         this += Binder().apply {
             bind(mPlayerFeature.news to mQuizPlayerFeature using PlayerNewsToQuizWish())
@@ -92,10 +77,13 @@ class Player(
     }
 
     private val mDisposables = CompositeDisposable().apply {
-        this += Observable.wrap(mPlayerFeature).subscribe { mPlayerStateListener(it) }
-        this += Observable.wrap(mPlayerFeature.news).subscribe { mPlayerNewsListener(it) }
+        this += Observable.wrap(mPlayerFeature)
+            .subscribe(mPlayerStateListener::onNext)
+        this += Observable.wrap(mPlayerFeature.news)
+            .subscribe(mPlayerNewsListener::onNext)
 
-        this += Observable.wrap(mQuizPlayerFeature).subscribe { mQuizStateListener(it) }
+        this += Observable.wrap(mQuizPlayerFeature)
+            .subscribe(mQuizStateListener::onNext)
 
         mBinders.forEach {
             this += it
@@ -106,8 +94,10 @@ class Player(
     }
 
     fun dispose() {
-        mVideoPlayer.dispose()
         mDisposables.dispose()
+        mQuizStateListenerDisposable.dispose()
+        mPlayerNewsListenerDisposable.dispose()
+        mPlayerStateListenerDisposable.dispose()
     }
 
 }
