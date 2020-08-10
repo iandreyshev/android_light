@@ -9,8 +9,8 @@ data class State(
     val questionsCount: Int = 0,
     val variants: List<Variant> = listOf(),
     val isMultipleMode: Boolean = false,
-    val questionResult: QuestionResult? = null,
-    val quizResult: QuizResult? = null
+    val questionResult: QuestionResult = QuestionResult.UNDEFINED,
+    val quizResult: QuizResult = QuizResult.UNDEFINED
 ) {
 
     fun hasNext() = questionIndex + 1 < questionsCount

@@ -13,10 +13,8 @@ import ru.iandreyshev.player_core.player.News
 import ru.iandreyshev.player_core.player.PlayerFeature
 import ru.iandreyshev.player_core.player.PlayerWish
 import ru.iandreyshev.player_core.player.State
-import ru.iandreyshev.player_core.quiz.QuizPlayer
+import ru.iandreyshev.player_core.quiz.*
 import ru.iandreyshev.player_core.quiz.QuizPlayerFeature
-import ru.iandreyshev.player_core.quiz.QuizPlayerState
-import ru.iandreyshev.player_core.quiz.QuizWish
 
 class Player(
     dataSource: IPlayerDataSource
@@ -54,17 +52,17 @@ class Player(
         mQuizPlayerFeature.accept(wish)
     }
 
-    private val mPlayer = CoursePlayer(
+    private val mCoursePlayer = CoursePlayer(
         dataSource = dataSource
     )
 
     private val mPlayerFeature = PlayerFeature(
-        coursePlayer = mPlayer
+        coursePlayer = mCoursePlayer
     )
 
     private val mQuizPlayerFeature =
         QuizPlayerFeature(
-            player = QuizPlayer()
+            player = QuizPlayer(mCoursePlayer)
         )
 
     private val mBinders = mutableListOf<Binder>().apply {

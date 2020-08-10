@@ -6,6 +6,6 @@ typealias QuizWish = Wish
 
 sealed class Wish {
     class Start(val quiz: PlayerItem.Quiz) : Wish()
-    class SwitchVariantValidState(val variantPosition: Int) : Wish()
+    class SwitchVariantCorrectState(val variantPosition: Int) : Wish()
     object Submit : Wish()
 }

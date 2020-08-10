@@ -5,14 +5,14 @@ import ru.iandreyshev.constructor.domain.quiz.VariantDraftId
 data class QuizMakerVariant(
     val id: VariantDraftId,
     var text: String,
-    var isValid: Boolean
+    var isCorrect: Boolean
 ) {
 
     companion object {
         fun empty() = QuizMakerVariant(
             id = VariantDraftId(""),
             text = "",
-            isValid = false
+            isCorrect = false
         )
     }
 

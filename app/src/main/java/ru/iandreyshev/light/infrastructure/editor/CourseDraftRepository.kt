@@ -13,10 +13,7 @@ import ru.iandreyshev.light.domain.ICourseRepository
 import ru.iandreyshev.player_core.course.Course
 import ru.iandreyshev.player_core.course.CourseId
 import ru.iandreyshev.player_core.course.CourseItem
-import ru.iandreyshev.player_core.quiz.Question
-import ru.iandreyshev.player_core.quiz.QuestionId
-import ru.iandreyshev.player_core.quiz.Variant
-import ru.iandreyshev.player_core.quiz.VariantId
+import ru.iandreyshev.player_core.quiz.*
 import timber.log.Timber
 import java.util.*
 
@@ -76,7 +73,8 @@ class CourseDraftRepository(
             when (item) {
                 is DraftItem.Quiz ->
                     CourseItem.Quiz(
-                        item.draft.questions
+                        id = QuizId(item.draft.id.value),
+                        questions = item.draft.questions
                             .mapIndexed { pos, questionDraft ->
                                 Question(
                                     id = QuestionId(questionDraft.id.value),
@@ -85,13 +83,13 @@ class CourseDraftRepository(
                                         Variant(
                                             id = VariantId(variantDraft.id.value),
                                             text = variantDraft.text,
-                                            isValid = variantDraft.isValid,
-                                            isSelectedAsValid = true
+                                            isCorrect = variantDraft.isCorrect,
+                                            isSelectedAsCorrect = true
                                         )
                                     },
                                     isMultipleMode = questionDraft.isMultipleMode,
                                     position = pos,
-                                    result = null
+                                    result = QuestionResult.UNDEFINED
                                 )
                             })
                 is DraftItem.Image ->

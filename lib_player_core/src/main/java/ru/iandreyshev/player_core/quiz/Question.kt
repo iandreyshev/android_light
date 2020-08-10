@@ -6,5 +6,5 @@ data class Question(
     val position: Int,
     val isMultipleMode: Boolean,
     val variants: List<Variant>,
-    val result: QuestionResult?
+    val result: QuestionResult
 )

@@ -10,10 +10,10 @@ import ru.iandreyshev.player.R
 class VariantItem(
     private val text: String,
     private val isMultipleMode: Boolean,
-    private val isSelectedAsValid: Boolean,
-    private val isValid: Boolean,
+    private val isSelectedAsCorrect: Boolean,
+    private val isCorrect: Boolean,
     private val isQuestionSubmitted: Boolean,
-    private val onValidStateSwitched: () -> Unit
+    private val onCorrectStateToggle: () -> Unit
 ) : Item<VariantItem.ViewHolder>() {
 
     override fun getLayout() = R.layout.item_quiz_player_variant
@@ -24,18 +24,18 @@ class VariantItem(
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.variantText.text = text
 
-        viewHolder.itemView.isValidCheckbox.isVisible = isMultipleMode && !isQuestionSubmitted
-        viewHolder.itemView.isValidCheckbox.setOnCheckedChangeListener(null)
-        viewHolder.itemView.isValidCheckbox.isChecked = isSelectedAsValid
-        viewHolder.itemView.isValidCheckbox.setOnCheckedChangeListener { _, _ ->
-            onValidStateSwitched()
+        viewHolder.itemView.isCorrectCheckbox.isVisible = isMultipleMode && !isQuestionSubmitted
+        viewHolder.itemView.isCorrectCheckbox.setOnCheckedChangeListener(null)
+        viewHolder.itemView.isCorrectCheckbox.isChecked = isSelectedAsCorrect
+        viewHolder.itemView.isCorrectCheckbox.setOnCheckedChangeListener { _, _ ->
+            onCorrectStateToggle()
         }
 
-        viewHolder.itemView.isValidRadioButton.isVisible = !isMultipleMode && !isQuestionSubmitted
-        viewHolder.itemView.isValidRadioButton.setOnCheckedChangeListener(null)
-        viewHolder.itemView.isValidRadioButton.isChecked = isSelectedAsValid
-        viewHolder.itemView.isValidRadioButton.setOnCheckedChangeListener { _, _ ->
-            onValidStateSwitched()
+        viewHolder.itemView.isCorrectRadioButton.isVisible = !isMultipleMode && !isQuestionSubmitted
+        viewHolder.itemView.isCorrectRadioButton.setOnCheckedChangeListener(null)
+        viewHolder.itemView.isCorrectRadioButton.isChecked = isSelectedAsCorrect
+        viewHolder.itemView.isCorrectRadioButton.setOnCheckedChangeListener { _, _ ->
+            onCorrectStateToggle()
         }
     }
 

@@ -6,10 +6,9 @@ interface IQuizPlayer {
     val currentQuestion: Question
     val currentQuestionPosition: Int
     val questionsCount: Int
-    val result: QuizResult?
+    val result: QuizResult
     fun prepare(playerQuiz: PlayerItem.Quiz)
     fun moveToNextQuestion()
-    fun switchCurrQuestionVariantValidState(variantPosition: Int)
+    fun switchCurrQuestionVariantCorrectState(variantPosition: Int)
     fun submitCurrentQuestion()
-    fun onFinish()
 }

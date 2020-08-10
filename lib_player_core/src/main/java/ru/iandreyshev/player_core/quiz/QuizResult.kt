@@ -1,5 +1,8 @@
 package ru.iandreyshev.player_core.quiz
 
-data class QuizResult(
-    val data: Any
-)
+enum class QuizResult {
+    UNDEFINED,
+    TRUE,
+    PARTLY_TRUE,
+    FALSE;
+}

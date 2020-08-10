@@ -1,10 +1,13 @@
 package ru.iandreyshev.player_core.course
 
 import ru.iandreyshev.core_utils.exhaustive
+import ru.iandreyshev.player_core.quiz.IQuizResultListener
+import ru.iandreyshev.player_core.quiz.QuizId
+import ru.iandreyshev.player_core.quiz.QuizResult
 
 internal class CoursePlayer(
     private val dataSource: IPlayerDataSource
-) : ICoursePlayer {
+) : ICoursePlayer, IQuizResultListener {
 
     private val mCourseItems = mutableListOf<PlayerItem>()
     private var mCurrentPosition: Int = 0
@@ -62,6 +65,18 @@ internal class CoursePlayer(
         )
     }
 
+    override fun onChange(quizId: QuizId, result: QuizResult) {
+        for (indexedValue in mCourseItems.withIndex()) {
+            when (val item = indexedValue.value) {
+                is PlayerItem.Quiz -> {
+                    mCourseItems[indexedValue.index] = item.copy(result = result)
+                    break
+                }
+                else -> Unit
+            }.exhaustive
+        }
+    }
+
     private fun parseItems(course: Course) =
         course.items
             .map { courseItem ->
@@ -69,7 +84,7 @@ internal class CoursePlayer(
                     is CourseItem.Quiz -> {
                         PlayerItem.Quiz(
                             quiz = courseItem,
-                            result = null
+                            result = QuizResult.UNDEFINED
                         )
                     }
                     is CourseItem.Image ->

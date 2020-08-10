@@ -5,5 +5,5 @@ import ru.iandreyshev.constructor.domain.quiz.VariantDraftId
 data class VariantDraft(
     val id: VariantDraftId,
     val text: String,
-    val isValid: Boolean
+    val isCorrect: Boolean
 )

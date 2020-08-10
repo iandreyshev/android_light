@@ -11,7 +11,7 @@ sealed class VariantViewState {
         var id: VariantDraftId? = null,
         val text: String = "",
         val position: Int,
-        val isValid: Boolean,
+        val isCorrect: Boolean,
         val isFirstInBlock: Boolean,
         val isMultipleMode: Boolean,
         val canDelete: Boolean

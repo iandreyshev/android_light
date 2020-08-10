@@ -39,7 +39,7 @@
             app:layout_constraintGuide_end="@dimen/grid_step_vertical_3" />
 
         <FrameLayout
-            android:id="@+id/isValidGroup"
+            android:id="@+id/correctGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
@@ -47,12 +47,12 @@
             app:layout_constraintTop_toTopOf="@id/guidelineTop">
 
             <CheckBox
-                android:id="@+id/isValidCheckbox"
+                android:id="@+id/isCorrectCheckbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <RadioButton
-                android:id="@+id/isValidRadioButton"
+                android:id="@+id/isCorrectRadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -68,7 +68,7 @@
             android:hint="@string/quiz_maker_variant_hint"
             app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
             app:layout_constraintEnd_toStartOf="@id/guidelineEnd"
-            app:layout_constraintStart_toEndOf="@id/isValidGroup"
+            app:layout_constraintStart_toEndOf="@id/correctGroup"
             app:layout_constraintTop_toTopOf="@id/guidelineTop" />
 
         <View

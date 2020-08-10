@@ -139,7 +139,7 @@ class QuizMakerViewModel(
                                         text = draft.text,
                                         position = vPos,
                                         isFirstInBlock = vPos == 0,
-                                        isValid = draft.isValid,
+                                        isCorrect = draft.isCorrect,
                                         isMultipleMode = currQuestion.isMultipleMode,
                                         canDelete = currQuestion.variants.count()
                                                 > QuizMaker.MIN_VARIANTS_COUNT
@@ -147,8 +147,8 @@ class QuizMakerViewModel(
                                     onTextChanged = { text ->
                                         mQuizMaker.setVariantText(currQuestionPosition, vPos, text)
                                     },
-                                    onValidStateSwitched = {
-                                        mQuizMaker.switchVariantValidState(
+                                    onCorrectStateToggle = {
+                                        mQuizMaker.switchVariantCorrectState(
                                             currQuestionPosition,
                                             vPos
                                         )

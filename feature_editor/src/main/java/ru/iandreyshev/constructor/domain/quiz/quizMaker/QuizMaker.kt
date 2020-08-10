@@ -35,10 +35,11 @@ class QuizMaker(
                         text = quizMakerQuestion.text,
                         isMultipleMode = quizMakerQuestion.isMultipleMode,
                         variants = quizMakerQuestion.variants
+                            .filter { it.isValid() }
                             .map {
                                 VariantDraft(
                                     id = it.id,
-                                    isValid = it.isValid,
+                                    isCorrect = it.isCorrect,
                                     text = it.text
                                 )
                             }
@@ -81,7 +82,7 @@ class QuizMaker(
         val question = mQuestions.getOrNull(currentQuestionPosition) ?: return
         question.isMultipleMode = !question.isMultipleMode
         question.variants.forEach {
-            it.isValid = false
+            it.isCorrect = false
         }
     }
 
@@ -102,7 +103,7 @@ class QuizMaker(
         variant.text = text
     }
 
-    fun switchVariantValidState(
+    fun switchVariantCorrectState(
         qPosition: Int,
         vPosition: Int
     ) {
@@ -110,16 +111,16 @@ class QuizMaker(
         val targetVariant = variants?.getOrNull(vPosition) ?: return
 
         if (currentQuestion.isMultipleMode) {
-            targetVariant.isValid = !targetVariant.isValid
+            targetVariant.isCorrect = !targetVariant.isCorrect
             return
         }
 
-        if (targetVariant.isValid) {
+        if (targetVariant.isCorrect) {
             return
         }
 
-        variants.forEach { it.isValid = false }
-        targetVariant.isValid = true
+        variants.forEach { it.isCorrect = false }
+        targetVariant.isCorrect = true
     }
 
     fun deleteQuestion() {

@@ -11,7 +11,7 @@ sealed class PlayerItem {
 
     data class Quiz(
         val quiz: CourseItem.Quiz,
-        val result: QuizResult?
+        val result: QuizResult
     ) : PlayerItem()
 
     data class Video(

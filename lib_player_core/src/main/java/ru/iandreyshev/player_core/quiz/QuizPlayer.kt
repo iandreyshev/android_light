@@ -3,7 +3,9 @@ package ru.iandreyshev.player_core.quiz
 import ru.iandreyshev.player_core.course.PlayerItem
 import java.util.*
 
-class QuizPlayer : IQuizPlayer {
+class QuizPlayer(
+    private val resultListener: IQuizResultListener
+) : IQuizPlayer {
 
     override val currentQuestion: Question
         get() = mQuestions[currentQuestionPosition]
@@ -11,9 +13,10 @@ class QuizPlayer : IQuizPlayer {
         private set
     override val questionsCount: Int
         get() = mQuestions.count()
-    override var result: QuizResult? = null
+    override var result = QuizResult.UNDEFINED
         private set
 
+    private var mQuizId = QuizId("")
     private var mQuestions = mutableListOf<Question>()
 
     override fun prepare(playerQuiz: PlayerItem.Quiz) {
@@ -25,6 +28,8 @@ class QuizPlayer : IQuizPlayer {
                 question.asPlayerQuestion(index)
             }
 
+        mQuizId = playerQuiz.quiz.id
+
         result = playerQuiz.result
     }
 
@@ -34,22 +39,22 @@ class QuizPlayer : IQuizPlayer {
         }
     }
 
-    override fun switchCurrQuestionVariantValidState(variantPosition: Int) {
+    override fun switchCurrQuestionVariantCorrectState(variantPosition: Int) {
         if (currentQuestion.isSubmitted()) {
             return
         }
 
         val variant = currentQuestion.variants.getOrNull(variantPosition) ?: return
         var newVariants = currentQuestion.variants.toMutableList()
-        val newVariantValidState = !variant.isSelectedAsValid
+        val newVariantCorrectState = !variant.isSelectedAsCorrect
 
         if (!currentQuestion.isMultipleMode) {
             newVariants = newVariants.mapTo(mutableListOf()) {
-                it.copy(isSelectedAsValid = false)
+                it.copy(isSelectedAsCorrect = false)
             }
         }
 
-        newVariants[variantPosition] = variant.copy(isSelectedAsValid = newVariantValidState)
+        newVariants[variantPosition] = variant.copy(isSelectedAsCorrect = newVariantCorrectState)
         mQuestions[currentQuestionPosition] = currentQuestion.copy(variants = newVariants)
     }
 
@@ -61,12 +66,33 @@ class QuizPlayer : IQuizPlayer {
         mQuestions[currentQuestionPosition] = currentQuestion
             .copy(result = currentQuestion.measureResult())
 
-        if (mQuestions.all { it.result != null }) {
-            result = QuizResult("Result")
+        val newResult = measureQuizResult()
+
+        if (newResult != result) {
+            result = newResult
+            resultListener.onChange(mQuizId, result)
         }
     }
 
-    override fun onFinish() {
+    private fun measureQuizResult(): QuizResult {
+        val questionResults = mQuestions.map { it.result }
+
+        val isTrue = questionResults.all { it == QuestionResult.TRUE }
+
+        if (isTrue) {
+            return QuizResult.TRUE
+        }
+
+        val isPartlyTrue = questionResults.any {
+            it == QuestionResult.PARTLY_TRUE
+                    || it == QuestionResult.PARTLY_TRUE
+        }
+
+        if (isPartlyTrue) {
+            return QuizResult.PARTLY_TRUE
+        }
+
+        return QuizResult.UNDEFINED
     }
 
     private fun Question.asPlayerQuestion(
@@ -80,18 +106,18 @@ class QuizPlayer : IQuizPlayer {
             Variant(
                 id = VariantId(Date().toString()),
                 text = it.text,
-                isSelectedAsValid = false,
-                isValid = it.isValid
+                isSelectedAsCorrect = false,
+                isCorrect = it.isCorrect
             )
         },
-        result = null
+        result = QuestionResult.UNDEFINED
     )
 
-    private fun Question.isSubmitted() = result != null
+    private fun Question.isSubmitted() = result != QuestionResult.UNDEFINED
 
     private fun Question.measureResult(): QuestionResult {
         val (trueVariants, falseVariants) = variants.partition { variant ->
-            variant.isValid && variant.isSelectedAsValid
+            variant.isCorrect && variant.isSelectedAsCorrect
         }
 
         return when {

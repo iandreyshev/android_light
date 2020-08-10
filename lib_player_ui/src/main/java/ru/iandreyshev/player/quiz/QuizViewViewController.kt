@@ -67,10 +67,10 @@ internal class QuizViewViewController(
                     VariantItem(
                         text = variant.text,
                         isMultipleMode = state.isMultipleMode,
-                        isSelectedAsValid = variant.isSelectedAsValid,
-                        isValid = variant.isValid,
+                        isSelectedAsCorrect = variant.isSelectedAsCorrect,
+                        isCorrect = variant.isCorrect,
                         isQuestionSubmitted = state.questionResult != null,
-                        onValidStateSwitched = { onWish(Wish.SwitchVariantValidState(index)) }
+                        onCorrectStateToggle = { onWish(Wish.SwitchVariantCorrectState(index)) }
                     )
                 }
             )
@@ -79,7 +79,7 @@ internal class QuizViewViewController(
 
     private fun renderResult(state: State) = with(view) {
         isVisible = true
-        resultText.text = state.questionResult.toString()
+        resultText.text = state.quizResult.toString()
         finishButton.setOnClickListener { onWish(Wish.Submit) }
     }
 

@@ -17,7 +17,7 @@ import ru.iandreyshev.core_utils.uiLazy
 class VariantItem(
     private val viewState: VariantViewState,
     private val onTextChanged: (String) -> Unit = {},
-    private val onValidStateSwitched: () -> Unit = {},
+    private val onCorrectStateToggle: () -> Unit = {},
     private val onDeleteVariant: () -> Unit = {},
     private val onAddNewVariant: () -> Unit = {}
 ) : Item<VariantItem.ViewHolder>() {
@@ -42,7 +42,7 @@ class VariantItem(
         viewHolder.bind(
             viewState,
             onTextChanged,
-            onValidStateSwitched,
+            onCorrectStateToggle,
             onDeleteVariant,
             onAddNewVariant
         )
@@ -55,7 +55,7 @@ class VariantItem(
         fun bind(
             viewState: VariantViewState,
             onTextChanged: (String) -> Unit,
-            onValidStateSwitched: () -> Unit,
+            onCorrectStateToggle: () -> Unit,
             onDeleteVariant: () -> Unit,
             onAddNewVariant: () -> Unit
         ) {
@@ -76,18 +76,18 @@ class VariantItem(
                     itemView.addNewButton.isVisible = false
                     itemView.addNewButton.setOnClickListener(null)
 
-                    itemView.isValidRadioButton.isVisible = !viewState.isMultipleMode
-                    itemView.isValidRadioButton.setOnCheckedChangeListener(null)
-                    itemView.isValidRadioButton.isChecked = viewState.isValid
-                    itemView.isValidRadioButton.setOnCheckedChangeListener { _, _ ->
-                        onValidStateSwitched()
+                    itemView.isCorrectRadioButton.isVisible = !viewState.isMultipleMode
+                    itemView.isCorrectRadioButton.setOnCheckedChangeListener(null)
+                    itemView.isCorrectRadioButton.isChecked = viewState.isCorrect
+                    itemView.isCorrectRadioButton.setOnCheckedChangeListener { _, _ ->
+                        onCorrectStateToggle()
                     }
 
-                    itemView.isValidCheckbox.isVisible = viewState.isMultipleMode
-                    itemView.isValidCheckbox.setOnCheckedChangeListener(null)
-                    itemView.isValidCheckbox.isChecked = viewState.isValid
-                    itemView.isValidCheckbox.setOnCheckedChangeListener { _, _ ->
-                        onValidStateSwitched()
+                    itemView.isCorrectCheckbox.isVisible = viewState.isMultipleMode
+                    itemView.isCorrectCheckbox.setOnCheckedChangeListener(null)
+                    itemView.isCorrectCheckbox.isChecked = viewState.isCorrect
+                    itemView.isCorrectCheckbox.setOnCheckedChangeListener { _, _ ->
+                        onCorrectStateToggle()
                     }
 
                     mTextWatcher?.let(itemView.variantText::removeTextChangedListener)

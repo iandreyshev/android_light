@@ -12,12 +12,11 @@ internal class QuizPlayerActor(
         when (state.type) {
             State.Type.DISABLED -> when (wish) {
                 is Wish.Start -> when (wish.quiz.result) {
-                    null -> {
+                    QuizResult.UNDEFINED -> {
                         player.prepare(wish.quiz)
                         Effect.ShowPreview(player.questionsCount).just()
                     }
-                    else ->
-                        Effect.ShowResult(wish.quiz.result).just()
+                    else -> Effect.ShowResult(wish.quiz.result).just()
                 }
                 else -> noEffect()
             }
@@ -27,8 +26,8 @@ internal class QuizPlayerActor(
                 else -> noEffect()
             }
             State.Type.QUESTION -> when (wish) {
-                is Wish.SwitchVariantValidState -> {
-                    player.switchCurrQuestionVariantValidState(wish.variantPosition)
+                is Wish.SwitchVariantCorrectState -> {
+                    player.switchCurrQuestionVariantCorrectState(wish.variantPosition)
                     Effect.ShowQuestion(player.currentQuestion).just()
                 }
                 Wish.Submit -> when (state.questionResult) {
@@ -42,7 +41,7 @@ internal class QuizPlayerActor(
                             Effect.ShowQuestion(player.currentQuestion).just()
                         }
                         else -> when (val playerResult = player.result) {
-                            null -> noEffect()
+                            QuizResult.UNDEFINED -> noEffect()
                             else -> Effect.ShowResult(playerResult).just()
                         }
                     }
@@ -50,10 +49,7 @@ internal class QuizPlayerActor(
                 else -> noEffect()
             }
             State.Type.RESULTS -> when (wish) {
-                Wish.Submit -> {
-                    player.onFinish()
-                    Effect.Finish.just()
-                }
+                Wish.Submit -> Effect.Finish.just()
                 else -> noEffect()
             }
         }
