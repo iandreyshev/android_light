@@ -12,7 +12,8 @@ import ru.iandreyshev.light.R
 import ru.iandreyshev.player_core.course.Course
 
 class CourseListAdapter(
-    private val onClickListener: (position: Int) -> Unit
+    private val onClickListener: (position: Int) -> Unit,
+    private val onLongClickListener: (position: Int) -> Unit
 ) : ListAdapter<Course, CourseViewHolder>(ItemCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder =
@@ -21,7 +22,11 @@ class CourseListAdapter(
             .let { view -> CourseViewHolder(view) }
             .also { holder ->
                 holder.itemView.setOnClickListener {
-                    holder.safelyPosition { pos -> onClickListener(pos) }
+                    holder.safelyPosition(onClickListener)
+                }
+                holder.itemView.setOnLongClickListener {
+                    holder.safelyPosition(onLongClickListener)
+                    return@setOnLongClickListener true
                 }
             }
 

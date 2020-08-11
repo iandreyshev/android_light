@@ -46,4 +46,14 @@ class CourseListViewModel(scope: Scope) : ViewModel() {
         )
     }
 
+    fun onEditCourseAt(position: Int) {
+    }
+
+    fun onDeleteCourseAt(position: Int) {
+        val course = mCourses.value
+            ?.getOrNull(position) ?: return
+
+        mRepository.delete(course.id)
+    }
+
 }

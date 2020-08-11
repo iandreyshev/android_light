@@ -24,4 +24,11 @@ class InMemoryCourseRepository : ICourseRepository {
         mCoursesObservable.offer(mCourses)
     }
 
+    override fun delete(courseId: CourseId) {
+        mCourses.indexOfFirst { it.id == courseId }
+            .let { mCourses.removeAt(it) }
+
+        mCoursesObservable.offer(mCourses)
+    }
+
 }
