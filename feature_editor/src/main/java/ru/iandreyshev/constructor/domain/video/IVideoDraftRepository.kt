@@ -7,5 +7,5 @@ interface IVideoDraftRepository {
     suspend fun get(): VideoDraft
     suspend fun getGallerySource(uri: Uri): VideoSource?
     suspend fun save(draft: VideoDraft)
-    suspend fun release()
+    suspend fun clear()
 }

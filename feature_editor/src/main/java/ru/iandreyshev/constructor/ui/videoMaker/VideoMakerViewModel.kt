@@ -41,9 +41,9 @@ class VideoMakerViewModel(
     private val mPlayer = MutableLiveData<ExoPlayer?>(null)
 
     override fun onCleared() {
-        GlobalScope.launch {
-            mRepository.release()
-            mPlayer.value?.release()
+        mPlayer.value?.release()
+        if (mDraft.source == null) {
+            GlobalScope.launch { mRepository.clear() }
         }
     }
 

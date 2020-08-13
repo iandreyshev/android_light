@@ -1,7 +1,7 @@
 package ru.iandreyshev.constructor.infrastructure.video
 
+import android.content.Context
 import android.net.Uri
-import ru.iandreyshev.constructor.domain.editor.files.VideoFiles
 import ru.iandreyshev.constructor.domain.video.VideoDraftId
 import ru.iandreyshev.constructor.domain.video.VideoSource
 import ru.iandreyshev.constructor.infrastructure.ICourseDraftStorage
@@ -9,43 +9,30 @@ import timber.log.Timber
 import java.io.File
 
 class VideoDraftStorage(
+    private val context: Context,
     private val courseStorage: ICourseDraftStorage,
     private val videoId: VideoDraftId
 ) : IVideoDraftStorage {
 
-    private val mImageFolderName: String
+    private val mVideoFolderName: String
         get() = "video_${videoId.value}"
 
-    override fun getFiles(): VideoFiles {
-        val courseFolder = courseStorage.getOrCreateCourseFolder()
-        val videoFolder = File(courseFolder, mImageFolderName)
-        videoFolder.mkdirs()
+    override fun createGallerySource(uri: Uri): VideoSource? {
+        val draftFile = getOrCreateDraftFile()
 
-        val sourceFile = File(
-            videoFolder,
-            VIDEO_FILE_NAME
-        )
+        val resolver = context.contentResolver
+        val galleryFileInput = resolver.openInputStream(uri)
+            ?: kotlin.run { return null }
 
-        return VideoFiles(
-            folderPath = videoFolder.path,
-            sourceFilePath = sourceFile.path
-        )
+        galleryFileInput.copyTo(draftFile.outputStream())
+
+        return VideoSource(draftFile.path)
     }
 
-    override fun save(uri: Uri): VideoSource? {
-        val files = getFiles()
-        val sourceFile = File(uri.path ?: return null)
-        val draftFile = File(files.sourceFilePath)
-
-        sourceFile.copyTo(draftFile)
-
-        return VideoSource(filePath = draftFile.path)
-    }
-
-    override fun delete() {
+    override fun clear() {
         try {
             val courseFolder = courseStorage.getOrCreateCourseFolder()
-            val videoFolder = File(courseFolder, mImageFolderName)
+            val videoFolder = File(courseFolder, mVideoFolderName)
 
             videoFolder.deleteRecursively()
         } catch (ex: Exception) {
@@ -53,8 +40,20 @@ class VideoDraftStorage(
         }
     }
 
+    private fun getOrCreateDraftFile(): File {
+        val courseFolder = courseStorage.getOrCreateCourseFolder()
+        val videoFolder = File(courseFolder, mVideoFolderName)
+        videoFolder.mkdirs()
+
+        return File(
+            videoFolder,
+            VIDEO_FILE_NAME
+        )
+    }
+
     companion object {
-        private const val VIDEO_FILE_NAME = "source.PNG"
+        // FIXME: 8/14/2020 Remove fixed extension
+        private const val VIDEO_FILE_NAME = "source.mp4"
     }
 
 }

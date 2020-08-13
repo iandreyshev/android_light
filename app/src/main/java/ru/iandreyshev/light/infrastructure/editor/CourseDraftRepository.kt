@@ -50,7 +50,7 @@ class CourseDraftRepository(
         mItemsChannel.offer(mDraft.items)
     }
 
-    override suspend fun release() {
+    override suspend fun clear() {
         Timber.d("Release course draft repository")
         storage.clear()
     }

@@ -25,16 +25,16 @@ class VideoDraftRepository(
     }
 
     override suspend fun getGallerySource(uri: Uri): VideoSource? {
-        return storage.save(uri)
+        return storage.createGallerySource(uri)
     }
 
     override suspend fun save(draft: VideoDraft) {
         courseRepository.add(DraftItem.Video(draft))
     }
 
-    override suspend fun release() {
-        Timber.d("Release video draft repository")
-        storage.delete()
+    override suspend fun clear() {
+        Timber.d("Release video $id draft files")
+        storage.clear()
     }
 
 }

@@ -15,8 +15,6 @@ class ImageDraftRepository(
     private val storage: IImageDraftStorage
 ) : IImageDraftRepository {
 
-    private var mIsReleased = false
-
     override suspend fun get(): ImageDraft {
         return courseRepository.getItems()
             .mapNotNull { it.asTypeOrNull<DraftItem.Image>()?.draft }
@@ -24,14 +22,12 @@ class ImageDraftRepository(
             ?: ImageDraft(ImageDraftId(newUID()))
     }
 
-    override suspend fun getPhotoSource(): ImageSource.Photo {
-        return ImageSource.Photo(
-            filePath = storage.getFiles().sourceFilePath
-        )
+    override suspend fun getPhotoSource(): ImageSource.Photo? {
+        return storage.getPhotoSource()
     }
 
     override suspend fun getGallerySource(uri: Uri): ImageSource.Gallery? {
-        return storage.save(uri)
+        return storage.createGallerySource(uri)
     }
 
     override suspend fun save(draft: ImageDraft): ImageDraftResult {
@@ -44,15 +40,10 @@ class ImageDraftRepository(
         return ImageDraftResult.Success
     }
 
-    override suspend fun release() {
-        if (mIsReleased) {
-            Timber.d("Repository already released")
-            return
-        }
+    override suspend fun clear() {
 
         Timber.d("Delete image draft files")
         storage.clear()
-        mIsReleased = true
     }
 
 }

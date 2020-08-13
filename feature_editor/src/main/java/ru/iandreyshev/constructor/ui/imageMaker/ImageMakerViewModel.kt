@@ -37,8 +37,8 @@ class ImageMakerViewModel(
     private lateinit var mDraft: ImageDraft
 
     override fun onCleared() {
-        GlobalScope.launch {
-            mRepository.release()
+        if (mDraft.source == null) {
+            GlobalScope.launch { mRepository.clear() }
         }
     }
 
@@ -61,18 +61,24 @@ class ImageMakerViewModel(
 
     fun onTakePhotoClick() {
         viewModelScope.launch {
-            val source = mRepository.getPhotoSource()
+            val source = mRepository.getPhotoSource() ?: kotlin.run {
+                event { ImageMakerEvent.ShowError("Error while copy video") }
+                return@launch
+            }
             event { ImageMakerEvent.TakePhoto(source) }
         }
     }
 
     fun onOpenCameraClick() {
-        mDraft = mDraft.copy(source = null)
-        modifyState {
-            copy(
-                cameraState = CameraState.AVAILABLE,
-                picture = null
-            )
+        viewModelScope.launch {
+            mRepository.clear()
+            mDraft = mDraft.copy(source = null)
+            modifyState {
+                copy(
+                    cameraState = CameraState.AVAILABLE,
+                    picture = null
+                )
+            }
         }
     }
 
@@ -85,7 +91,6 @@ class ImageMakerViewModel(
         viewModelScope.launch {
             when (val saveResult = mRepository.save(mDraft)) {
                 ImageDraftResult.Success -> {
-                    mRepository.release()
                     event { ImageMakerEvent.Exit }
                 }
                 is ImageDraftResult.Error -> when (saveResult.error) {
@@ -126,30 +131,36 @@ class ImageMakerViewModel(
     fun onTakePhotoError(exception: ImageCaptureException) {
         Timber.d(exception)
 
-        mDraft = mDraft.copy(source = null)
-        modifyState {
-            copy(
-                picture = null,
-                cameraState = CameraState.AVAILABLE
-            )
+        viewModelScope.launch {
+            mRepository.clear()
+            mDraft = mDraft.copy(source = null)
+            modifyState {
+                copy(
+                    picture = null,
+                    cameraState = CameraState.AVAILABLE
+                )
+            }
         }
     }
 
     fun onPictureLoadError(exception: GlideException?) {
         Timber.d(exception)
 
-        mDraft = mDraft.copy(source = null)
-        modifyState {
-            copy(
-                picture = null,
-                cameraState = CameraState.AVAILABLE
-            )
+        viewModelScope.launch {
+            mRepository.clear()
+            mDraft = mDraft.copy(source = null)
+            modifyState {
+                copy(
+                    picture = null,
+                    cameraState = CameraState.AVAILABLE
+                )
+            }
         }
     }
 
     fun onExit() {
         viewModelScope.launch {
-            mRepository.release()
+            mRepository.clear()
             event { ImageMakerEvent.Exit }
         }
     }

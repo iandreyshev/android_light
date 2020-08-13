@@ -1,7 +1,7 @@
 package ru.iandreyshev.constructor.infrastructure.image
 
+import android.content.Context
 import android.net.Uri
-import ru.iandreyshev.constructor.domain.editor.files.ImageFiles
 import ru.iandreyshev.constructor.domain.image.ImageDraftId
 import ru.iandreyshev.constructor.domain.image.ImageSource
 import ru.iandreyshev.constructor.infrastructure.ICourseDraftStorage
@@ -9,6 +9,7 @@ import timber.log.Timber
 import java.io.File
 
 class ImageDraftStorage(
+    private val context: Context,
     private val courseStorage: ICourseDraftStorage,
     private val imageId: ImageDraftId
 ) : IImageDraftStorage {
@@ -16,28 +17,21 @@ class ImageDraftStorage(
     private val mImageFolderName: String
         get() = "image_${imageId.value}"
 
-    override fun getFiles(): ImageFiles {
-        val courseFolder = courseStorage.getOrCreateCourseFolder()
-        val imageFolder = File(courseFolder, mImageFolderName)
-        imageFolder.mkdirs()
+    override fun getPhotoSource(): ImageSource.Photo {
+        val draftFile = getOrCreateDraftFile()
+        val draftFilePath = draftFile.path
 
-        val sourceFile = File(
-            imageFolder,
-            IMAGE_FILE_NAME
-        )
-
-        return ImageFiles(
-            folderPath = imageFolder.path,
-            sourceFilePath = sourceFile.path
-        )
+        return ImageSource.Photo(draftFilePath)
     }
 
-    override fun save(uri: Uri): ImageSource.Gallery? {
-        val files = getFiles()
-        val sourceFile = File(uri.path ?: return null)
-        val draftFile = File(files.sourceFilePath)
+    override fun createGallerySource(uri: Uri): ImageSource.Gallery? {
+        val draftFile = getOrCreateDraftFile()
 
-        sourceFile.copyTo(draftFile)
+        val resolver = context.contentResolver
+        val galleryFileInput = resolver.openInputStream(uri)
+            ?: kotlin.run { return null }
+
+        galleryFileInput.copyTo(draftFile.outputStream())
 
         return ImageSource.Gallery(filePath = draftFile.path)
     }
@@ -53,8 +47,20 @@ class ImageDraftStorage(
         }
     }
 
+    private fun getOrCreateDraftFile(): File {
+        val courseFolder = courseStorage.getOrCreateCourseFolder()
+        val imageFolder = File(courseFolder, mImageFolderName)
+        imageFolder.mkdirs()
+
+        return File(
+            imageFolder,
+            IMAGE_FILE_NAME
+        )
+    }
+
     companion object {
-        private const val IMAGE_FILE_NAME = "source.PNG"
+        // FIXME: 8/14/2020 Remove fixed extension
+        private const val IMAGE_FILE_NAME = "source.png"
     }
 
 }

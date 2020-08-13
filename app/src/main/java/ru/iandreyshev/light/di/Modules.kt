@@ -29,6 +29,7 @@ import ru.iandreyshev.core_app.navGraphScope
 import ru.iandreyshev.light.R
 import ru.iandreyshev.light.domain.ICourseRepository
 import ru.iandreyshev.light.domain.IDraftSerializer
+import ru.iandreyshev.light.infrastructure.courseList.CourseStorage
 import ru.iandreyshev.light.infrastructure.courseList.InMemoryCourseRepository
 import ru.iandreyshev.light.infrastructure.editor.CourseDraftRepository
 import ru.iandreyshev.light.infrastructure.editor.ImageDraftRepository
@@ -49,7 +50,13 @@ fun Context.initDI() = startKoin {
 }
 
 private val MAIN_MODULE = module {
-    single { InMemoryCourseRepository() }
+    single {
+        InMemoryCourseRepository(
+            storage = CourseStorage(
+                context = androidContext()
+            )
+        )
+    }
     single<ICourseRepository> { get<InMemoryCourseRepository>() }
     single<IDraftSerializer> { get<InMemoryCourseRepository>() }
 
@@ -84,12 +91,14 @@ private val MAIN_MODULE = module {
         }
         factory<IVideoDraftStorage> {
             VideoDraftStorage(
+                context = androidContext(),
                 courseStorage = get { parametersOf(it.component1()) },
                 videoId = it.component2()
             )
         }
         factory<IImageDraftStorage> {
             ImageDraftStorage(
+                context = androidContext(),
                 courseStorage = get { parametersOf(it.component1()) },
                 imageId = it.component2()
             )

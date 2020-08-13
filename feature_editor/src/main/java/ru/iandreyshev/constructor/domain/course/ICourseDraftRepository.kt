@@ -10,5 +10,5 @@ interface ICourseDraftRepository {
     suspend fun observeItems(): Flow<List<DraftItem>>
     suspend fun save(draft: CourseDraft)
     suspend fun add(item: DraftItem)
-    suspend fun release()
+    suspend fun clear()
 }

@@ -1,6 +1,7 @@
 package ru.iandreyshev.constructor.ui.editor
 
 import androidx.lifecycle.*
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.core.parameter.parametersOf
@@ -33,6 +34,12 @@ class EditorViewModel(
         }
     }
     private lateinit var mDraft: CourseDraft
+
+    override fun onCleared() {
+        if (mDraft.items.isEmpty()) {
+            GlobalScope.launch { mRepository.clear() }
+        }
+    }
 
     fun onCreate() {
         viewModelScope.launch {
@@ -73,7 +80,10 @@ class EditorViewModel(
     }
 
     fun onExit() {
-        event { EditorEvent.Exit }
+        viewModelScope.launch {
+            mRepository.clear()
+            event { EditorEvent.Exit }
+        }
     }
 
     fun onSave() {
