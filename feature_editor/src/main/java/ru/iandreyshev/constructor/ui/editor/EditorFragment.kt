@@ -6,19 +6,23 @@ import android.view.View
 import android.widget.PopupMenu
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.ItemTouchHelper.*
-import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_editor.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.iandreyshev.constructor.R
+import ru.iandreyshev.constructor.domain.course.CourseDraftId
+import ru.iandreyshev.constructor.domain.editor.DraftItem
+import ru.iandreyshev.constructor.domain.image.ImageSource
 import ru.iandreyshev.constructor.navigation.router
 import ru.iandreyshev.core_app.BaseFragment
 import ru.iandreyshev.core_ui.withItemListeners
+import ru.iandreyshev.core_utils.exhaustive
+import java.lang.IllegalStateException
 
 class EditorFragment : BaseFragment(R.layout.fragment_editor) {
 
@@ -26,19 +30,21 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
         parametersOf(
             getScope(R.id.nav_editor),
             EditorArgs(
-                courseDraftId = null,
+                courseDraftId = CourseDraftId.random(),
                 courseTitle = resources.getString(R.string.editor_default_title)
             )
         )
     }
+    private val mTimelineAdapter = GroupAdapter<GroupieViewHolder>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initMenu()
         initTimeline()
-        initCourseTitle()
-        initSettingsMenu()
+
+        mViewModel.state.viewObserveWith(::render)
+        mViewModel.event(::handleEvent)
     }
 
     private fun initMenu() {
@@ -50,76 +56,77 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
         addVideoButton.setOnClickListener { mViewModel.onCreateVideo() }
         addImageButton.setOnClickListener { mViewModel.onCreateImage() }
         addQuizButton.setOnClickListener { mViewModel.onCreateQuiz() }
-
-        mViewModel.isTimelineEmpty.viewObserveWith { bottomMenu.isGone = it }
-
-        mViewModel.eventBackFromEditor(router()::back)
-        mViewModel.eventOpenImageMaker(router()::openImageMaker)
-        mViewModel.eventOpenVideoMaker(router()::openVideoMaker)
-        mViewModel.eventOpenQuizMaker(router()::openQuizMaker)
     }
 
     private fun initTimeline() {
-        timeline.adapter = mViewModel.timelineAdapter
-        mViewModel.isTimelineEmpty.viewObserveWith {
-            emptyView.isVisible = it
-            timeline.isVisible = !it
-        }
+        timeline.adapter = mTimelineAdapter
         emptyViewAddVideoButton.setOnClickListener { mViewModel.onCreateVideo() }
         emptyViewAddImageButton.setOnClickListener { mViewModel.onCreateImage() }
         emptyViewAddQuizButton.setOnClickListener { mViewModel.onCreateQuiz() }
     }
 
-    private fun initCourseTitle() {
-        mViewModel.courseTitle.viewObserveWith {
-            courseTitle.text = it
-            courseTitle.setOnClickListener {
-                showRenameCourseDialog()
-            }
-        }
+    private fun handleEvent(event: EditorEvent) {
+        when (event) {
+            is EditorEvent.OpenQuizMaker -> router.openQuizMaker(event.args)
+            is EditorEvent.OpenImageMaker -> router.openImageMaker(event.args)
+            is EditorEvent.OpenVideoMaker -> router.openVideoMaker(event.args)
+            EditorEvent.Exit -> router.back()
+        }.exhaustive
     }
 
-    private fun initSettingsMenu() {
+    private fun render(state: EditorViewState) {
+        emptyView.isVisible = state.isTimelineEmpty
+        timeline.isVisible = !state.isTimelineEmpty
+
+        bottomMenu.isGone = state.isTimelineEmpty
+
+        courseTitle.text = state.courseTitle
+        courseTitle.setOnClickListener(null)
+        courseTitle.setOnClickListener {
+            showRenameCourseDialog(state.courseTitle)
+        }
+
+        settingsButton.setOnClickListener(null)
         settingsButton.setOnClickListener { buttonView ->
-            val popupMenu = PopupMenu(requireContext(), buttonView)
-            popupMenu.inflate(R.menu.menu_editor_settings)
-            popupMenu.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    R.id.actionRename -> {
-                        showRenameCourseDialog()
-                        true
-                    }
-                    else -> false
-                }
-            }
-            popupMenu.show()
-            popupMenus += popupMenu
+            showSettingsMenu(buttonView, state.courseTitle)
         }
-    }
 
-    private fun buildItemTouchHelper() =
-        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(UP or DOWN, 0) {
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) = Unit
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                val from = viewHolder.adapterPosition
-                val to = target.adapterPosition
+        mTimelineAdapter.update(state.items.map { item ->
+            when (item) {
+                is DraftItem.Quiz -> QuizItem(
+                    id = item.draft.hashCode().toLong(),
+                    questionsCount = item.draft.questions.count(),
+                    onClickListener = {}
+                )
+                is DraftItem.Image -> {
+                    val filePath = when (val source = item.draft.source) {
+                        is ImageSource.Gallery -> source.filePath
+                        is ImageSource.Photo -> source.filePath
+                        null -> throw IllegalStateException("Image source is null")
+                    }
 
-                mViewModel.onMove(from, to)
-                recyclerView.adapter?.notifyItemMoved(from, to)
-
-                return true
+                    ImageItem(
+                        id = item.draft.id.hashCode().toLong(),
+                        imageName = filePath,
+                        imageUrl = filePath,
+                        onClickListener = {}
+                    )
+                }
+                is DraftItem.Video -> VideoItem(
+                    id = item.draft.hashCode().toLong(),
+                    videoName = item.draft.source?.filePath.orEmpty(),
+                    duration = "",
+                    onClickListener = {}
+                )
             }
         })
+    }
 
-    private fun showRenameCourseDialog() {
+    private fun showRenameCourseDialog(preFill: String) {
         MaterialDialog(requireContext()).show {
             title(R.string.editor_rename_dialog_title)
             input(
-                prefill = mViewModel.courseTitle.value,
+                prefill = preFill,
                 inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES,
                 maxLength = COURSE_MAX_NAME
             ) { _, text ->
@@ -128,6 +135,22 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
             negativeButton { }
             lifecycleOwner(this@EditorFragment)
         }
+    }
+
+    private fun showSettingsMenu(view: View, courseTitle: String) {
+        val popupMenu = PopupMenu(requireContext(), view)
+        popupMenu.inflate(R.menu.menu_editor_settings)
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.actionRename -> {
+                    showRenameCourseDialog(courseTitle)
+                    true
+                }
+                else -> false
+            }
+        }
+        popupMenu.show()
+        popupMenus += popupMenu
     }
 
     companion object {

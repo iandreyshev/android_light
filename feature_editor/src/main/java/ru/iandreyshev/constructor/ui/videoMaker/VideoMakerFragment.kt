@@ -55,8 +55,8 @@ class VideoMakerFragment : BaseFragment(R.layout.fragment_video_maker) {
     private fun initMenu() {
         createButton.setOnClickListener { mViewModel.onCreateDraft() }
         mViewModel.hasVideo.viewObserveWith { createButton.isVisible = it }
-        exitButton.setOnClickListener { router().back() }
-        mViewModel.eventExit { router().back() }
+        exitButton.setOnClickListener { router.back() }
+        mViewModel.eventExit { router.back() }
     }
 
     private fun initPickerControls() {

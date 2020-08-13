@@ -37,12 +37,12 @@ class QuizMakerFragment : BaseFragment(R.layout.fragment_quiz_maker) {
     }
 
     private fun initMenu() {
-        toolbar.setNavigationOnClickListener { router().back() }
+        toolbar.setNavigationOnClickListener { router.back() }
         toolbar.withItemListeners {
             R.id.actionQuizMakerSave { mViewModel.onSave() }
         }
 
-        mViewModel.eventExit(router()::back)
+        mViewModel.eventExit(router::back)
     }
 
     private fun initVariantsList() {

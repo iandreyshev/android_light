@@ -1,10 +1,12 @@
 package ru.iandreyshev.light.infrastructure.editor
 
+import android.net.Uri
 import ru.iandreyshev.constructor.domain.course.ICourseDraftRepository
 import ru.iandreyshev.constructor.domain.editor.DraftItem
-import ru.iandreyshev.constructor.domain.editor.files.ICourseDraftFilesStorage
+import ru.iandreyshev.constructor.infrastructure.video.IVideoDraftStorage
 import ru.iandreyshev.constructor.domain.video.IVideoDraftRepository
 import ru.iandreyshev.constructor.domain.video.VideoDraftId
+import ru.iandreyshev.constructor.domain.video.VideoSource
 import ru.iandreyshev.constructor.domain.video.draft.VideoDraft
 import ru.iandreyshev.constructor.utils.newUID
 import timber.log.Timber
@@ -12,12 +14,8 @@ import timber.log.Timber
 class VideoDraftRepository(
     private val id: VideoDraftId,
     private val courseRepository: ICourseDraftRepository,
-    private val courseDraftFilesProvider: ICourseDraftFilesStorage
+    private val storage: IVideoDraftStorage
 ) : IVideoDraftRepository {
-
-    private val mFiles by lazy {
-        courseDraftFilesProvider.getVideoFiles(id)
-    }
 
     override suspend fun get(): VideoDraft {
         return courseRepository.getItems()
@@ -26,8 +24,8 @@ class VideoDraftRepository(
             ?: VideoDraft(VideoDraftId(newUID()))
     }
 
-    override suspend fun getVideoFilePath(): String {
-        return mFiles.videoSourceFilePath
+    override suspend fun getGallerySource(uri: Uri): VideoSource? {
+        return storage.save(uri)
     }
 
     override suspend fun save(draft: VideoDraft) {
@@ -36,6 +34,7 @@ class VideoDraftRepository(
 
     override suspend fun release() {
         Timber.d("Release video draft repository")
+        storage.delete()
     }
 
 }

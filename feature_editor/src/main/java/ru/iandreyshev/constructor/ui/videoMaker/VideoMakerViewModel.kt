@@ -12,9 +12,9 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
 import ru.iandreyshev.constructor.domain.video.IVideoDraftRepository
-import ru.iandreyshev.constructor.domain.video.VideoSource
 import ru.iandreyshev.constructor.domain.video.draft.VideoDraft
 import ru.iandreyshev.core_ui.invoke
+import ru.iandreyshev.core_ui.singleLiveEvent
 import ru.iandreyshev.core_ui.voidSingleLiveEvent
 import ru.iandreyshev.core_utils.uiLazy
 
@@ -29,6 +29,7 @@ class VideoMakerViewModel(
             .distinctUntilChanged()
     }
 
+    val eventShowError = singleLiveEvent<String>()
     val eventExit = voidSingleLiveEvent()
 
     private val mRepository by uiLazy {
@@ -60,22 +61,31 @@ class VideoMakerViewModel(
     }
 
     fun onPickFromGallery(uri: Uri) {
-        mPlayer.value?.release()
-        mPlayer.value = null
+        mPlayer.value?.playWhenReady = false
 
-        val player = scope.get<ExoPlayer>()
-        val dataSourceFactory = DefaultDataSourceFactory(
-            scope.androidApplication(),
-            Util.getUserAgent(scope.androidApplication(), "Light")
-        )
-        val videoSource = ProgressiveMediaSource.Factory(dataSourceFactory)
-            .createMediaSource(uri)
+        viewModelScope.launch {
+            val source = mRepository.getGallerySource(uri) ?: kotlin.run {
+                eventShowError("Error while video from gallery")
+                return@launch
+            }
 
-        player.prepare(videoSource)
+            mPlayer.value?.release()
+            mPlayer.value = null
 
-        mPlayer.value = player
+            val player = scope.get<ExoPlayer>()
+            val dataSourceFactory = DefaultDataSourceFactory(
+                scope.androidApplication(),
+                Util.getUserAgent(scope.androidApplication(), "Light")
+            )
+            val videoSource = ProgressiveMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(Uri.parse(source.filePath))
 
-        mDraft = mDraft.copy(source = VideoSource(uri.toString()))
+            player.prepare(videoSource)
+
+            mPlayer.value = player
+
+            mDraft = mDraft.copy(source = source)
+        }
     }
 
 }

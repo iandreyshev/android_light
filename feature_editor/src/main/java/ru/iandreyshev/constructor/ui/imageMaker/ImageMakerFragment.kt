@@ -29,6 +29,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.iandreyshev.constructor.R
+import ru.iandreyshev.constructor.domain.image.ImageSource
 import ru.iandreyshev.constructor.navigation.router
 import ru.iandreyshev.core_app.BaseFragment
 import ru.iandreyshev.core_ui.setFullScreen
@@ -46,7 +47,7 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
     }
     private val mPickFromGalleryLauncher by uiLazy {
         registerForActivityResult(ActivityResultContracts.GetContent()) {
-            mViewModel.onPickFromGallerySuccess(it.toString())
+            mViewModel.onPickFromGallerySuccess(it)
         }
     }
     private val mRequestCameraPermissionLauncher by uiLazy {
@@ -64,6 +65,7 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
         initCameraView()
 
         mViewModel.state.viewObserveWith(::render)
+        mViewModel.event(::handleEvent)
 
         setFullScreen()
         setOrientationPortrait()
@@ -77,8 +79,7 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
 
     private fun initMenu() {
         createButton.setOnClickListener { mViewModel.onSaveDraft() }
-        exitButton.setOnClickListener { router().back() }
-        mViewModel.eventExit(router()::back)
+        exitButton.setOnClickListener { mViewModel.onExit() }
     }
 
     private fun initPickerControls() {
@@ -95,30 +96,38 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
 
     private fun initCameraView() {
         mRequestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+    }
 
-        mViewModel.eventTakePhoto { filePath ->
-            val outputFile = File(filePath)
-            val outputOptions = ImageCapture.OutputFileOptions
-                .Builder(outputFile)
-                .build()
+    private fun handleEvent(event: ImageMakerEvent) {
+        when (event) {
+            is ImageMakerEvent.ShowError -> TODO()
+            is ImageMakerEvent.TakePhoto -> takePhoto(event.imageSource)
+            ImageMakerEvent.Exit -> router.back()
+        }.exhaustive
+    }
 
-            cameraView.takePicture(
-                outputOptions,
-                Dispatchers.IO.asExecutor(),
-                object : ImageCapture.OnImageSavedCallback {
-                    override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                        lifecycleScope.launch {
-                            mViewModel.onTakePhotoSuccess(filePath)
-                        }
+    private fun takePhoto(source: ImageSource.Photo) {
+        val outputFile = File(source.filePath)
+        val outputOptions = ImageCapture.OutputFileOptions
+            .Builder(outputFile)
+            .build()
+
+        cameraView.takePicture(
+            outputOptions,
+            Dispatchers.IO.asExecutor(),
+            object : ImageCapture.OnImageSavedCallback {
+                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                    lifecycleScope.launch {
+                        mViewModel.onTakePhotoSuccess(source)
                     }
+                }
 
-                    override fun onError(exception: ImageCaptureException) {
-                        lifecycleScope.launch {
-                            mViewModel.onTakePhotoError(exception)
-                        }
+                override fun onError(exception: ImageCaptureException) {
+                    lifecycleScope.launch {
+                        mViewModel.onTakePhotoError(exception)
                     }
-                })
-        }
+                }
+            })
     }
 
     private fun render(state: ImageMakerViewState) {

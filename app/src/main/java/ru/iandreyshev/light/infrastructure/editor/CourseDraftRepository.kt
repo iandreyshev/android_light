@@ -6,28 +6,18 @@ import ru.iandreyshev.constructor.domain.course.CourseDraftId
 import ru.iandreyshev.constructor.domain.course.ICourseDraftRepository
 import ru.iandreyshev.constructor.domain.editor.CourseDraft
 import ru.iandreyshev.constructor.domain.editor.DraftItem
-import ru.iandreyshev.constructor.domain.image.ImageSource
-import ru.iandreyshev.constructor.domain.video.VideoSource
-import ru.iandreyshev.constructor.utils.newUID
-import ru.iandreyshev.light.domain.ICourseRepository
-import ru.iandreyshev.player_core.course.Course
-import ru.iandreyshev.player_core.course.CourseId
-import ru.iandreyshev.player_core.course.CourseItem
-import ru.iandreyshev.player_core.quiz.*
+import ru.iandreyshev.constructor.infrastructure.ICourseDraftStorage
+import ru.iandreyshev.light.domain.IDraftSerializer
 import timber.log.Timber
-import java.util.*
 
 class CourseDraftRepository(
-    private val courseDraftId: CourseDraftId?,
-    private val courseDefaultTitle: String,
-    private val repository: ICourseRepository
+    id: CourseDraftId,
+    defaultTitle: String,
+    private val storage: ICourseDraftStorage,
+    private val serializer: IDraftSerializer
 ) : ICourseDraftRepository {
 
-    private var mDraft = CourseDraft(
-        CourseDraftId(newUID()),
-        courseDefaultTitle,
-        listOf()
-    )
+    private var mDraft = CourseDraft(id, defaultTitle)
     private val mItemsChannel = ConflatedBroadcastChannel<List<DraftItem>>()
 
     init {
@@ -46,10 +36,9 @@ class CourseDraftRepository(
         mItemsChannel.asFlow()
 
     override suspend fun save(draft: CourseDraft) {
-        val course = draft
+        val draftToSave = draft
             .copy(items = mDraft.items)
-            .asCourse()
-        repository.save(course)
+        serializer.save(draftToSave)
     }
 
     override suspend fun add(item: DraftItem) {
@@ -63,62 +52,7 @@ class CourseDraftRepository(
 
     override suspend fun release() {
         Timber.d("Release course draft repository")
+        storage.clear()
     }
-
-    private fun CourseDraft.asCourse() = Course(
-        id = CourseId(id.value),
-        title = title,
-        creationDate = Date(),
-        items = items.map { item ->
-            when (item) {
-                is DraftItem.Quiz ->
-                    CourseItem.Quiz(
-                        id = QuizId(item.draft.id.value),
-                        questions = item.draft.questions
-                            .mapIndexed { pos, questionDraft ->
-                                Question(
-                                    id = QuestionId(questionDraft.id.value),
-                                    text = questionDraft.text,
-                                    variants = questionDraft.variants.map { variantDraft ->
-                                        Variant(
-                                            id = VariantId(variantDraft.id.value),
-                                            text = variantDraft.text,
-                                            isCorrect = variantDraft.isCorrect,
-                                            isSelectedAsCorrect = true
-                                        )
-                                    },
-                                    isMultipleMode = questionDraft.isMultipleMode,
-                                    position = pos,
-                                    result = QuestionResult.UNDEFINED
-                                )
-                            })
-                is DraftItem.Image ->
-                    CourseItem.Image(
-                        item.draft.text,
-                        item.draft.source
-                            ?.asPlayerImageSource()
-                            ?: throw IllegalArgumentException("Image draft source is null")
-                    )
-                is DraftItem.Video ->
-                    CourseItem.Video(
-                        item.draft.source
-                            ?.asPlayerVideoSource()
-                            ?: throw IllegalArgumentException("Video draft source is null")
-                    )
-            }
-        }
-    )
-
-
-    private fun ImageSource.asPlayerImageSource() =
-        ru.iandreyshev.player_core.image.ImageSource(
-            when (this) {
-                is ImageSource.Gallery -> filePath
-                is ImageSource.Photo -> filePath
-            }
-        )
-
-    private fun VideoSource.asPlayerVideoSource() =
-        ru.iandreyshev.player_core.video.VideoSource(filePath)
 
 }

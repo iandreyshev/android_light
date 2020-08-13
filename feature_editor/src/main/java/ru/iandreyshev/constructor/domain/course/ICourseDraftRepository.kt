@@ -3,7 +3,6 @@ package ru.iandreyshev.constructor.domain.course
 import kotlinx.coroutines.flow.Flow
 import ru.iandreyshev.constructor.domain.editor.CourseDraft
 import ru.iandreyshev.constructor.domain.editor.DraftItem
-import ru.iandreyshev.constructor.domain.image.draft.ImageDraft
 
 interface ICourseDraftRepository {
     suspend fun get(): CourseDraft

@@ -1,5 +1,6 @@
 package ru.iandreyshev.constructor.ui.imageMaker
 
+import android.net.Uri
 import androidx.camera.core.ImageCaptureException
 import androidx.lifecycle.*
 import com.bumptech.glide.load.engine.GlideException
@@ -12,10 +13,7 @@ import ru.iandreyshev.constructor.domain.image.ImageDraftError
 import ru.iandreyshev.constructor.domain.image.ImageDraftResult
 import ru.iandreyshev.constructor.domain.image.draft.ImageDraft
 import ru.iandreyshev.constructor.domain.image.ImageSource
-import ru.iandreyshev.core_ui.singleLiveEvent
-import ru.iandreyshev.core_ui.voidSingleLiveEvent
-import ru.iandreyshev.core_ui.invoke
-import ru.iandreyshev.core_ui.modify
+import ru.iandreyshev.core_app.UnifiedStateViewModel
 import ru.iandreyshev.core_utils.exhaustive
 import ru.iandreyshev.core_utils.uiLazy
 import timber.log.Timber
@@ -23,22 +21,13 @@ import timber.log.Timber
 class ImageMakerViewModel(
     scope: Scope,
     imageMakerArgs: ImageMakerArgs
-) : ViewModel() {
-
-    val state by uiLazy { mState.distinctUntilChanged() }
-
-    val eventTakePhoto = singleLiveEvent<String>()
-    val eventShowError = singleLiveEvent<String>()
-    val eventExit = voidSingleLiveEvent()
-
-    private val mState = MutableLiveData<ImageMakerViewState>(
-        ImageMakerViewState(
-            cameraState = CameraState.AWAIT_PERMISSION,
-            text = "",
-            picture = null,
-            isSaved = false
-        )
+) : UnifiedStateViewModel<ImageMakerViewState, ImageMakerEvent>(
+    initialState = ImageMakerViewState(
+        cameraState = CameraState.AWAIT_PERMISSION,
+        text = "",
+        picture = null
     )
+) {
 
     private val mRepository by uiLazy {
         scope.get<IImageDraftRepository> {
@@ -49,9 +38,7 @@ class ImageMakerViewModel(
 
     override fun onCleared() {
         GlobalScope.launch {
-            if (mState.value?.isSaved == false) {
-                mRepository.release()
-            }
+            mRepository.release()
         }
     }
 
@@ -62,7 +49,7 @@ class ImageMakerViewModel(
     }
 
     fun onCameraPermissionGranted(isGranted: Boolean) {
-        mState.modify {
+        modifyState {
             copy(
                 cameraState = when (isGranted) {
                     true -> CameraState.AVAILABLE
@@ -74,13 +61,14 @@ class ImageMakerViewModel(
 
     fun onTakePhotoClick() {
         viewModelScope.launch {
-            eventTakePhoto(mRepository.getImageFilePath())
+            val source = mRepository.getPhotoSource()
+            event { ImageMakerEvent.TakePhoto(source) }
         }
     }
 
     fun onOpenCameraClick() {
         mDraft = mDraft.copy(source = null)
-        mState.modify {
+        modifyState {
             copy(
                 cameraState = CameraState.AVAILABLE,
                 picture = null
@@ -90,42 +78,48 @@ class ImageMakerViewModel(
 
     fun onChangeText(text: String?) {
         mDraft = mDraft.copy(text = text)
-        mState.modify { copy(text = mDraft.text.orEmpty()) }
+        modifyState { copy(text = mDraft.text.orEmpty()) }
     }
 
     fun onSaveDraft() {
         viewModelScope.launch {
             when (val saveResult = mRepository.save(mDraft)) {
                 ImageDraftResult.Success -> {
-                    mState.modify { copy(isSaved = true) }
-                    eventExit()
+                    mRepository.release()
+                    event { ImageMakerEvent.Exit }
                 }
                 is ImageDraftResult.Error -> when (saveResult.error) {
-                    ImageDraftError.SOURCE_NOT_FOUND -> {
-                        eventShowError("ERROR: Image source is null")
-                    }
+                    ImageDraftError.SOURCE_NOT_FOUND ->
+                        event { ImageMakerEvent.ShowError("ERROR: Image source is null") }
                 }
             }.exhaustive
         }
     }
 
-    fun onTakePhotoSuccess(filePath: String) {
-        mDraft = mDraft.copy(source = ImageSource.Photo(filePath))
-        mState.modify {
+    fun onTakePhotoSuccess(source: ImageSource.Photo) {
+        mDraft = mDraft.copy(source = source)
+        modifyState {
             copy(
-                picture = filePath,
+                picture = source.filePath,
                 cameraState = CameraState.DISABLED
             )
         }
     }
 
-    fun onPickFromGallerySuccess(uriString: String) {
-        mDraft = mDraft.copy(source = ImageSource.Gallery(uriString))
-        mState.modify {
-            copy(
-                picture = uriString,
-                cameraState = CameraState.DISABLED
-            )
+    fun onPickFromGallerySuccess(uri: Uri) {
+        viewModelScope.launch {
+            val source = mRepository.getGallerySource(uri) ?: kotlin.run {
+                event { ImageMakerEvent.ShowError("Error while copy image from gallery") }
+                return@launch
+            }
+
+            mDraft = mDraft.copy(source = source)
+            modifyState {
+                copy(
+                    picture = source.filePath,
+                    cameraState = CameraState.DISABLED
+                )
+            }
         }
     }
 
@@ -133,7 +127,7 @@ class ImageMakerViewModel(
         Timber.d(exception)
 
         mDraft = mDraft.copy(source = null)
-        mState.modify {
+        modifyState {
             copy(
                 picture = null,
                 cameraState = CameraState.AVAILABLE
@@ -145,11 +139,18 @@ class ImageMakerViewModel(
         Timber.d(exception)
 
         mDraft = mDraft.copy(source = null)
-        mState.modify {
+        modifyState {
             copy(
                 picture = null,
                 cameraState = CameraState.AVAILABLE
             )
+        }
+    }
+
+    fun onExit() {
+        viewModelScope.launch {
+            mRepository.release()
+            event { ImageMakerEvent.Exit }
         }
     }
 
