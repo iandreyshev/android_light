@@ -1,8 +1,5 @@
 package ru.iandreyshev.constructor.ui.quizMaker
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
 import com.xwray.groupie.Item
 import kotlinx.coroutines.launch
@@ -14,25 +11,16 @@ import ru.iandreyshev.constructor.domain.quiz.quizMaker.QuizMaker
 import ru.iandreyshev.constructor.ui.quizMaker.items.QuestionItem
 import ru.iandreyshev.constructor.ui.quizMaker.items.SettingsItem
 import ru.iandreyshev.constructor.ui.quizMaker.items.VariantItem
-import ru.iandreyshev.core_ui.invoke
-import ru.iandreyshev.core_ui.modify
-import ru.iandreyshev.core_ui.singleLiveEvent
-import ru.iandreyshev.core_ui.voidSingleLiveEvent
+import ru.iandreyshev.core_app.UnifiedStateViewModel
 import ru.iandreyshev.core_utils.uiLazy
 
 class QuizMakerViewModel(
     scope: Scope,
     private val args: QuizMakerArgs
-) : ViewModel() {
+) : UnifiedStateViewModel<QuizMakerViewState, QuizMakerEvent>(
+    initialState = QuizMakerViewState(items = arrayListOf())
+) {
 
-    val state by uiLazy { mState.distinctUntilChanged() }
-
-    val eventExit = voidSingleLiveEvent()
-    val eventShowError = singleLiveEvent<String>()
-
-    private val mState = MutableLiveData<QuizMakerViewState>(
-        QuizMakerViewState(items = arrayListOf())
-    )
     private val mRepository by uiLazy {
         scope.get<IQuizDraftRepository> { parametersOf(args) }
     }
@@ -58,11 +46,13 @@ class QuizMakerViewModel(
             when (val result = mQuizMaker.createDraft()) {
                 is CreateResult.Success -> {
                     mRepository.save(result.draft)
-                    eventExit()
+                    event { QuizMakerEvent.Exit }
                 }
-                is CreateResult.ErrorInvalidQuestion -> {
-                    eventShowError("Invalid question at position: ${result.position.inc()}")
-                }
+                is CreateResult.ErrorInvalidQuestion ->
+                    event {
+                        val text = "Invalid question at position: ${result.position.inc()}"
+                        QuizMakerEvent.ShowError(text)
+                    }
             }
         }
     }
@@ -107,7 +97,7 @@ class QuizMakerViewModel(
         val currQuestion = mQuizMaker.currentQuestion
         val currQuestionPosition = mQuizMaker.currentQuestionPosition
 
-        mState.modify {
+        modifyState {
             copy(
                 items = arrayListOf<Item<*>>()
                     .apply {

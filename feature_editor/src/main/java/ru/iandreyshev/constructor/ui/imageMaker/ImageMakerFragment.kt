@@ -35,6 +35,7 @@ import ru.iandreyshev.core_app.BaseFragment
 import ru.iandreyshev.core_ui.setFullScreen
 import ru.iandreyshev.core_ui.setOrientationPortrait
 import ru.iandreyshev.core_ui.setOrientationUnspecified
+import ru.iandreyshev.core_ui.toast
 import ru.iandreyshev.core_utils.exhaustive
 import ru.iandreyshev.core_utils.uiLazy
 import java.io.File
@@ -100,7 +101,7 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
 
     private fun handleEvent(event: ImageMakerEvent) {
         when (event) {
-            is ImageMakerEvent.ShowError -> TODO()
+            is ImageMakerEvent.ShowError -> toast(event.text)
             is ImageMakerEvent.TakePhoto -> takePhoto(event.imageSource)
             ImageMakerEvent.Exit -> router.back()
         }.exhaustive

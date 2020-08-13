@@ -2,7 +2,6 @@ package ru.iandreyshev.constructor.ui.quizMaker
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import com.xwray.groupie.GroupAdapter
@@ -13,7 +12,9 @@ import org.koin.core.parameter.parametersOf
 import ru.iandreyshev.constructor.R
 import ru.iandreyshev.constructor.navigation.router
 import ru.iandreyshev.core_app.BaseFragment
+import ru.iandreyshev.core_ui.toast
 import ru.iandreyshev.core_ui.withItemListeners
+import ru.iandreyshev.core_utils.exhaustive
 import ru.iandreyshev.core_utils.uiLazy
 
 class QuizMakerFragment : BaseFragment(R.layout.fragment_quiz_maker) {
@@ -31,9 +32,7 @@ class QuizMakerFragment : BaseFragment(R.layout.fragment_quiz_maker) {
         initVariantsList()
 
         mViewModel.state.viewObserveWith(::render)
-        mViewModel.eventShowError {
-            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-        }
+        mViewModel.event(::handleEvent)
     }
 
     private fun initMenu() {
@@ -41,12 +40,17 @@ class QuizMakerFragment : BaseFragment(R.layout.fragment_quiz_maker) {
         toolbar.withItemListeners {
             R.id.actionQuizMakerSave { mViewModel.onSave() }
         }
-
-        mViewModel.eventExit(router::back)
     }
 
     private fun initVariantsList() {
         variantList.adapter = mAdapter
+    }
+
+    private fun handleEvent(event: QuizMakerEvent) {
+        when (event) {
+            is QuizMakerEvent.ShowError -> toast(event.text)
+            QuizMakerEvent.Exit -> router.back()
+        }.exhaustive
     }
 
     private fun render(state: QuizMakerViewState) {
