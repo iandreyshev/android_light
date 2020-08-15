@@ -23,9 +23,9 @@ import ru.iandreyshev.core_app.BaseFragment
 import ru.iandreyshev.core_ui.setFullScreen
 import ru.iandreyshev.core_ui.setOrientationPortrait
 import ru.iandreyshev.core_ui.setOrientationUnspecified
+import ru.iandreyshev.core_ui.toast
 import ru.iandreyshev.core_utils.exhaustive
 import ru.iandreyshev.core_utils.uiLazy
-import timber.log.Timber
 
 class VideoMakerFragment : BaseFragment(R.layout.fragment_video_maker) {
 
@@ -77,7 +77,7 @@ class VideoMakerFragment : BaseFragment(R.layout.fragment_video_maker) {
 
     private fun handleEvent(event: VideoMakerEvent) {
         when (event) {
-            is VideoMakerEvent.ShowError -> TODO()
+            is VideoMakerEvent.ShowError -> toast(event.text)
             VideoMakerEvent.PickVideo ->
                 mPickFromGalleryLauncher.launch(PICK_FROM_GALLERY_INPUT)
             VideoMakerEvent.Exit -> router.back()
