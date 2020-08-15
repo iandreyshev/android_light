@@ -14,7 +14,6 @@ import ru.iandreyshev.core_ui.setOrientationUnspecified
 import ru.iandreyshev.light.R
 import ru.iandreyshev.light.navigation.router
 import ru.iandreyshev.player_core.player.News
-import ru.iandreyshev.player_core.player.Wish
 
 class PlayerFragment : BaseFragment(R.layout.fragment_player) {
 
@@ -30,11 +29,15 @@ class PlayerFragment : BaseFragment(R.layout.fragment_player) {
         mViewModel.liveData.eventShowNews(::onNews)
 
         playerView.subscribe(mViewModel.wishListener)
-        playerView.setLifecycle(viewLifecycleOwner)
         playerView.onExitClick(router()::back)
 
         setFullScreen()
         setOrientationPortrait()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        playerView.pause()
     }
 
     override fun onDestroyView() {

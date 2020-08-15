@@ -4,10 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.OnLifecycleEvent
 import kotlinx.android.synthetic.main.lay_player_image_view.view.*
 import kotlinx.android.synthetic.main.lay_player_quiz_view.view.*
 import kotlinx.android.synthetic.main.lay_player_video_view.view.*
@@ -22,12 +18,11 @@ import ru.iandreyshev.player_core.course.PlayerItemState
 import ru.iandreyshev.player_core.player.State
 import ru.iandreyshev.player_core.quiz.QuizPlayerState
 
-
 class PlayerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr), LifecycleObserver {
+) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     init {
         inflate(getContext(), R.layout.view_player, this)
@@ -57,10 +52,6 @@ class PlayerView @JvmOverloads constructor(
             onBack = { mWishListener(UiAction.Back.asWish()) },
             onForward = { mWishListener(UiAction.Forward.asWish()) }
         )
-    }
-
-    fun setLifecycle(lifecycleOwner: LifecycleOwner) {
-        lifecycleOwner.lifecycle.addObserver(this)
     }
 
     fun subscribe(listener: IWishListener) {
@@ -122,8 +113,7 @@ class PlayerView @JvmOverloads constructor(
         mQuizViewViewController.render(state)
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun pauseVideo() {
+    fun pause() {
         mVideoViewViewController.pause()
     }
 

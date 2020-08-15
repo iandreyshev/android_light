@@ -22,33 +22,45 @@ internal class VideoViewViewController(
     private var mVideoUri: String = ""
     private var mPlayer: ExoPlayer? = null
 
-    fun render(state: PlayerItemState.Video?): Unit = with(view) {
-        val newUri: String? = state?.uri
-
-        if (newUri == null) {
-            isVisible = false
-            return@with
+    fun render(state: PlayerItemState.Video?) {
+        when (val newUri = state?.uri) {
+            null -> hideView()
+            else -> when (newUri != mVideoUri) {
+                true -> startPlayer(newUri)
+                else -> Unit
+            }
         }
-
-        if (state.uri == mVideoUri) {
-            return@with
-        }
-
-        isVisible = true
-        mVideoUri = newUri
-
-        mPlayer = newPlayer(newUri)
-        playerView.player = mPlayer
-        backButton.setOnClickListener { onBack() }
-        forwardButton.setOnClickListener { onForward() }
     }
 
     fun pause() {
-        if (mPlayer?.playbackState == Player.STATE_READY
-            && mPlayer?.playWhenReady == true
-        ) {
+        val isPlaying = mPlayer?.playbackState == Player.STATE_READY
+                && mPlayer?.playWhenReady == true
+
+        if (isPlaying) {
             mPlayer?.playWhenReady = false
         }
+    }
+
+    private fun hideView() {
+        releasePlayer()
+        view.isVisible = false
+    }
+
+    private fun startPlayer(newUri: String) {
+        view.isVisible = true
+        mVideoUri = newUri
+
+        releasePlayer()
+        mPlayer = newPlayer(newUri)
+        view.playerView.player = mPlayer
+        view.backButton.setOnClickListener { onBack() }
+        view.forwardButton.setOnClickListener { onForward() }
+    }
+
+    private fun releasePlayer() {
+        mPlayer?.stop()
+        mPlayer?.release()
+        mPlayer = null
     }
 
     private fun newPlayer(uri: String): ExoPlayer {

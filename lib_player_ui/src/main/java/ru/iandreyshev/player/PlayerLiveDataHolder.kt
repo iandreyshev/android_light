@@ -31,12 +31,9 @@ class PlayerLiveDataHolder(player: Player) {
         }
     }
 
-    fun subscribe(
-        lifecycleOwner: LifecycleOwner,
-        playerView: PlayerView
-    ) {
-        playerState.observe(lifecycleOwner, Observer { playerView.render(it) })
-        quizPlayerState.observe(lifecycleOwner, Observer { playerView.render(it) })
+    fun subscribe(lifecycleOwner: LifecycleOwner, view: PlayerView) {
+        playerState.observe(lifecycleOwner, Observer(view::render))
+        quizPlayerState.observe(lifecycleOwner, Observer(view::render))
     }
 
 }
