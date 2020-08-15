@@ -14,14 +14,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="@dimen/grid_step_2" />
+            app:layout_constraintGuide_begin="@dimen/grid_step_4" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineEnd"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="@dimen/grid_step_2" />
+            app:layout_constraintGuide_end="@dimen/grid_step_4" />
 
         <EditText
             android:id="@+id/questionInput"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:hint="@string/quiz_maker_question_hint"
-            android:paddingVertical="@dimen/grid_step_vertical_2"
+            android:paddingVertical="@dimen/grid_step_2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/previousQuestionButton"
             app:layout_constraintStart_toEndOf="@id/guidelineBegin"

@@ -11,14 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="@dimen/grid_step_2" />
+        app:layout_constraintGuide_begin="@dimen/grid_step_4" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineEnd"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="@dimen/grid_step_2" />
+        app:layout_constraintGuide_end="@dimen/grid_step_4" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/imageCard"
@@ -37,50 +37,12 @@
             android:id="@+id/playerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:controller_layout_id="@layout/lay_video_maker_video_controller"
             app:repeat_toggle_modes="none"
             app:show_buffering="when_playing"
             app:show_shuffle_button="true" />
 
     </androidx.cardview.widget.CardView>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/sourceChooserGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@id/guidelineBegin"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <Button
-            android:id="@+id/takeVideoButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@drawable/ic_video_maker_take_video"
-            android:gravity="center"
-            android:text="Camera"
-            android:textColor="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/pickFromGalleryButton"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/pickFromGalleryButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@drawable/ic_video_maker_pick_from_gallery"
-            android:text="Gallery"
-            android:textColor="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/takeVideoButton"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
         android:id="@+id/exitButtonBackground"
@@ -96,7 +58,7 @@
         android:id="@+id/exitButton"
         android:layout_width="@dimen/square_button_small"
         android:layout_height="@dimen/square_button_small"
-        android:layout_margin="@dimen/grid_step_vertical_4"
+        android:layout_margin="@dimen/grid_step_4"
         android:background="?attr/selectableItemBackgroundBorderless"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -116,30 +78,22 @@
         android:id="@+id/createButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/grid_step_vertical_4"
+        android:layout_margin="@dimen/grid_step_4"
         android:backgroundTint="@android:color/white"
+        app:borderWidth="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_image_maker_save" />
 
     <ImageButton
-        android:id="@+id/changeFromCameraButton"
-        android:layout_width="@dimen/square_button_normal"
-        android:layout_height="@dimen/square_button_normal"
-        android:layout_marginTop="@dimen/grid_step_vertical_2"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        app:layout_constraintEnd_toEndOf="@id/createButton"
-        app:layout_constraintTop_toBottomOf="@id/createButton"
-        app:srcCompat="@drawable/ic_video_maker_take_video" />
-
-    <ImageButton
         android:id="@+id/changeFromGalleryButton"
         android:layout_width="@dimen/square_button_normal"
         android:layout_height="@dimen/square_button_normal"
-        android:layout_marginTop="@dimen/grid_step_vertical_2"
+        android:layout_marginTop="@dimen/grid_step_2"
         android:background="?attr/selectableItemBackgroundBorderless"
-        app:layout_constraintEnd_toEndOf="@id/changeFromCameraButton"
-        app:layout_constraintTop_toBottomOf="@id/changeFromCameraButton"
+        app:layout_constraintEnd_toEndOf="@id/createButton"
+        app:layout_constraintStart_toStartOf="@id/createButton"
+        app:layout_constraintTop_toBottomOf="@id/createButton"
         app:srcCompat="@drawable/ic_video_maker_pick_from_gallery" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

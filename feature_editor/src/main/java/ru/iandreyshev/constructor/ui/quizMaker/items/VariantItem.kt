@@ -67,7 +67,7 @@ class VariantItem(
                     itemView.rootCardView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                         topMargin = when (viewState.isFirstInBlock) {
                             true -> itemView.resources
-                                .getDimensionPixelSize(R.dimen.grid_step_vertical_4)
+                                .getDimensionPixelSize(R.dimen.grid_step_4)
                             else -> 0
                         }
                     }
@@ -104,7 +104,7 @@ class VariantItem(
                     itemView.rootCardView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                         topMargin = when (viewState.isFirstInBlock) {
                             true -> itemView.resources
-                                .getDimensionPixelSize(R.dimen.grid_step_vertical_4)
+                                .getDimensionPixelSize(R.dimen.grid_step_4)
                             else -> 0
                         }
                     }

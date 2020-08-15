@@ -76,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginVertical="@dimen/grid_step_vertical_4"
+            android:layout_marginVertical="@dimen/grid_step_4"
             android:textSize="18sp"
             android:textStyle="bold"
             tools:text="Partly result" />
@@ -110,7 +110,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginVertical="@dimen/grid_step_vertical_4"
+            android:layout_marginVertical="@dimen/grid_step_4"
             android:textSize="16sp"
             tools:text="42 questions" />
 

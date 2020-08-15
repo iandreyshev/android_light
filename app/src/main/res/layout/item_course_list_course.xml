@@ -10,28 +10,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="@dimen/grid_step_2" />
+        app:layout_constraintGuide_begin="@dimen/grid_step_4" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="@dimen/grid_step_2" />
+        app:layout_constraintGuide_end="@dimen/grid_step_4" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="@dimen/grid_step_vertical_3" />
+        app:layout_constraintGuide_begin="@dimen/grid_step_3" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineBottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="@dimen/grid_step_vertical_3" />
+        app:layout_constraintGuide_end="@dimen/grid_step_3" />
 
     <TextView
         android:id="@+id/title"
@@ -50,7 +50,7 @@
         android:id="@+id/subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/grid_step_vertical_1"
+        android:layout_marginTop="@dimen/grid_step_1"
         android:textColor="@color/gray"
         app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"

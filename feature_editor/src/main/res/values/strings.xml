@@ -23,4 +23,5 @@
 
     <string name="video_maker_title">New Video</string>
     <string name="video_maker_action_save">Create</string>
+    <string name="video_maker_title_title">Video title</string>
 </resources>

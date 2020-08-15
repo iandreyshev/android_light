@@ -15,28 +15,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="@dimen/grid_step_2" />
+            app:layout_constraintGuide_begin="@dimen/grid_step_4" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="@dimen/grid_step_2" />
+            app:layout_constraintGuide_end="@dimen/grid_step_4" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineTop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="@dimen/grid_step_vertical_3" />
+            app:layout_constraintGuide_begin="@dimen/grid_step_3" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineBottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_end="@dimen/grid_step_vertical_3" />
+            app:layout_constraintGuide_end="@dimen/grid_step_3" />
 
         <FrameLayout
             android:id="@+id/correctGroup"
@@ -62,8 +62,8 @@
             android:id="@+id/variantText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/grid_step_vertical_2"
-            android:layout_marginBottom="@dimen/grid_step_vertical_2"
+            android:layout_marginTop="@dimen/grid_step_2"
+            android:layout_marginBottom="@dimen/grid_step_2"
             android:background="@null"
             android:hint="@string/quiz_maker_variant_hint"
             app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"

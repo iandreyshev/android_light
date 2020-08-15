@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="grid_step_1">8dp</dimen>
-    <dimen name="grid_step_2">16dp</dimen>
-    <dimen name="grid_step_vertical_1">4dp</dimen>
-    <dimen name="grid_step_vertical_2">8dp</dimen>
-    <dimen name="grid_step_vertical_3">12dp</dimen>
-    <dimen name="grid_step_vertical_4">16dp</dimen>
-    <dimen name="grid_margin">@dimen/grid_step_2</dimen>
+    <dimen name="grid_step_1">4dp</dimen>
+    <dimen name="grid_step_2">8dp</dimen>
+    <dimen name="grid_step_3">8dp</dimen>
+    <dimen name="grid_step_4">16dp</dimen>
+    <dimen name="grid_margin">@dimen/grid_step_4</dimen>
 
     <dimen name="square_button_mini">24dp</dimen>
     <dimen name="square_button_small">46dp</dimen>

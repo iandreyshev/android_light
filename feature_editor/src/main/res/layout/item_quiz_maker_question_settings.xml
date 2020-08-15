@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/grid_step_vertical_4">
+    android:layout_marginTop="@dimen/grid_step_4">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,14 +14,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="@dimen/grid_step_2" />
+            app:layout_constraintGuide_begin="@dimen/grid_step_4" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guidelineEnd"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="@dimen/grid_step_2" />
+            app:layout_constraintGuide_end="@dimen/grid_step_4" />
 
         <Button
             android:id="@+id/multipleVariantsButton"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:paddingHorizontal="@dimen/grid_margin"
-            android:paddingVertical="@dimen/grid_step_vertical_2"
+            android:paddingVertical="@dimen/grid_step_2"
             android:text="Multiple variants"
             android:textAlignment="textStart"
             android:textColor="#000"
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:paddingHorizontal="@dimen/grid_margin"
-            android:paddingVertical="@dimen/grid_step_vertical_2"
+            android:paddingVertical="@dimen/grid_step_2"
             android:text="Delete question"
             android:textAlignment="textStart"
             android:textColor="#a00"

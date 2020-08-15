@@ -7,30 +7,29 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.parameter.parametersOf
 import org.koin.core.scope.Scope
 import ru.iandreyshev.constructor.domain.video.IVideoDraftRepository
 import ru.iandreyshev.constructor.domain.video.draft.VideoDraft
-import ru.iandreyshev.core_ui.invoke
-import ru.iandreyshev.core_ui.singleLiveEvent
-import ru.iandreyshev.core_ui.voidSingleLiveEvent
+import ru.iandreyshev.core_app.UnifiedStateViewModel
 import ru.iandreyshev.core_utils.uiLazy
 
 class VideoMakerViewModel(
     private val scope: Scope,
     private val args: VideoMakerArgs
-) : ViewModel() {
-
-    val player by uiLazy { mPlayer.distinctUntilChanged() }
-    val hasVideo by uiLazy {
-        player.map { it != null }
-            .distinctUntilChanged()
-    }
-
-    val eventShowError = singleLiveEvent<String>()
-    val eventExit = voidSingleLiveEvent()
+) : UnifiedStateViewModel<VideoMakerViewState, VideoMakerEvent>(
+    initialState = VideoMakerViewState(
+        isLoading = true,
+        title = "Unnamed video",
+        player = null,
+        duration = 0,
+        position = 0
+    )
+) {
 
     private val mRepository by uiLazy {
         scope.get<IVideoDraftRepository> {
@@ -38,10 +37,8 @@ class VideoMakerViewModel(
         }
     }
     private lateinit var mDraft: VideoDraft
-    private val mPlayer = MutableLiveData<ExoPlayer?>(null)
 
     override fun onCleared() {
-        mPlayer.value?.release()
         if (mDraft.source == null) {
             GlobalScope.launch { mRepository.clear() }
         }
@@ -50,42 +47,101 @@ class VideoMakerViewModel(
     fun onCreate() {
         viewModelScope.launch {
             mDraft = mRepository.get()
+            modifyState {
+                copy(
+                    isLoading = false,
+                    title = mDraft.title
+                )
+            }
+            event { VideoMakerEvent.PickVideo }
+
+            while (coroutineContext.isActive) {
+                delay(TIMELINE_UPDATE_DELAY)
+                modifyState {
+                    copy(
+                        position = player?.currentPosition?.toInt() ?: position,
+                        duration = player?.duration?.toInt() ?: duration
+                    )
+                }
+            }
         }
     }
 
     fun onCreateDraft() {
         viewModelScope.launch {
             mRepository.save(mDraft)
-            eventExit()
+            event { VideoMakerEvent.Exit }
         }
     }
 
     fun onPickFromGallery(uri: Uri) {
-        mPlayer.value?.playWhenReady = false
-
         viewModelScope.launch {
-            val source = mRepository.getGallerySource(uri) ?: kotlin.run {
-                eventShowError("Error while video from gallery")
-                return@launch
-            }
+            mDraft = mDraft.copy(
+                source = mRepository.getGallerySource(uri) ?: kotlin.run {
+                    event { VideoMakerEvent.ShowError("Error while video from gallery") }
+                    releasePlayer()
+                    event { VideoMakerEvent.Exit }
+                    return@launch
+                }
+            )
 
-            mPlayer.value?.release()
-            mPlayer.value = null
+            releasePlayer()
 
             val player = scope.get<ExoPlayer>()
             val dataSourceFactory = DefaultDataSourceFactory(
                 scope.androidApplication(),
                 Util.getUserAgent(scope.androidApplication(), "Light")
             )
+            val videoUri = Uri.parse(mDraft.source?.filePath)
             val videoSource = ProgressiveMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(Uri.parse(source.filePath))
+                .createMediaSource(videoUri)
 
             player.prepare(videoSource)
 
-            mPlayer.value = player
-
-            mDraft = mDraft.copy(source = source)
+            modifyState {
+                copy(
+                    player = player,
+                    duration = player.duration.toInt()
+                )
+            }
         }
+    }
+
+    fun onChangeTitle(title: String) {
+        mDraft = mDraft.copy(title = title)
+        modifyState { copy(title = mDraft.title) }
+    }
+
+    fun onSeekTo(position: Int) {
+        state.value?.player?.seekTo(position.toLong())
+    }
+
+    fun onPause() {
+        state.value?.player?.let { player ->
+            if (player.playWhenReady) {
+                player.playWhenReady = false
+            }
+        }
+    }
+
+    fun onExit() {
+        releasePlayer()
+        event { VideoMakerEvent.Exit }
+    }
+
+    private fun releasePlayer() {
+        state.value?.player?.let { player ->
+            player.stop()
+            player.release()
+
+            modifyState {
+                copy(player = null)
+            }
+        }
+    }
+
+    companion object {
+        private const val TIMELINE_UPDATE_DELAY = 1000L
     }
 
 }

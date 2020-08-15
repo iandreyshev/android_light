@@ -11,28 +11,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="@dimen/grid_step_2" />
+        app:layout_constraintGuide_begin="@dimen/grid_step_4" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="@dimen/grid_step_2" />
+        app:layout_constraintGuide_end="@dimen/grid_step_4" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="@dimen/grid_step_vertical_2" />
+        app:layout_constraintGuide_begin="@dimen/grid_step_2" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineBottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="@dimen/grid_step_vertical_2" />
+        app:layout_constraintGuide_end="@dimen/grid_step_2" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/videoPreviewCard"
@@ -60,8 +60,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="@dimen/grid_step_1"
-        android:layout_marginEnd="@dimen/grid_step_1"
+        android:layout_marginStart="@dimen/grid_step_2"
+        android:layout_marginEnd="@dimen/grid_step_2"
         android:text="Video"
         android:textColor="#000"
         android:textSize="18sp"
@@ -75,7 +75,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="@dimen/grid_step_1"
+        android:layout_marginStart="@dimen/grid_step_2"
         android:textColor="@color/gray"
         app:layout_constraintEnd_toEndOf="@+id/title"
         app:layout_constraintStart_toEndOf="@id/videoPreviewCard"
@@ -87,7 +87,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="@dimen/grid_step_1"
+        android:layout_marginStart="@dimen/grid_step_2"
         android:ellipsize="middle"
         android:maxLines="2"
         android:textColor="@color/gray"
@@ -109,7 +109,7 @@
     <View
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginStart="@dimen/grid_step_1"
+        android:layout_marginStart="@dimen/grid_step_2"
         android:background="@color/gray_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"

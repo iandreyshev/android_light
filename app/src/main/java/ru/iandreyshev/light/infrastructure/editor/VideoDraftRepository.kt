@@ -21,7 +21,10 @@ class VideoDraftRepository(
         return courseRepository.getItems()
             .mapNotNull { it.asTypeOrNull<DraftItem.Video>()?.draft }
             .firstOrNull { it.id == id }
-            ?: VideoDraft(VideoDraftId(newUID()))
+            ?: VideoDraft(
+                id = VideoDraftId(newUID()),
+                title = "Unnamed video"
+            )
     }
 
     override suspend fun getGallerySource(uri: Uri): VideoSource? {
