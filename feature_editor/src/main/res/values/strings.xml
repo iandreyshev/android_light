@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="editor_action_save">Save</string>
-    <string name="editor_action_start_preview">Start preview</string>
-    <string name="editor_action_edit_title">Edit title</string>
-    <string name="editor_action_add_quiz">New Quiz</string>
-    <string name="editor_action_add_image">New Image</string>
-    <string name="editor_action_add_video">New Video</string>
-    <string name="editor_default_title">New course</string>
-    <string name="editor_empty_view_text">Insert first element</string>
-    <string name="editor_settings_action_rename">Rename</string>
-    <string name="editor_rename_dialog_title">Course name</string>
+    <string name="editor_action_save">Сохранить</string>
+    <string name="editor_action_start_preview">Предпросмотр</string>
+    <string name="editor_default_title">Новый курс</string>
+    <string name="editor_empty_view_text">В курсе нет материалов</string>
+    <string name="editor_settings_action_rename">Переименовать</string>
+    <string name="editor_rename_dialog_title">Название курса</string>
 
-    <string name="quiz_maker_title">New Quiz</string>
-    <string name="quiz_maker_action_save">Create</string>
-    <string name="quiz_maker_question_hint">Question</string>
-    <string name="quiz_maker_variant_hint">Variant</string>
-    <string name="quiz_maker_add_variant_title">Add variant</string>
+    <string name="quiz_maker_title">Новый тест</string>
+    <string name="quiz_maker_action_save">Сохранить</string>
+    <string name="quiz_maker_question_hint">Вопрос</string>
+    <string name="quiz_maker_variant_hint">Вариант ответа</string>
+    <string name="quiz_maker_add_variant_title">Добавить вариант ответа</string>
 
-    <string name="image_maker_title">New Image</string>
-    <string name="image_maker_text_title">Image text</string>
-    <string name="image_maker_action_save">Create</string>
+    <string name="image_maker_text_title">Описание</string>
+    <string name="image_maker_action_save">Сохранить</string>
 
-    <string name="video_maker_title">New Video</string>
-    <string name="video_maker_action_save">Create</string>
-    <string name="video_maker_title_title">Video title</string>
+    <string name="video_maker_action_save">Сохранить</string>
+    <string name="video_maker_title_title">Название видео</string>
 </resources>

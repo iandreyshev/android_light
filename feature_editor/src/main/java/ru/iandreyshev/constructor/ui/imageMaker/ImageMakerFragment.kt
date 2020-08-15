@@ -133,7 +133,7 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
 
     private fun render(state: ImageMakerViewState) {
         createButton.isVisible = state.hasPicture
-        editTextButton.isVisible = state.hasPicture
+        editDescriptionButton.isVisible = state.hasPicture
 
         sourceChooserGroup.isVisible = !state.hasPicture
         changeFromCameraButton.isVisible = state.hasPicture
@@ -148,7 +148,7 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
     }
 
     private fun renderEditTextDialog(text: String) {
-        editTextButton.setOnClickListener {
+        editDescriptionButton.setOnClickListener {
             MaterialDialog(requireContext()).show {
                 var newText = ""
                 title(R.string.image_maker_text_title)

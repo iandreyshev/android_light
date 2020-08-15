@@ -164,16 +164,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_image_maker_exit" />
 
-    <FrameLayout
-        android:id="@+id/editorControlsBackground"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="#36000000"
-        app:layout_constraintBottom_toBottomOf="@id/changeFromGalleryButton"
-        app:layout_constraintEnd_toEndOf="@id/createButton"
-        app:layout_constraintStart_toStartOf="@id/createButton"
-        app:layout_constraintTop_toTopOf="@id/createButton" />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/createButton"
         android:layout_width="wrap_content"
@@ -185,31 +175,58 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_image_maker_save" />
 
+    <FrameLayout
+        android:id="@+id/editDescriptionButtonBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/background_image_maker_controls"
+        app:layout_constraintBottom_toBottomOf="@id/editDescriptionButton"
+        app:layout_constraintEnd_toEndOf="@id/editDescriptionButton"
+        app:layout_constraintStart_toStartOf="@id/editDescriptionButton"
+        app:layout_constraintTop_toTopOf="@id/editDescriptionButton" />
+
     <ImageButton
-        android:id="@+id/editTextButton"
+        android:id="@+id/editDescriptionButton"
         android:layout_width="@dimen/square_button_normal"
         android:layout_height="@dimen/square_button_normal"
-        android:layout_marginTop="@dimen/grid_step_2"
         android:background="?attr/selectableItemBackgroundBorderless"
         app:layout_constraintEnd_toEndOf="@id/createButton"
         app:layout_constraintTop_toBottomOf="@id/createButton"
         app:srcCompat="@drawable/ic_image_maker_edit_text" />
 
+    <FrameLayout
+        android:id="@+id/changeFromCameraButtonBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/background_image_maker_controls"
+        app:layout_constraintBottom_toBottomOf="@id/changeFromCameraButton"
+        app:layout_constraintEnd_toEndOf="@id/changeFromCameraButton"
+        app:layout_constraintStart_toStartOf="@id/changeFromCameraButton"
+        app:layout_constraintTop_toTopOf="@id/changeFromCameraButton" />
+
     <ImageButton
         android:id="@+id/changeFromCameraButton"
         android:layout_width="@dimen/square_button_normal"
         android:layout_height="@dimen/square_button_normal"
-        android:layout_marginTop="@dimen/grid_step_2"
         android:background="?attr/selectableItemBackgroundBorderless"
-        app:layout_constraintEnd_toEndOf="@id/editTextButton"
-        app:layout_constraintTop_toBottomOf="@id/editTextButton"
+        app:layout_constraintEnd_toEndOf="@id/editDescriptionButton"
+        app:layout_constraintTop_toBottomOf="@id/editDescriptionButton"
         app:srcCompat="@drawable/ic_image_maker_take_photo" />
+
+    <FrameLayout
+        android:id="@+id/changeFromGalleryButtonBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/background_image_maker_controls"
+        app:layout_constraintBottom_toBottomOf="@id/changeFromGalleryButton"
+        app:layout_constraintEnd_toEndOf="@id/changeFromGalleryButton"
+        app:layout_constraintStart_toStartOf="@id/changeFromGalleryButton"
+        app:layout_constraintTop_toTopOf="@id/changeFromGalleryButton" />
 
     <ImageButton
         android:id="@+id/changeFromGalleryButton"
         android:layout_width="@dimen/square_button_normal"
         android:layout_height="@dimen/square_button_normal"
-        android:layout_marginTop="@dimen/grid_step_2"
         android:background="?attr/selectableItemBackgroundBorderless"
         app:layout_constraintEnd_toEndOf="@id/changeFromCameraButton"
         app:layout_constraintTop_toBottomOf="@id/changeFromCameraButton"
