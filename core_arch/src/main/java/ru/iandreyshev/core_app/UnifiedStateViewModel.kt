@@ -11,8 +11,8 @@ abstract class UnifiedStateViewModel<TState : Any, TEvent : Any>(
     initialState: TState? = null
 ) : ViewModel() {
 
-    val state by lazy<LiveData<TState>>(LazyThreadSafetyMode.NONE) { mState }
-    val event by lazy<LiveData<Event<TEvent>>>(LazyThreadSafetyMode.NONE) { mEvent }
+    val state: LiveData<TState> by lazy(LazyThreadSafetyMode.NONE) { mState }
+    val event: LiveData<Event<TEvent>> by lazy(LazyThreadSafetyMode.NONE) { mEvent }
 
     private val mState = MutableLiveData<TState>()
     private val mEvent = singleLiveEvent<TEvent>()
@@ -21,11 +21,11 @@ abstract class UnifiedStateViewModel<TState : Any, TEvent : Any>(
         initialState?.let(mState::setValue)
     }
 
-    fun modifyState(modifier: TState.() -> TState) {
+    protected fun modifyState(modifier: TState.() -> TState) {
         mState.value = mState.value?.let(modifier)
     }
 
-    fun event(eventBuilder: () -> TEvent) {
+    protected fun event(eventBuilder: () -> TEvent) {
         mEvent(eventBuilder())
     }
 
