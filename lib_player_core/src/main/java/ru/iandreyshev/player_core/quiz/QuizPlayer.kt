@@ -77,22 +77,12 @@ class QuizPlayer(
     private fun measureQuizResult(): QuizResult {
         val questionResults = mQuestions.map { it.result }
 
-        val isTrue = questionResults.all { it == QuestionResult.TRUE }
-
-        if (isTrue) {
-            return QuizResult.TRUE
+        return when {
+            questionResults.contains(QuestionResult.UNDEFINED) -> QuizResult.UNDEFINED
+            questionResults.all { it == QuestionResult.FAILURE } -> QuizResult.FAILURE
+            questionResults.all { it == QuestionResult.SUCCESS } -> QuizResult.SUCCESS
+            else -> QuizResult.PARTLY_SUCCESS
         }
-
-        val isPartlyTrue = questionResults.any {
-            it == QuestionResult.PARTLY_TRUE
-                    || it == QuestionResult.PARTLY_TRUE
-        }
-
-        if (isPartlyTrue) {
-            return QuizResult.PARTLY_TRUE
-        }
-
-        return QuizResult.UNDEFINED
     }
 
     private fun Question.asPlayerQuestion(
@@ -116,15 +106,15 @@ class QuizPlayer(
     private fun Question.isSubmitted() = result != QuestionResult.UNDEFINED
 
     private fun Question.measureResult(): QuestionResult {
-        val (trueVariants, falseVariants) = variants.partition { variant ->
-            variant.isCorrect && variant.isSelectedAsCorrect
-        }
-
         return when {
-            trueVariants.isNotEmpty() && falseVariants.isNotEmpty() -> QuestionResult.PARTLY_TRUE
-            falseVariants.isEmpty() -> QuestionResult.TRUE
-            else -> QuestionResult.FALSE
+            variants.none { it.isSelectedAsCorrect } -> QuestionResult.UNDEFINED
+            variants.all { it.isSuccess() } -> QuestionResult.SUCCESS
+            variants.all { !it.isSuccess() } -> QuestionResult.FAILURE
+            else -> QuestionResult.PARTLY_SUCCESS
         }
     }
+
+    private fun Variant.isSuccess() =
+        (isCorrect && isSelectedAsCorrect) || (!isCorrect && !isSelectedAsCorrect)
 
 }

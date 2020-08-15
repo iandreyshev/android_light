@@ -8,6 +8,7 @@ import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.lay_player_quiz_view.view.*
 import ru.iandreyshev.core_utils.exhaustive
 import ru.iandreyshev.core_utils.uiLazy
+import ru.iandreyshev.player_core.quiz.QuestionResult
 import ru.iandreyshev.player_core.quiz.QuizPlayerState
 import ru.iandreyshev.player_core.quiz.State
 import ru.iandreyshev.player_core.quiz.Wish
@@ -52,7 +53,7 @@ internal class QuizViewViewController(
         toolbar.title =
             "Question (${state.questionIndex + 1} / ${state.questionsCount})"
         submitButton.text = when {
-            state.questionResult == null -> "Submit"
+            state.questionResult != QuestionResult.UNDEFINED -> "Submit"
             !state.hasNext() -> "Show results"
             else -> "Next"
         }
@@ -69,7 +70,7 @@ internal class QuizViewViewController(
                         isMultipleMode = state.isMultipleMode,
                         isSelectedAsCorrect = variant.isSelectedAsCorrect,
                         isCorrect = variant.isCorrect,
-                        isQuestionSubmitted = state.questionResult != null,
+                        isQuestionSubmitted = state.questionResult != QuestionResult.UNDEFINED,
                         onCorrectStateToggle = { onWish(Wish.SwitchVariantCorrectState(index)) }
                     )
                 }

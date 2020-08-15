@@ -31,7 +31,7 @@ internal class QuizPlayerActor(
                     Effect.ShowQuestion(player.currentQuestion).just()
                 }
                 Wish.Submit -> when (state.questionResult) {
-                    null -> {
+                    QuestionResult.UNDEFINED -> {
                         player.submitCurrentQuestion()
                         Effect.ShowQuestion(player.currentQuestion).just()
                     }
