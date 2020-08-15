@@ -17,7 +17,6 @@ import org.koin.core.parameter.parametersOf
 import ru.iandreyshev.constructor.R
 import ru.iandreyshev.constructor.domain.course.CourseDraftId
 import ru.iandreyshev.constructor.domain.editor.DraftItem
-import ru.iandreyshev.constructor.domain.image.ImageSource
 import ru.iandreyshev.constructor.navigation.router
 import ru.iandreyshev.core_app.BaseFragment
 import ru.iandreyshev.core_ui.withItemListeners
@@ -99,11 +98,8 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
                     onClickListener = {}
                 )
                 is DraftItem.Image -> {
-                    val filePath = when (val source = item.draft.source) {
-                        is ImageSource.Gallery -> source.filePath
-                        is ImageSource.Photo -> source.filePath
-                        null -> throw IllegalStateException("Image source is null")
-                    }
+                    val filePath = item.draft.source?.filePath
+                        ?: throw IllegalStateException("Image source is null")
 
                     ImageItem(
                         id = item.draft.id.hashCode().toLong(),

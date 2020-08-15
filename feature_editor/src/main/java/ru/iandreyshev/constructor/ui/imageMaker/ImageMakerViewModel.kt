@@ -83,8 +83,8 @@ class ImageMakerViewModel(
     }
 
     fun onChangeText(text: String?) {
-        mDraft = mDraft.copy(text = text)
-        modifyState { copy(text = mDraft.text.orEmpty()) }
+        mDraft = mDraft.copy(description = text)
+        modifyState { copy(text = mDraft.description.orEmpty()) }
     }
 
     fun onSaveDraft() {
@@ -101,7 +101,7 @@ class ImageMakerViewModel(
         }
     }
 
-    fun onTakePhotoSuccess(source: ImageSource.Photo) {
+    fun onTakePhotoSuccess(source: ImageSource) {
         mDraft = mDraft.copy(source = source)
         modifyState {
             copy(

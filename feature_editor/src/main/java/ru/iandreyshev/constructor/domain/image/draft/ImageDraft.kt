@@ -5,6 +5,6 @@ import ru.iandreyshev.constructor.domain.image.ImageSource
 
 data class ImageDraft(
     val id: ImageDraftId,
-    val text: String? = null,
+    val description: String? = null,
     val source: ImageSource? = null
 )

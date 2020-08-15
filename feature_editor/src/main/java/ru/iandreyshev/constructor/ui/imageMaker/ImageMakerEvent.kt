@@ -4,6 +4,6 @@ import ru.iandreyshev.constructor.domain.image.ImageSource
 
 sealed class ImageMakerEvent {
     class ShowError(val text: String) : ImageMakerEvent()
-    class TakePhoto(val imageSource: ImageSource.Photo) : ImageMakerEvent()
+    class TakePhoto(val imageSource: ImageSource) : ImageMakerEvent()
     object Exit : ImageMakerEvent()
 }

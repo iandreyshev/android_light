@@ -16,6 +16,11 @@ class InMemoryCourseRepository(
     private val mCourses = mutableListOf<Course>()
     private val mCoursesObservable = ConflatedBroadcastChannel<List<Course>>()
 
+    override fun prepare() {
+        mCourses.addAll(storage.list())
+        mCoursesObservable.offer(mCourses)
+    }
+
     override fun getCourse(id: CourseId): Course? {
         return mCourses.firstOrNull { it.id == id }
     }
@@ -24,13 +29,13 @@ class InMemoryCourseRepository(
         mCoursesObservable.asFlow()
 
     override fun save(draft: CourseDraft) {
-        val course = storage.save(draft)
+        val course = storage.add(draft)
         mCourses.add(course)
         mCoursesObservable.offer(mCourses)
     }
 
     override fun delete(courseId: CourseId) {
-        storage.delete(courseId)
+        storage.remove(courseId)
         mCourses.indexOfFirst { it.id == courseId }
             .let { mCourses.removeAt(it) }
 

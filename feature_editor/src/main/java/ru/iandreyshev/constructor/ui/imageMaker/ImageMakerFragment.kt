@@ -107,7 +107,7 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
         }.exhaustive
     }
 
-    private fun takePhoto(source: ImageSource.Photo) {
+    private fun takePhoto(source: ImageSource) {
         val outputFile = File(source.filePath)
         val outputOptions = ImageCapture.OutputFileOptions
             .Builder(outputFile)

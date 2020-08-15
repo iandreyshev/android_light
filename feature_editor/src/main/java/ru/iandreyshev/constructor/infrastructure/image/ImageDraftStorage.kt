@@ -17,14 +17,14 @@ class ImageDraftStorage(
     private val mImageFolderName: String
         get() = "image_${imageId.value}"
 
-    override fun getPhotoSource(): ImageSource.Photo {
+    override fun getPhotoSource(): ImageSource {
         val draftFile = getOrCreateDraftFile()
         val draftFilePath = draftFile.path
 
-        return ImageSource.Photo(draftFilePath)
+        return ImageSource(draftFilePath)
     }
 
-    override fun createGallerySource(uri: Uri): ImageSource.Gallery? {
+    override fun createGallerySource(uri: Uri): ImageSource? {
         val draftFile = getOrCreateDraftFile()
 
         val resolver = context.contentResolver
@@ -33,7 +33,7 @@ class ImageDraftStorage(
 
         galleryFileInput.copyTo(draftFile.outputStream())
 
-        return ImageSource.Gallery(filePath = draftFile.path)
+        return ImageSource(filePath = draftFile.path)
     }
 
     override fun clear() {

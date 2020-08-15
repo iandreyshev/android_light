@@ -13,7 +13,7 @@ sealed class CourseItem {
     ) : CourseItem()
 
     class Image(
-        val text: String?,
+        val description: String?,
         val source: ImageSource
     ) : CourseItem()
 

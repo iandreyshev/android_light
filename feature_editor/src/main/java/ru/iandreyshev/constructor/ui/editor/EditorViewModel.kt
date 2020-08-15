@@ -87,7 +87,7 @@ class EditorViewModel(
     }
 
     fun onSave() {
-        viewModelScope.launch {
+         viewModelScope.launch {
             mRepository.save(mDraft)
             event { EditorEvent.Exit }
         }

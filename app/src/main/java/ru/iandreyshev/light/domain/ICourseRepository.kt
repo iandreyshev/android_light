@@ -6,6 +6,7 @@ import ru.iandreyshev.player_core.course.Course
 import ru.iandreyshev.player_core.course.CourseId
 
 interface ICourseRepository {
+    fun prepare()
     fun getCourse(id: CourseId): Course?
     fun getCoursesObservable(): Flow<List<Course>>
     fun delete(courseId: CourseId)

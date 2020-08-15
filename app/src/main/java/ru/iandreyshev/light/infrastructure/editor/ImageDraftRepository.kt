@@ -22,11 +22,11 @@ class ImageDraftRepository(
             ?: ImageDraft(ImageDraftId(newUID()))
     }
 
-    override suspend fun getPhotoSource(): ImageSource.Photo? {
+    override suspend fun getPhotoSource(): ImageSource? {
         return storage.getPhotoSource()
     }
 
-    override suspend fun getGallerySource(uri: Uri): ImageSource.Gallery? {
+    override suspend fun getGallerySource(uri: Uri): ImageSource? {
         return storage.createGallerySource(uri)
     }
 

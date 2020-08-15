@@ -67,13 +67,19 @@ internal class CoursePlayer(
 
     override fun onChange(quizId: QuizId, result: QuizResult) {
         for (indexedValue in mCourseItems.withIndex()) {
+            var isBreak = false
             when (val item = indexedValue.value) {
                 is PlayerItem.Quiz -> {
                     mCourseItems[indexedValue.index] = item.copy(result = result)
-                    break
+                    isBreak = true
                 }
                 else -> Unit
             }.exhaustive
+
+            // FIXME: 8/16/2020 Исправить когда выйдет kotlin 1.4
+            if (isBreak) {
+                break
+            }
         }
     }
 

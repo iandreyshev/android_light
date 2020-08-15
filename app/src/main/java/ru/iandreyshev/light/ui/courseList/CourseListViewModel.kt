@@ -26,6 +26,7 @@ class CourseListViewModel(scope: Scope) : ViewModel() {
 
     fun onCreate() {
         viewModelScope.launch {
+            mRepository.prepare()
             mRepository.getCoursesObservable()
                 .collect { courses ->
                     mCourses.value = courses

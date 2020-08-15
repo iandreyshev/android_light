@@ -5,6 +5,7 @@ import ru.iandreyshev.player_core.course.Course
 import ru.iandreyshev.player_core.course.CourseId
 
 interface ICourseStorage {
-    fun save(draft: CourseDraft): Course
-    fun delete(courseId: CourseId)
+    fun add(draft: CourseDraft): Course
+    fun list(): List<Course>
+    fun remove(courseId: CourseId)
 }
