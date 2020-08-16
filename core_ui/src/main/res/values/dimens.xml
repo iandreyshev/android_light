@@ -4,6 +4,11 @@
     <dimen name="grid_step_2">8dp</dimen>
     <dimen name="grid_step_3">8dp</dimen>
     <dimen name="grid_step_4">16dp</dimen>
+    <dimen name="grid_step_5">20dp</dimen>
+    <dimen name="grid_step_6">24dp</dimen>
+    <dimen name="grid_step_7">28dp</dimen>
+    <dimen name="grid_step_8">32dp</dimen>
+
     <dimen name="grid_margin">@dimen/grid_step_4</dimen>
 
     <dimen name="square_button_mini">24dp</dimen>

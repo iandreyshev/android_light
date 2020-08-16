@@ -23,7 +23,7 @@ internal sealed class Effect {
         val uri: String
     ) : Effect()
 
-    class Finish(val result: String) : Effect()
+    object Finish : Effect()
 
     class Error(val error: String) : Effect()
 

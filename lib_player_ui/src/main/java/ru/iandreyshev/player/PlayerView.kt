@@ -89,7 +89,6 @@ class PlayerView @JvmOverloads constructor(
                 errorRepeatButton.isVisible = false
 
                 resultView.isVisible = true
-                resultView.text = state.result
             }
             State.Type.PLAYING_ITEM_ERROR,
             State.Type.PREPARE_PLAYER_ERROR -> {

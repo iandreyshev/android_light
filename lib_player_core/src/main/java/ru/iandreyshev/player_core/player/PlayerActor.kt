@@ -81,7 +81,7 @@ internal class PlayerActor(
                             )
                     }
                     MoveItemResult.MoveLimited ->
-                        Effect.Finish("Results").just()
+                        Effect.Finish.just()
                 }
                 Wish.Back -> when (val result = player.back()) {
                     is MoveItemResult.Success -> when (val item = result.item) {

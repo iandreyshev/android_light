@@ -39,10 +39,7 @@ internal class PlayerReducer : Reducer<State, Effect> {
                         .copy(itemState = PlayerItemState.Video(effect.uri))
                 is Effect.Finish ->
                     state.toResultState()
-                        .copy(
-                            result = effect.result,
-                            itemState = null
-                        )
+                        .copy(itemState = null)
                 is Effect.PlaybackStateChanged ->
                     state.copy(
                         itemsCount = effect.itemsCount,

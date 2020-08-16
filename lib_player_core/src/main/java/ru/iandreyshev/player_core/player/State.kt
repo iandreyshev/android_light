@@ -9,8 +9,7 @@ data class State(
     val itemPosition: Int = 0,
     val canForward: Boolean = false,
     val canBack: Boolean = false,
-    val error: String = "",
-    val result: String? = null
+    val error: String = ""
 ) {
 
     enum class Type {
