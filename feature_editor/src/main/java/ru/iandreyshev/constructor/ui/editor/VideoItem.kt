@@ -21,7 +21,7 @@ class VideoItem(
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.clickableArea.setOnClickListener { onClickListener() }
-        viewHolder.itemView.subtitle.text = duration
+        viewHolder.itemView.creationDate.text = duration
         viewHolder.itemView.subtitleSecond.text = videoName
     }
 

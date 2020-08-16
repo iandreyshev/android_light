@@ -33,7 +33,7 @@ class CourseListAdapter(
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
         val item = getItem(position)
         holder.itemView.title.text = item.title
-        holder.itemView.subtitle.text = item.creationDate.toString()
+        holder.itemView.creationDate.text = item.creationDate.toString()
     }
 
 }

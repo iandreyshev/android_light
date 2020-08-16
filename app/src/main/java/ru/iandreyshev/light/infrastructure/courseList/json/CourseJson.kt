@@ -1,6 +1,5 @@
 package ru.iandreyshev.light.infrastructure.courseList.json
 
-import com.google.gson.annotations.SerializedName
 import ru.iandreyshev.core_utils.exhaustive
 import ru.iandreyshev.player_core.course.Course
 import ru.iandreyshev.player_core.course.CourseId
@@ -133,45 +132,31 @@ private fun VariantJson.toCourseItem() =
 
 @Serializable
 data class CourseJson(
-    @SerializedName("id")
     val id: String,
-    @SerializedName("title")
     val title: String,
-    @SerializedName("creation_date")
     val creationDate: Long,
-    @SerializedName("images")
     val images: List<ImageJson>,
-    @SerializedName("videos")
     val videos: List<VideoJson>,
-    @SerializedName("quizzes")
     val quizzes: List<QuizJson>
 )
 
 @Serializable
 data class ImageJson(
-    @SerializedName("description")
     val description: String?,
-    @SerializedName("source")
     val source: String,
-    @SerializedName("position_in_course")
     val positionInCourse: Int
 )
 
 @Serializable
 data class VideoJson(
-    @SerializedName("source")
     val source: String,
-    @SerializedName("position_in_course")
     val positionInCourse: Int
 )
 
 @Serializable
 data class QuizJson(
-    @SerializedName("id")
     val id: String,
-    @SerializedName("questions")
     val questions: List<QuestionJson>,
-    @SerializedName("position_in_course")
     val positionInCourse: Int
 )
 

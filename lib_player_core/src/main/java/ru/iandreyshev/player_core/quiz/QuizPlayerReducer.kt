@@ -12,6 +12,11 @@ internal class QuizPlayerReducer : Reducer<State, Effect> {
                         type = State.Type.PREVIEW,
                         questionsCount = effect.questionsCount
                     )
+                is Effect.ShowResult ->
+                    state.copy(
+                        type = State.Type.RESULTS,
+                        quizResult = effect.result
+                    )
                 else -> state
             }
             State.Type.PREVIEW -> when (effect) {

@@ -20,7 +20,7 @@ class QuizItem(
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.clickableArea.setOnClickListener { onClickListener() }
-        viewHolder.itemView.subtitle.text = "$questionsCount questions"
+        viewHolder.itemView.creationDate.text = "$questionsCount questions"
     }
 
     class ViewHolder(view: View) : GroupieViewHolder(view)

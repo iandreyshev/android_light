@@ -22,7 +22,7 @@ class ImageItem(
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.clickableArea.setOnClickListener { onClickListener() }
-        viewHolder.itemView.subtitle.text = imageName
+        viewHolder.itemView.creationDate.text = imageName
 
         Glide.with(viewHolder.itemView)
             .load(imageUrl)
