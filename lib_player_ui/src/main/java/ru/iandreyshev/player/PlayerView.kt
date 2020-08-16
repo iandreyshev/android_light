@@ -26,7 +26,7 @@ class PlayerView @JvmOverloads constructor(
 
     init {
         inflate(getContext(), R.layout.view_player, this)
-        exitButton.setOnClickListener { mWishListener(UiAction.Exit.asWish()) }
+        exitClickableArea.setOnClickListener { mWishListener(UiAction.Exit.asWish()) }
     }
 
     private var mWishListener: IWishListener = object : IWishListener {}
@@ -53,9 +53,12 @@ class PlayerView @JvmOverloads constructor(
         )
     }
 
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-        mQuizViewViewController.setQuizViewTopMargin(200)
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+
+        mQuizViewViewController.setQuizViewTopMargin(
+            topBar.measuredHeight + resources.getDimensionPixelSize(R.dimen.grid_step_2)
+        )
     }
 
     fun subscribe(listener: IWishListener) {
@@ -65,7 +68,7 @@ class PlayerView @JvmOverloads constructor(
     fun render(state: State) {
         when (state.type) {
             State.Type.PREPARE_PLAYER -> {
-                playbackView.isVisible = false
+                playbackText.isVisible = false
                 resultView.isVisible = false
                 errorText.isVisible = false
                 errorRepeatButton.isVisible = false
@@ -79,14 +82,14 @@ class PlayerView @JvmOverloads constructor(
                 errorText.isVisible = false
                 errorRepeatButton.isVisible = false
 
-                playbackView.isVisible = true
-                playbackView.text = "${state.itemPosition + 1} / " +
+                playbackText.isVisible = true
+                playbackText.text = "${state.itemPosition + 1} / " +
                         "${state.itemsCount} "
                 exitButton.isVisible = true
             }
             State.Type.RESULT -> {
                 preloadingProgressBar.isVisible = false
-                playbackView.isVisible = false
+                playbackText.isVisible = false
                 errorText.isVisible = false
                 errorRepeatButton.isVisible = false
                 exitButton.isVisible = false
@@ -99,7 +102,7 @@ class PlayerView @JvmOverloads constructor(
             State.Type.PLAYING_ITEM_ERROR,
             State.Type.PREPARE_PLAYER_ERROR -> {
                 preloadingProgressBar.isVisible = false
-                playbackView.isVisible = false
+                playbackText.isVisible = false
                 resultView.isVisible = false
 
                 errorText.isVisible = true

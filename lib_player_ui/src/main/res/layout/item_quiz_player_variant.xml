@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/grid_step_4"
-        android:layout_marginTop="@dimen/grid_step_3"
+        android:layout_marginBottom="@dimen/grid_step_3"
         android:background="@drawable/background_variant_border">
 
         <androidx.constraintlayout.widget.Guideline
@@ -76,6 +76,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/checkButton"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@android:color/transparent"
