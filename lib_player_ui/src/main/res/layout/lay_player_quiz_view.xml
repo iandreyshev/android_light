@@ -87,44 +87,12 @@
         android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:layout_marginTop="50dp">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/progressView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/grid_step_4">
-
-            <TextView
-                android:id="@+id/progressTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/light"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="@string/quiz_progress_title_not_started" />
-
-            <ProgressBar
-                android:id="@+id/progressProgressBar"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="6dp"
-                android:layout_marginTop="@dimen/grid_step_2"
-                android:progressDrawable="@drawable/background_quiz_progress_bar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/progressTitle"
-                tools:max="100"
-                tools:progress="42" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="@dimen/grid_step_4"
-            android:layout_marginTop="@dimen/grid_step_6"
             android:layout_marginBottom="@dimen/grid_step_4"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp"

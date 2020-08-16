@@ -51,23 +51,12 @@ internal class QuizViewViewController(
     private fun renderPreview(state: State) = with(view) {
         quizTitle.text = state.quizTitle
         quizSubtitle.text = resources.getString(R.string.quiz_preview_title, state.questionsCount)
-        progressTitle.text = resources.getString(R.string.quiz_progress_title_not_started)
         startButton.setOnClickListener {
             onWish(Wish.Submit)
         }
     }
 
     private fun renderQuestion(state: State) = with(view) {
-        progressProgressBar.max = state.questionsCount
-        progressProgressBar.progress = when (state.questionResult) {
-            QuestionResult.UNDEFINED -> state.questionIndex
-            else -> state.questionIndex + 1
-        }
-        progressTitle.text = resources.getString(
-            R.string.quiz_progress_title_in_progress,
-            state.questionIndex + 1,
-            state.questionsCount
-        )
         submitButton.setText(
             when (state.questionResult) {
                 QuestionResult.UNDEFINED -> R.string.quiz_question_submit_button
@@ -77,7 +66,9 @@ internal class QuizViewViewController(
         mQuizAdapter.update(mutableListOf<Item<*>>().apply {
             add(
                 QuestionItem(
-                    text = state.questionText
+                    text = state.questionText,
+                    position = state.questionIndex + 1,
+                    questionsCount = state.questionsCount
                 )
             )
             addAll(

@@ -9,6 +9,7 @@
         <item name="android:paddingTop">@dimen/grid_step_2</item>
         <item name="android:paddingLeft">@dimen/grid_step_4</item>
         <item name="android:paddingRight">@dimen/grid_step_4</item>
+        <item name="android:inset">0dp</item>
         <item name="cornerRadius">8dp</item>
         <item name="rippleColor">@color/green_light</item>
     </style>

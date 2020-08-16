@@ -1,19 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/progressTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/grid_step_4"
+        android:layout_marginTop="@dimen/grid_step_4"
+        android:textColor="@color/gray_dark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/quiz_progress_title_in_progress" />
 
     <TextView
         android:id="@+id/questionText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/grid_step_4"
-        android:layout_marginTop="@dimen/grid_step_4"
+        android:layout_marginTop="@dimen/grid_step_1"
         android:layout_marginBottom="@dimen/grid_step_4"
         android:textColor="@color/dark"
         android:textSize="20sp"
         android:textStyle="bold"
         tools:text="Как вас зовут?" />
 
-</FrameLayout>
+</LinearLayout>
