@@ -125,6 +125,7 @@ class CourseStorage(
     private fun convertToQuiz(quiz: QuizDraft): CourseItem.Quiz {
         return CourseItem.Quiz(
             id = QuizId(quiz.id.value),
+            title = quiz.id.value,
             questions = quiz.questions
                 .mapIndexed { pos, questionDraft ->
                     Question(

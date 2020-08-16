@@ -4,6 +4,7 @@ typealias QuizPlayerState = State
 
 data class State(
     val type: Type = Type.DISABLED,
+    val quizTitle: String = "",
     val questionText: String = "",
     val questionIndex: Int = 0,
     val questionsCount: Int = 0,

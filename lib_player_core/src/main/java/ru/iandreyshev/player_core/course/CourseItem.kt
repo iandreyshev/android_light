@@ -9,6 +9,7 @@ sealed class CourseItem {
 
     class Quiz(
         val id: QuizId,
+        val title: String,
         val questions: List<Question>
     ) : CourseItem()
 

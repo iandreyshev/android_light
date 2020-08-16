@@ -26,10 +26,9 @@ class PlayerView @JvmOverloads constructor(
 
     init {
         inflate(getContext(), R.layout.view_player, this)
-        exitButton.setOnClickListener { mOnExitClickListener() }
+        exitButton.setOnClickListener { mWishListener(UiAction.Exit.asWish()) }
     }
 
-    private var mOnExitClickListener: () -> Unit = {}
     private var mWishListener: IWishListener = object : IWishListener {}
 
     private val mImageViewViewController by uiLazy {
@@ -42,7 +41,7 @@ class PlayerView @JvmOverloads constructor(
     private val mQuizViewViewController by uiLazy {
         QuizViewViewController(
             view = quizView,
-            onWish = mWishListener::invoke
+            onWish = { mWishListener(it) }
         )
     }
 
@@ -54,12 +53,13 @@ class PlayerView @JvmOverloads constructor(
         )
     }
 
-    fun subscribe(listener: IWishListener) {
-        mWishListener = listener
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        mQuizViewViewController.setQuizViewTopMargin(200)
     }
 
-    fun onExitClick(listener: () -> Unit) {
-        mOnExitClickListener = listener
+    fun subscribe(listener: IWishListener) {
+        mWishListener = listener
     }
 
     fun render(state: State) {
@@ -71,6 +71,7 @@ class PlayerView @JvmOverloads constructor(
                 errorRepeatButton.isVisible = false
 
                 preloadingProgressBar.isVisible = true
+                exitButton.isVisible = true
             }
             State.Type.PLAYING_ITEM -> {
                 preloadingProgressBar.isVisible = false
@@ -81,14 +82,19 @@ class PlayerView @JvmOverloads constructor(
                 playbackView.isVisible = true
                 playbackView.text = "${state.itemPosition + 1} / " +
                         "${state.itemsCount} "
+                exitButton.isVisible = true
             }
             State.Type.RESULT -> {
                 preloadingProgressBar.isVisible = false
                 playbackView.isVisible = false
                 errorText.isVisible = false
                 errorRepeatButton.isVisible = false
+                exitButton.isVisible = false
 
                 resultView.isVisible = true
+                finishButton.setOnClickListener {
+                    mWishListener(UiAction.Exit.asWish())
+                }
             }
             State.Type.PLAYING_ITEM_ERROR,
             State.Type.PREPARE_PLAYER_ERROR -> {
@@ -102,6 +108,7 @@ class PlayerView @JvmOverloads constructor(
                 errorRepeatButton.setOnClickListener {
                     mWishListener(UiAction.Repeat.asWish())
                 }
+                exitButton.isVisible = true
             }
         }.exhaustive
 

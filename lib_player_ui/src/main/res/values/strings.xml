@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string name="quiz_preview_start_button">Начать</string>
+    <string name="quiz_preview_title">Тест. %1$d вопросов</string>
+    <string name="quiz_question_submit_button">Ответить</string>
+    <string name="quiz_question_next_button">Далее</string>
+    <string name="quiz_result_next_button">Далее</string>
+    <string name="quiz_result_prev_button">Назад</string>
+    <string name="quiz_result_success_title">Поздравляем!</string>
+    <string name="quiz_result_success_subtitle">Вы ответили правильно на все вопросы</string>
+    <string name="quiz_result_partly_success_title">Победа где-то рядом</string>
+    <string name="quiz_result_partly_success_subtitle">Только часть ответов были правильными</string>
+    <string name="quiz_result_failure_title">Неудача</string>
+    <string name="quiz_result_failure_subtitle">Правильных ответов не было</string>
+    <string name="quiz_progress_title_not_started">Ожидает начала</string>
+    <string name="quiz_progress_title_in_progress">Вопрос %1$d из %2$d</string>
+
     <string name="result_title">Поздравляем</string>
     <string name="result_subtitle">Вы успешно прошли курс</string>
+    <string name="result_submit_button">Выход</string>
+
 </resources>

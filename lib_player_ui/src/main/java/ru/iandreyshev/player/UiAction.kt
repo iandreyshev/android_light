@@ -7,6 +7,7 @@ internal sealed class UiAction {
     object Forward : UiAction()
     object Back : UiAction()
     object Repeat : UiAction()
+    object Exit : UiAction()
 }
 
 internal fun UiAction.asWish() = when (this) {
@@ -14,4 +15,5 @@ internal fun UiAction.asWish() = when (this) {
     UiAction.Back -> Wish.Back
     UiAction.Repeat -> Wish.Repeat
     UiAction.LoadImageError -> Wish.ShowError
+    UiAction.Exit -> Wish.Exit
 }

@@ -25,6 +25,8 @@ internal sealed class Effect {
 
     object Finish : Effect()
 
+    object Exit : Effect()
+
     class Error(val error: String) : Effect()
 
 }

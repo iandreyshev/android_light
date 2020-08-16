@@ -1,45 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineBegin"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="@dimen/grid_step_4" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineEnd"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="@dimen/grid_step_4" />
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/grid_step_4"
-        android:layout_marginBottom="@dimen/grid_step_2"
-        android:text="Question"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@id/guidelineBegin"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/questionText"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/grid_step_4"
+        android:layout_marginTop="@dimen/grid_step_4"
         android:layout_marginBottom="@dimen/grid_step_4"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-        app:layout_constraintStart_toStartOf="@id/guidelineBegin"
-        app:layout_constraintTop_toBottomOf="@id/title"
+        android:textColor="@color/dark"
+        android:textSize="20sp"
+        android:textStyle="bold"
         tools:text="Как вас зовут?" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

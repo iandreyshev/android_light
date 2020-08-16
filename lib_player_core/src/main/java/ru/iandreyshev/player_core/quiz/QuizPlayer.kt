@@ -7,6 +7,8 @@ class QuizPlayer(
     private val resultListener: IQuizResultListener
 ) : IQuizPlayer {
 
+    override val title: String
+        get() = mQuizTitle
     override val currentQuestion: Question
         get() = mQuestions[currentQuestionPosition]
     override var currentQuestionPosition: Int = 0
@@ -17,6 +19,7 @@ class QuizPlayer(
         private set
 
     private var mQuizId = QuizId("")
+    private var mQuizTitle = ""
     private var mQuestions = mutableListOf<Question>()
 
     override fun prepare(playerQuiz: PlayerItem.Quiz) {
@@ -29,6 +32,7 @@ class QuizPlayer(
             }
 
         mQuizId = playerQuiz.quiz.id
+        mQuizTitle = playerQuiz.quiz.title
 
         result = playerQuiz.result
     }

@@ -28,5 +28,5 @@ class NavComponentRouter(
 
 }
 
-fun Fragment.router() = NavComponentRouter(findNavController())
-
+val Fragment.router
+    get() = NavComponentRouter(findNavController())

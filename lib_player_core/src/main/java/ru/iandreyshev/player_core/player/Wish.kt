@@ -8,4 +8,5 @@ sealed class Wish {
     object Back : Wish()
     object Repeat : Wish()
     object ShowError : Wish()
+    object Exit : Wish()
 }

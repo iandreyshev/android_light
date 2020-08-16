@@ -5,4 +5,5 @@ import ru.iandreyshev.player_core.course.PlayerItem
 sealed class News {
     class ToastNews(val text: String) : News()
     class ShowQuiz(val quiz: PlayerItem.Quiz) : News()
+    object Exit : News()
 }

@@ -29,7 +29,6 @@ class PlayerFragment : BaseFragment(R.layout.fragment_player) {
         mViewModel.liveData.eventShowNews(::onNews)
 
         playerView.subscribe(mViewModel.wishListener)
-        playerView.onExitClick(router()::back)
 
         setFullScreen()
         setOrientationPortrait()
@@ -51,6 +50,7 @@ class PlayerFragment : BaseFragment(R.layout.fragment_player) {
             is News.ToastNews ->
                 Toast.makeText(requireContext(), news.text, Toast.LENGTH_SHORT).show()
             is News.ShowQuiz -> Unit
+            News.Exit -> router.back()
         }
 
 }

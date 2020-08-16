@@ -14,7 +14,10 @@ internal class QuizPlayerActor(
                 is Wish.Start -> when (wish.quiz.result) {
                     QuizResult.UNDEFINED -> {
                         player.prepare(wish.quiz)
-                        Effect.ShowPreview(player.questionsCount).just()
+                        Effect.ShowPreview(
+                            player.title,
+                            player.questionsCount
+                        ).just()
                     }
                     else -> Effect.ShowResult(wish.quiz.result).just()
                 }
@@ -50,6 +53,7 @@ internal class QuizPlayerActor(
             }
             State.Type.RESULTS -> when (wish) {
                 Wish.Submit -> Effect.Finish.just()
+                Wish.Back -> Effect.Back.just()
                 else -> noEffect()
             }
         }

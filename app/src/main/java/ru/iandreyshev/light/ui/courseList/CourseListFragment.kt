@@ -46,8 +46,8 @@ class CourseListFragment : BaseFragment(R.layout.fragment_course_list) {
 
         mViewModel.isListEmpty.viewObserveWith { createCourseButton.isGone = it }
 
-        mViewModel.eventOpenCourseEditor(router()::openCourseEditor)
-        mViewModel.eventOpenPlayer(router()::openPlayer)
+        mViewModel.eventOpenCourseEditor(router::openCourseEditor)
+        mViewModel.eventOpenPlayer(router::openPlayer)
     }
 
     private fun initCourseList() {

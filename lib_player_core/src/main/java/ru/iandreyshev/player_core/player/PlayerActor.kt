@@ -34,6 +34,7 @@ internal class PlayerActor(
                     PrepareResult.ErrorCourseIsEmpty ->
                         Effect.Error(result.toString()).just()
                 }
+                Wish.Exit -> Effect.Exit.just()
                 else -> noEffect()
             }
             State.Type.PREPARE_PLAYER_ERROR -> when (wish) {
@@ -59,6 +60,7 @@ internal class PlayerActor(
                     PrepareResult.ErrorCourseIsEmpty ->
                         Effect.Error(result.toString()).just()
                 }
+                Wish.Exit -> Effect.Exit.just()
                 else -> noEffect()
             }
             State.Type.PLAYING_ITEM -> when (wish) {
@@ -108,10 +110,17 @@ internal class PlayerActor(
                         Effect.Error("Error load image: ${item.uri}").just()
                     else -> noEffect()
                 }
+                Wish.Exit -> Effect.Exit.just()
                 else -> noEffect()
             }
-            State.Type.PLAYING_ITEM_ERROR -> noEffect()
-            State.Type.RESULT -> noEffect()
+            State.Type.PLAYING_ITEM_ERROR -> when (wish) {
+                Wish.Exit -> Effect.Exit.just()
+                else -> noEffect()
+            }
+            State.Type.RESULT -> when (wish) {
+                Wish.Exit -> Effect.Exit.just()
+                else -> noEffect()
+            }
         }
 
     private fun noEffect() = Observable.empty<Effect>()

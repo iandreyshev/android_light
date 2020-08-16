@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Light.Button.FillButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/light</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:backgroundTint">@color/green</item>
+        <item name="android:paddingBottom">@dimen/grid_step_2</item>
+        <item name="android:paddingTop">@dimen/grid_step_2</item>
+        <item name="android:paddingLeft">@dimen/grid_step_4</item>
+        <item name="android:paddingRight">@dimen/grid_step_4</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="rippleColor">@color/green_light</item>
+    </style>
+
+    <style name="Light.Button.FillButton.Gray" parent="Light.Button.FillButton">
+        <item name="android:backgroundTint">@color/gray_dark</item>
+        <item name="rippleColor">@color/gray</item>
+    </style>
+
+    <style name="Light.Button.OutlineButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">@color/green</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingBottom">@dimen/grid_step_2</item>
+        <item name="android:paddingTop">@dimen/grid_step_2</item>
+        <item name="android:paddingLeft">@dimen/grid_step_4</item>
+        <item name="android:paddingRight">@dimen/grid_step_4</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="rippleColor">@color/gray_dark</item>
+        <item name="strokeColor">@color/green</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+</resources>

@@ -109,6 +109,7 @@ private fun VideoJson.toCourseItem() =
 private fun QuizJson.toCourseItem() =
     CourseItem.Quiz(
         id = QuizId(id),
+        title = id,
         questions = questions.map { it.toCourseItem() }
     )
 

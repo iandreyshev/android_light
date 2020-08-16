@@ -21,20 +21,24 @@ class VariantItem(
     override fun createViewHolder(itemView: View) =
         ViewHolder(itemView)
 
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.variantText.text = text
+    override fun bind(viewHolder: ViewHolder, position: Int) = with(viewHolder.itemView) {
+        variantText.text = text
 
-        viewHolder.itemView.isCorrectCheckbox.isVisible = isMultipleMode && !isQuestionSubmitted
-        viewHolder.itemView.isCorrectCheckbox.setOnCheckedChangeListener(null)
-        viewHolder.itemView.isCorrectCheckbox.isChecked = isSelectedAsCorrect
-        viewHolder.itemView.isCorrectCheckbox.setOnCheckedChangeListener { _, _ ->
+        isCorrectCheckbox.isVisible = isMultipleMode && !isQuestionSubmitted
+        isCorrectCheckbox.setOnCheckedChangeListener(null)
+        isCorrectCheckbox.isChecked = isSelectedAsCorrect
+        isCorrectCheckbox.setOnCheckedChangeListener { _, _ ->
             onCorrectStateToggle()
         }
 
-        viewHolder.itemView.isCorrectRadioButton.isVisible = !isMultipleMode && !isQuestionSubmitted
-        viewHolder.itemView.isCorrectRadioButton.setOnCheckedChangeListener(null)
-        viewHolder.itemView.isCorrectRadioButton.isChecked = isSelectedAsCorrect
-        viewHolder.itemView.isCorrectRadioButton.setOnCheckedChangeListener { _, _ ->
+        isCorrectRadioButton.isVisible = !isMultipleMode && !isQuestionSubmitted
+        isCorrectRadioButton.setOnCheckedChangeListener(null)
+        isCorrectRadioButton.isChecked = isSelectedAsCorrect
+        isCorrectRadioButton.setOnCheckedChangeListener { _, _ ->
+            onCorrectStateToggle()
+        }
+
+        checkButton.setOnClickListener {
             onCorrectStateToggle()
         }
     }

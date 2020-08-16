@@ -10,6 +10,7 @@ internal class QuizPlayerReducer : Reducer<State, Effect> {
                 is Effect.ShowPreview ->
                     state.copy(
                         type = State.Type.PREVIEW,
+                        quizTitle = effect.title,
                         questionsCount = effect.questionsCount
                     )
                 is Effect.ShowResult ->
@@ -53,6 +54,7 @@ internal class QuizPlayerReducer : Reducer<State, Effect> {
                     state.copy(
                         type = State.Type.DISABLED
                     )
+                Effect.Back -> TODO("Back not implemented")
                 else -> state
             }
         }
