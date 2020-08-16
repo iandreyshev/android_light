@@ -33,6 +33,8 @@ class CourseListAdapter(
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
         val item = getItem(position)
         holder.itemView.title.text = item.title
+        holder.itemView.itemsCount.text = holder.itemView.resources
+            .getString(R.string.course_list_course_items_count, item.items.count())
         holder.itemView.creationDate.text = item.creationDate.toString()
     }
 

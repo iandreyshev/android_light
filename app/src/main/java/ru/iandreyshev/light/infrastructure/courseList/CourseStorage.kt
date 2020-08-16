@@ -57,6 +57,11 @@ class CourseStorage(
 
     override fun remove(courseId: CourseId) {
         try {
+            val courses = list().toMutableList()
+                .apply { removeAll { it.id == courseId } }
+                .map { it.toJson() }
+
+            saveCourseList(CourseListJson(courses))
             getOrCreateCourseFolder(courseId).deleteRecursively()
         } catch (ex: Exception) {
             Timber.d(ex)
@@ -195,12 +200,20 @@ class CourseStorage(
             .apply { add(course) }
             .map { it.toJson() }
 
-        val json = Json(JsonConfiguration.Stable)
-        val jsonString = json.stringify(CourseListJson.serializer(), CourseListJson(courses))
+        saveCourseList(CourseListJson(courses))
+    }
 
-        val courseListFile = getOrCreateCourseListFile()
+    private fun saveCourseList(courses: CourseListJson) {
+        try {
+            val json = Json(JsonConfiguration.Stable)
+            val jsonString = json.stringify(CourseListJson.serializer(), courses)
 
-        courseListFile.writeText(jsonString)
+            val courseListFile = getOrCreateCourseListFile()
+
+            courseListFile.writeText(jsonString)
+        } catch (ex: Exception) {
+            Timber.e(ex)
+        }
     }
 
     private fun CourseDraftId.asCourseId() = CourseId(value)

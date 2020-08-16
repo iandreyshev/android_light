@@ -3,4 +3,5 @@
 
     <string name="course_list_course_context_menu_edit">Редактировать</string>
     <string name="course_list_course_context_menu_delete">Удалить</string>
+    <string name="course_list_course_items_count">%1$d материалов</string>
 </resources>

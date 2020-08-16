@@ -48,9 +48,10 @@ internal class VideoViewViewController(
 
     private fun startPlayer(newUri: String) {
         view.isVisible = true
-        mVideoUri = newUri
 
         releasePlayer()
+
+        mVideoUri = newUri
         mPlayer = newPlayer(newUri)
         view.playerView.player = mPlayer
         view.backButton.setOnClickListener { onBack() }
@@ -58,6 +59,7 @@ internal class VideoViewViewController(
     }
 
     private fun releasePlayer() {
+        mVideoUri = ""
         mPlayer?.stop()
         mPlayer?.release()
         mPlayer = null
