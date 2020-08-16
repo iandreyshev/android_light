@@ -126,7 +126,7 @@
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/topBar"
+        android:id="@+id/playbackView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -137,18 +137,18 @@
             android:id="@+id/playbackText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/grid_step_6"
             android:layout_marginEnd="@dimen/grid_step_4"
             android:orientation="horizontal"
             android:textAlignment="center"
             android:textColor="@color/light"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/exitButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/exitButton"
             tools:text="42 / 46" />
 
-        <ProgressBar
+        <ru.iandreyshev.player.PlayerProgressView
             android:id="@+id/playbackProgressBar"
             style="@style/Widget.MaterialComponents.ProgressIndicator.Circular.Determinate"
             android:layout_width="18dp"

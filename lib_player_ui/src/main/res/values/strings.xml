@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="playback_items_count">%1$d / %2$d</string>
+
     <string name="quiz_preview_start_button">Начать</string>
     <string name="quiz_preview_title">Тест. %1$d вопросов</string>
     <string name="quiz_question_submit_button">Ответить</string>
