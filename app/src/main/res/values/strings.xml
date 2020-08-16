@@ -1,7 +1,13 @@
 <resources>
+
     <string name="app_name">Light</string>
 
+    <string name="course_list_title">Курсы</string>
     <string name="course_list_course_context_menu_edit">Редактировать</string>
     <string name="course_list_course_context_menu_delete">Удалить</string>
     <string name="course_list_course_items_count">%1$d материалов</string>
+    <string name="course_list_empty_view_title">Список курсов пуст</string>
+    <string name="course_list_empty_view_subtitle">Создайте свой курс или опробуйте плеер с демо курсом</string>
+    <string name="course_list_empty_view_download_demo_button">ДЕМО КУРС</string>
+
 </resources>

@@ -13,11 +13,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
+            style="@style/Light.Toolbar.Main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title="@string/app_name"
-            app:titleTextColor="#fff" />
+            android:background="@color/light"
+            app:title="@string/course_list_title" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -36,35 +37,58 @@
 
     <TextView
         android:id="@+id/emptyViewTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:text="You have not created courses yet"
-        android:textSize="18sp"
+        android:layout_marginHorizontal="@dimen/grid_step_4"
+        android:gravity="center"
+        android:text="@string/course_list_empty_view_title"
+        android:textColor="@color/dark"
+        android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/emptyViewCreateCourseButton"
+        app:layout_constraintBottom_toTopOf="@id/emptyViewSubtitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout"
         app:layout_constraintVertical_chainStyle="packed" />
 
-    <Button
-        android:id="@+id/emptyViewCreateCourseButton"
+    <TextView
+        android:id="@+id/emptyViewSubtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/grid_step_4"
+        android:layout_marginTop="@dimen/grid_step_2"
+        android:gravity="center"
+        android:text="@string/course_list_empty_view_subtitle"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/emptyViewDownloadDemoButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/emptyViewTitle"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/emptyViewDownloadDemoButton"
+        style="@style/Light.Button.FillButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create first"
+        android:layout_marginTop="@dimen/grid_step_4"
+        android:text="@string/course_list_empty_view_download_demo_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/emptyViewTitle" />
+        app:layout_constraintTop_toBottomOf="@id/emptyViewSubtitle"
+        tools:background="@color/green" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/createCourseButton"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="@dimen/square_button_normal"
         android:layout_height="@dimen/square_button_normal"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/grid_step_6"
+        app:backgroundTint="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_course_list_create_new" />
+        app:srcCompat="@drawable/ic_course_list_create_new"
+        app:tint="@color/light" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

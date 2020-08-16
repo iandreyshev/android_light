@@ -3,13 +3,14 @@ package ru.iandreyshev.light.ui.courseList
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.fragment_course_list.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.iandreyshev.core_app.BaseFragment
 import ru.iandreyshev.core_ui.dismissOnDestroy
+import ru.iandreyshev.core_ui.toast
+import ru.iandreyshev.core_utils.exhaustive
 import ru.iandreyshev.core_utils.uiLazy
 import ru.iandreyshev.light.R
 import ru.iandreyshev.light.navigation.router
@@ -32,6 +33,9 @@ class CourseListFragment : BaseFragment(R.layout.fragment_course_list) {
 
         initMenu()
         initCourseList()
+
+        mViewModel.state.viewObserveWith(::render)
+        mViewModel.event(::handleEvent)
     }
 
     override fun onDestroyView() {
@@ -43,26 +47,11 @@ class CourseListFragment : BaseFragment(R.layout.fragment_course_list) {
         createCourseButton.setOnClickListener {
             mViewModel.onCreateCourseClick()
         }
-
-        mViewModel.isListEmpty.viewObserveWith { createCourseButton.isGone = it }
-
-        mViewModel.eventOpenCourseEditor(router::openCourseEditor)
-        mViewModel.eventOpenPlayer(router::openPlayer)
     }
 
     private fun initCourseList() {
         courseList.adapter = mCourseListAdapter
-        mViewModel.courses.viewObserveWith {
-            mCourseContextMenu?.dismissOnDestroy()
-
-            courseList.isVisible = it.isNotEmpty()
-            emptyViewTitle.isVisible = it.isEmpty()
-            emptyViewCreateCourseButton.isVisible = it.isEmpty()
-            emptyViewCreateCourseButton.setOnClickListener {
-                mViewModel.onCreateCourseClick()
-            }
-            mCourseListAdapter.submitList(it)
-        }
+        courseList.addItemDecoration(CourseListRecyclerViewDecorator())
     }
 
     private fun showCourseMenu(coursePosition: Int) {
@@ -82,6 +71,27 @@ class CourseListFragment : BaseFragment(R.layout.fragment_course_list) {
                 dialog.dismiss()
             }
             .show()
+    }
+
+    private fun handleEvent(event: CourseListEvent) {
+        when (event) {
+            CourseListEvent.OpenCourseEditor -> router.openCourseEditor()
+            is CourseListEvent.OpenPlayer -> router.openPlayer(event.args)
+            is CourseListEvent.ShowError -> toast(event.text)
+        }.exhaustive
+    }
+
+    private fun render(state: CourseListViewState) {
+        mCourseContextMenu?.dismissOnDestroy()
+
+        courseList.isVisible = state.courses.isNotEmpty()
+        emptyViewTitle.isVisible = state.courses.isEmpty()
+        emptyViewSubtitle.isVisible = state.courses.isEmpty()
+        emptyViewDownloadDemoButton.isVisible = state.courses.isEmpty()
+        emptyViewDownloadDemoButton.setOnClickListener {
+            mViewModel.onDownloadDemo()
+        }
+        mCourseListAdapter.submitList(state.courses)
     }
 
 }

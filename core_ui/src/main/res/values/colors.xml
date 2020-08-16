@@ -15,5 +15,6 @@
     <color name="green">#1FBF64</color>
     <color name="green_light">#20ED79</color>
     <color name="blue">#363ED9</color>
+    <color name="blue_ultra_light">#F5F6FC</color>
     <color name="pink">#F2A0DC</color>
 </resources>

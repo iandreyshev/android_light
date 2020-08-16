@@ -21,10 +21,10 @@ class CourseListAdapter(
             .inflate(R.layout.item_course_list_course, parent, false)
             .let { view -> CourseViewHolder(view) }
             .also { holder ->
-                holder.itemView.setOnClickListener {
+                holder.itemView.openCourseButton.setOnClickListener {
                     holder.safelyPosition(onClickListener)
                 }
-                holder.itemView.setOnLongClickListener {
+                holder.itemView.openCourseButton.setOnLongClickListener {
                     holder.safelyPosition(onLongClickListener)
                     return@setOnLongClickListener true
                 }
