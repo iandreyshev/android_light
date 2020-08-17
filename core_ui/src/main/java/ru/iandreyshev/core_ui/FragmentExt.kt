@@ -20,11 +20,11 @@ fun Fragment.setFullScreen(isFullScreen: Boolean = true) {
 }
 
 fun Fragment.setOrientationPortrait() {
-    activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    //activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 }
 
 fun Fragment.setOrientationUnspecified() {
-    activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+    //activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 }
 
 fun Fragment.toast(text: String) {

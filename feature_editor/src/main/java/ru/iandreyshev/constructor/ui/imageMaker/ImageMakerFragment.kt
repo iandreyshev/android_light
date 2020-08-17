@@ -22,6 +22,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import dev.chrisbanes.insetter.applySystemGestureInsetsToMargin
+import dev.chrisbanes.insetter.applySystemWindowInsetsToMargin
+import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 import kotlinx.android.synthetic.main.fragment_image_maker.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
@@ -32,7 +35,6 @@ import ru.iandreyshev.constructor.R
 import ru.iandreyshev.constructor.domain.image.ImageSource
 import ru.iandreyshev.constructor.navigation.router
 import ru.iandreyshev.core_app.BaseFragment
-import ru.iandreyshev.core_ui.setFullScreen
 import ru.iandreyshev.core_ui.setOrientationPortrait
 import ru.iandreyshev.core_ui.setOrientationUnspecified
 import ru.iandreyshev.core_ui.toast
@@ -64,27 +66,30 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
 
         initMenu()
         initPickerControls()
+        initDescriptionView()
         initCameraView()
 
         mViewModel.state.viewObserveWith(::render)
         mViewModel.event(::handleEvent)
 
-        setFullScreen()
         setOrientationPortrait()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         setOrientationUnspecified()
-        setFullScreen(false)
     }
 
     private fun initMenu() {
+        createButton.applySystemGestureInsetsToMargin(top = true)
         createButton.setOnClickListener { mViewModel.onSaveDraft() }
+        exitButton.applySystemWindowInsetsToMargin(top = true)
         exitButton.setOnClickListener { mViewModel.onExit() }
     }
 
     private fun initPickerControls() {
+        sourceChooserGroup.applySystemWindowInsetsToMargin(bottom = true)
+
         pickFromGalleryButton.setOnClickListener {
             mPickFromGalleryLauncher.launch(PICK_FROM_GALLERY_INPUT)
         }
@@ -94,6 +99,10 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
         changeFromGalleryButton.setOnClickListener {
             mPickFromGalleryLauncher.launch(PICK_FROM_GALLERY_INPUT)
         }
+    }
+
+    private fun initDescriptionView() {
+        descriptionView.applySystemWindowInsetsToPadding(bottom = true)
     }
 
     private fun initCameraView() {
@@ -140,8 +149,8 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
         changeFromCameraButton.isVisible = state.hasPicture
         changeFromGalleryButton.isVisible = state.hasPicture
 
-        textBalloon.isVisible = state.hasText
-        balloonText.text = state.text
+        descriptionView.isVisible = state.hasText
+        descriptionText.text = state.text
 
         renderEditTextDialog(state.text)
         renderPicture(state.picture)

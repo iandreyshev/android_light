@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
+import dev.chrisbanes.insetter.applySystemWindowInsetsToMargin
 import kotlinx.android.synthetic.main.fragment_video_maker.*
 import kotlinx.android.synthetic.main.fragment_video_maker.changeFromGalleryButton
 import kotlinx.android.synthetic.main.fragment_video_maker.createButton
@@ -20,7 +21,6 @@ import org.koin.core.parameter.parametersOf
 import ru.iandreyshev.constructor.R
 import ru.iandreyshev.constructor.navigation.router
 import ru.iandreyshev.core_app.BaseFragment
-import ru.iandreyshev.core_ui.setFullScreen
 import ru.iandreyshev.core_ui.setOrientationPortrait
 import ru.iandreyshev.core_ui.setOrientationUnspecified
 import ru.iandreyshev.core_ui.toast
@@ -45,11 +45,11 @@ class VideoMakerFragment : BaseFragment(R.layout.fragment_video_maker) {
 
         initMenu()
         initPickerControls()
+        initPlayerView()
 
         mViewModel.state.viewObserveWith(::render)
         mViewModel.event(::handleEvent)
 
-        setFullScreen()
         setOrientationPortrait()
     }
 
@@ -61,11 +61,12 @@ class VideoMakerFragment : BaseFragment(R.layout.fragment_video_maker) {
     override fun onDestroyView() {
         super.onDestroyView()
         setOrientationUnspecified()
-        setFullScreen(false)
     }
 
     private fun initMenu() {
+        createButton.applySystemWindowInsetsToMargin(top = true)
         createButton.setOnClickListener { mViewModel.onCreateDraft() }
+        exitButton.applySystemWindowInsetsToMargin(top = true)
         exitButton.setOnClickListener { mViewModel.onExit() }
     }
 
@@ -73,6 +74,10 @@ class VideoMakerFragment : BaseFragment(R.layout.fragment_video_maker) {
         changeFromGalleryButton.setOnClickListener {
             mPickFromGalleryLauncher.launch(PICK_FROM_GALLERY_INPUT)
         }
+    }
+
+    private fun initPlayerView() {
+        playerView.applySystemWindowInsetsToMargin(top = true, bottom = true)
     }
 
     private fun handleEvent(event: VideoMakerEvent) {

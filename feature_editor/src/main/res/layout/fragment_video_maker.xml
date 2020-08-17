@@ -64,16 +64,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_image_maker_exit" />
 
-    <FrameLayout
-        android:id="@+id/editorControlsBackground"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="#36000000"
-        app:layout_constraintBottom_toBottomOf="@id/changeFromGalleryButton"
-        app:layout_constraintEnd_toEndOf="@id/createButton"
-        app:layout_constraintStart_toStartOf="@id/createButton"
-        app:layout_constraintTop_toTopOf="@id/createButton" />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/createButton"
         android:layout_width="wrap_content"
@@ -84,6 +74,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_image_maker_save" />
+
+    <FrameLayout
+        android:id="@+id/changeFromGalleryButtonBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/background_image_maker_controls"
+        app:layout_constraintBottom_toBottomOf="@id/changeFromGalleryButton"
+        app:layout_constraintEnd_toEndOf="@id/changeFromGalleryButton"
+        app:layout_constraintStart_toStartOf="@id/changeFromGalleryButton"
+        app:layout_constraintTop_toTopOf="@id/changeFromGalleryButton" />
 
     <ImageButton
         android:id="@+id/changeFromGalleryButton"

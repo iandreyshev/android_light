@@ -6,12 +6,15 @@ import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
+import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 import kotlinx.android.synthetic.main.fragment_quiz_maker.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.iandreyshev.constructor.R
 import ru.iandreyshev.constructor.navigation.router
+import ru.iandreyshev.constructor.ui.quizMaker.items.QuizItemsItemDecoration
 import ru.iandreyshev.core_app.BaseFragment
+import ru.iandreyshev.core_ui.doOnApplyWindowInsets
 import ru.iandreyshev.core_ui.toast
 import ru.iandreyshev.core_ui.withItemListeners
 import ru.iandreyshev.core_utils.exhaustive
@@ -24,6 +27,7 @@ class QuizMakerFragment : BaseFragment(R.layout.fragment_quiz_maker) {
         parametersOf(getScope(R.id.nav_editor), navArgs.quizMakerArgs)
     }
     private val mAdapter by uiLazy { GroupAdapter<GroupieViewHolder>() }
+    private val mItemDecoration = QuizItemsItemDecoration()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,6 +40,7 @@ class QuizMakerFragment : BaseFragment(R.layout.fragment_quiz_maker) {
     }
 
     private fun initMenu() {
+        appBarLayout.applySystemWindowInsetsToPadding(top = true)
         toolbar.setNavigationOnClickListener { router.back() }
         toolbar.withItemListeners {
             R.id.actionQuizMakerSave { mViewModel.onSave() }
@@ -44,6 +49,11 @@ class QuizMakerFragment : BaseFragment(R.layout.fragment_quiz_maker) {
 
     private fun initVariantsList() {
         variantList.adapter = mAdapter
+        variantList.addItemDecoration(mItemDecoration)
+        variantList.doOnApplyWindowInsets { _, windowInsetsCompat, _ ->
+            mItemDecoration.lastItemBottomMargin = windowInsetsCompat.systemWindowInsetBottom
+            windowInsetsCompat
+        }
     }
 
     private fun handleEvent(event: QuizMakerEvent) {
