@@ -44,8 +44,6 @@
             android:layout_width="72dp"
             android:layout_height="72dp"
             app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
-            app:layout_constraintDimensionRatio="w,9:16"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineContentBegin"
             app:layout_constraintStart_toStartOf="@id/guidelineBegin"
             app:layout_constraintTop_toTopOf="@id/guidelineTop"
             app:srcCompat="@drawable/ic_quiz_item_icon" />

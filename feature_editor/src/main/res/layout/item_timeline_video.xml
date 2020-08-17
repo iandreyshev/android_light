@@ -43,11 +43,9 @@
             android:id="@+id/videoPreviewCard"
             android:layout_width="72dp"
             android:layout_height="72dp"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
-            app:layout_constraintDimensionRatio="w,9:16"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineContentBegin"
             app:layout_constraintStart_toStartOf="@id/guidelineBegin"
             app:layout_constraintTop_toTopOf="@id/guidelineTop"
             app:layout_constraintVertical_bias="1">
