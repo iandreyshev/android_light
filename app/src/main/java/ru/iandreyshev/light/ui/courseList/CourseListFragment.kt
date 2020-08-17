@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import dev.chrisbanes.insetter.applySystemWindowInsetsToMargin
+import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 import kotlinx.android.synthetic.main.fragment_course_list.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.iandreyshev.core_app.BaseFragment
 import ru.iandreyshev.core_ui.dismissOnDestroy
+import ru.iandreyshev.core_ui.doOnApplyWindowInsets
 import ru.iandreyshev.core_ui.toast
 import ru.iandreyshev.core_utils.exhaustive
 import ru.iandreyshev.core_utils.uiLazy
@@ -26,12 +29,14 @@ class CourseListFragment : BaseFragment(R.layout.fragment_course_list) {
             onLongClickListener = ::showCourseMenu
         )
     }
+    private val mCourseListDecorator = CourseListRecyclerViewDecorator()
     private var mCourseContextMenu: AlertDialog? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initMenu()
+        initCreateButton()
+        initToolbar()
         initCourseList()
 
         mViewModel.state.viewObserveWith(::render)
@@ -43,15 +48,24 @@ class CourseListFragment : BaseFragment(R.layout.fragment_course_list) {
         mCourseContextMenu?.dismissOnDestroy()
     }
 
-    private fun initMenu() {
+    private fun initCreateButton() {
+        createCourseButton.applySystemWindowInsetsToMargin(bottom = true)
         createCourseButton.setOnClickListener {
             mViewModel.onCreateCourseClick()
         }
     }
 
+    private fun initToolbar() {
+        appBarLayout.applySystemWindowInsetsToPadding(top = true)
+    }
+
     private fun initCourseList() {
         courseList.adapter = mCourseListAdapter
-        courseList.addItemDecoration(CourseListRecyclerViewDecorator())
+        courseList.addItemDecoration(mCourseListDecorator)
+        courseList.doOnApplyWindowInsets { _, insets, _ ->
+            mCourseListDecorator.lastItemBottomMargin = insets.systemWindowInsetBottom
+            insets
+        }
     }
 
     private fun showCourseMenu(coursePosition: Int) {

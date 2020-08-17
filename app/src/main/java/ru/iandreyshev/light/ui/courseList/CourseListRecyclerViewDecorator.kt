@@ -7,6 +7,8 @@ import ru.iandreyshev.light.R
 
 class CourseListRecyclerViewDecorator : RecyclerView.ItemDecoration() {
 
+    var lastItemBottomMargin = 0
+
     override fun getItemOffsets(
         outRect: Rect,
         view: View,
@@ -29,6 +31,10 @@ class CourseListRecyclerViewDecorator : RecyclerView.ItemDecoration() {
         outRect.left = resources.getDimensionPixelSize(R.dimen.grid_step_4)
         outRect.right = resources.getDimensionPixelSize(R.dimen.grid_step_4)
         outRect.bottom = resources.getDimensionPixelSize(R.dimen.grid_step_2)
+
+        if (position + 1 == parent.adapter?.itemCount) {
+            outRect.bottom = outRect.bottom + lastItemBottomMargin
+        }
     }
 
 }
