@@ -7,34 +7,22 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#fff"
+        android:background="@color/light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
+            style="@style/Light.Toolbar.Main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#fff"
+            android:background="@color/light"
             app:menu="@menu/menu_editor"
-            app:navigationIcon="@drawable/ic_editor_exit" />
-
-        <TextView
-            android:id="@+id/courseTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/grid_step_4"
-            android:layout_marginTop="@dimen/grid_step_1"
-            android:layout_marginBottom="@dimen/grid_step_2"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:text="Длинное название курса, которое умещается только в две строки"
-            android:textColor="#000"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            app:navigationIcon="@drawable/ic_editor_exit"
+            tools:title="Новый курс" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -44,7 +32,7 @@
         android:layout_height="0dp"
         android:background="#fff"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@id/bottomMenu"
+        app:layout_constraintBottom_toTopOf="@id/bottomMenuCard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout"
@@ -52,116 +40,83 @@
         tools:listitem="@layout/item_timeline_image"
         tools:visibility="visible" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/emptyView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/bottomMenu"
+        android:layout_marginHorizontal="@dimen/grid_step_4"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/bottomMenuCard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout">
 
         <TextView
             android:id="@+id/emptyViewTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="@string/editor_empty_view_text"
-            android:textAlignment="center"
-            android:textColor="@color/gray"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/emptyViewAddVideoButton"
-            android:layout_width="@dimen/square_button_small"
-            android:layout_height="@dimen/square_button_small"
-            android:layout_marginEnd="@dimen/grid_step_4"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@drawable/ic_add_video"
-            android:text="Video"
-            app:layout_constraintEnd_toStartOf="@id/emptyViewAddImageButton"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/emptyViewTitle" />
-
-        <Button
-            android:id="@+id/emptyViewAddImageButton"
-            android:layout_width="@dimen/square_button_small"
-            android:layout_height="@dimen/square_button_small"
             android:layout_marginHorizontal="@dimen/grid_step_4"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@drawable/ic_add_image"
-            android:text="Image"
-            app:layout_constraintEnd_toStartOf="@id/emptyViewAddQuizButton"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@id/emptyViewAddVideoButton"
-            app:layout_constraintTop_toBottomOf="@id/emptyViewTitle" />
+            android:gravity="center"
+            android:text="@string/editor_empty_view_title"
+            android:textColor="@color/dark"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/emptyViewAddQuizButton"
-            android:layout_width="@dimen/square_button_small"
-            android:layout_height="@dimen/square_button_small"
-            android:layout_marginStart="@dimen/grid_step_4"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:drawableTop="@drawable/ic_add_quiz"
-            android:text="Quiz"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/emptyViewAddImageButton"
-            app:layout_constraintTop_toBottomOf="@id/emptyViewTitle" />
+        <TextView
+            android:id="@+id/emptyViewSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/grid_step_4"
+            android:layout_marginTop="@dimen/grid_step_2"
+            android:gravity="center"
+            android:text="@string/editor_empty_view_subtitle"
+            android:textSize="16sp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/bottomMenu"
+        android:id="@+id/bottomMenuCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:cardCornerRadius="0dp"
-        app:cardElevation="8dp"
+        app:cardElevation="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
+            android:id="@+id/bottomMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/grid_margin"
+            android:layout_marginVertical="@dimen/grid_step_2"
             android:orientation="horizontal">
 
-            <ImageButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/addVideoButton"
-                android:layout_width="@dimen/square_button_small"
-                android:layout_height="@dimen/square_button_small"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@drawable/ic_add_video" />
+                style="@style/Light.Editor.AddItemButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/editor_type_video"
+                app:icon="@drawable/ic_add_video" />
 
-            <ImageButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/addImageButton"
-                android:layout_width="@dimen/square_button_small"
-                android:layout_height="@dimen/square_button_small"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@drawable/ic_add_image" />
+                style="@style/Light.Editor.AddItemButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/editor_type_image"
+                app:icon="@drawable/ic_add_image" />
 
-            <ImageButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/addQuizButton"
-                android:layout_width="@dimen/square_button_small"
-                android:layout_height="@dimen/square_button_small"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@drawable/ic_add_quiz" />
+                style="@style/Light.Editor.AddItemButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/editor_type_quiz"
+                app:icon="@drawable/ic_add_quiz" />
 
         </LinearLayout>
-
-        <ImageButton
-            android:id="@+id/settingsButton"
-            android:layout_width="@dimen/square_button_small"
-            android:layout_height="@dimen/square_button_small"
-            android:layout_gravity="end"
-            android:layout_marginEnd="@dimen/grid_step_4"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:srcCompat="@drawable/ic_editor_settings" />
 
     </androidx.cardview.widget.CardView>
 

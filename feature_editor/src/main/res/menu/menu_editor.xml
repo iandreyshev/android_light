@@ -4,8 +4,8 @@
 
     <item
         android:id="@+id/startView"
-        android:icon="@drawable/ic_editor_start_preview"
-        android:title="@string/editor_action_start_preview"
+        android:icon="@drawable/ic_editor_rename"
+        android:title="@string/editor_action_rename"
         app:showAsAction="always" />
 
     <item
@@ -13,6 +13,5 @@
         android:icon="@drawable/ic_editor_save"
         android:title="@string/editor_action_save"
         app:showAsAction="always" />
-
 
 </menu>

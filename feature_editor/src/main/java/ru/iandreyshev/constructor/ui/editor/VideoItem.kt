@@ -19,10 +19,10 @@ class VideoItem(
 
     override fun createViewHolder(itemView: View) = ViewHolder(itemView)
 
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.clickableArea.setOnClickListener { onClickListener() }
-        viewHolder.itemView.creationDate.text = duration
-        viewHolder.itemView.subtitleSecond.text = videoName
+    override fun bind(viewHolder: ViewHolder, position: Int) = with(viewHolder.itemView) {
+        clickableArea.setOnClickListener { onClickListener() }
+        title.text = videoName
+        videoDuration.text = duration
     }
 
     class ViewHolder(view: View) : GroupieViewHolder(view)

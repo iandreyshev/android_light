@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="editor_action_save">Сохранить</string>
-    <string name="editor_action_start_preview">Предпросмотр</string>
+    <string name="editor_action_rename">Переименовать</string>
     <string name="editor_default_title">Новый курс</string>
-    <string name="editor_empty_view_text">В курсе нет материалов</string>
+    <string name="editor_empty_view_title">В курсе нет материалов</string>
+    <string name="editor_empty_view_subtitle">Материалы можно выбрать в нижней панели</string>
     <string name="editor_settings_action_rename">Переименовать</string>
     <string name="editor_rename_dialog_title">Название курса</string>
+    <string name="editor_type_image">Картинка</string>
+    <string name="editor_type_video">Видео</string>
+    <string name="editor_type_quiz">Тест</string>
+    <string name="editor_quiz_subtitle">Тест. (%1$d вопросов)</string>
 
     <string name="quiz_maker_title">Новый тест</string>
     <string name="quiz_maker_action_save">Сохранить</string>

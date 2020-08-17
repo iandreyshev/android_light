@@ -20,7 +20,9 @@ class QuizItem(
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.clickableArea.setOnClickListener { onClickListener() }
-        viewHolder.itemView.creationDate.text = "$questionsCount questions"
+        viewHolder.itemView.title.text = "Название теста"
+        viewHolder.itemView.subtitle.text =
+            viewHolder.itemView.resources.getString(R.string.editor_quiz_subtitle, questionsCount)
     }
 
     class ViewHolder(view: View) : GroupieViewHolder(view)
