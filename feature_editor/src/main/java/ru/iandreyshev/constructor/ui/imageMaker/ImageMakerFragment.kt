@@ -47,9 +47,10 @@ class ImageMakerFragment : BaseFragment(R.layout.fragment_image_maker) {
         parametersOf(getScope(R.id.nav_editor), navArgs.imageMakerArgs)
     }
     private val mPickFromGalleryLauncher by uiLazy {
-        registerForActivityResult(ActivityResultContracts.GetContent()) {
-            mViewModel.onPickFromGallerySuccess(it)
-        }
+        registerForActivityResult(
+            ActivityResultContracts.GetContent(),
+            mViewModel::onPickFromGallerySuccess
+        )
     }
     private val mRequestCameraPermissionLauncher by uiLazy {
         registerForActivityResult(

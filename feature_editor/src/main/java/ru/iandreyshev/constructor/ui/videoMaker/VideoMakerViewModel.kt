@@ -74,7 +74,12 @@ class VideoMakerViewModel(
         }
     }
 
-    fun onPickFromGallery(uri: Uri) {
+    fun onPickFromGallery(uri: Uri?) {
+        uri ?: kotlin.run {
+            event { VideoMakerEvent.Exit }
+            return
+        }
+
         viewModelScope.launch {
             mDraft = mDraft.copy(
                 source = mRepository.getGallerySource(uri) ?: kotlin.run {

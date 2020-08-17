@@ -111,7 +111,9 @@ class ImageMakerViewModel(
         }
     }
 
-    fun onPickFromGallerySuccess(uri: Uri) {
+    fun onPickFromGallerySuccess(uri: Uri?) {
+        uri ?: return
+
         viewModelScope.launch {
             val source = mRepository.getGallerySource(uri) ?: kotlin.run {
                 event { ImageMakerEvent.ShowError("Error while copy image from gallery") }
