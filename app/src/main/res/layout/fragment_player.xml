@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ru.iandreyshev.player.PlayerView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/playerView"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/playerViewWrap"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    android:background="@color/dark">
+
+    <ru.iandreyshev.player.PlayerView
+        android:id="@+id/playerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</FrameLayout>

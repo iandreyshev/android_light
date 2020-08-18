@@ -21,8 +21,6 @@ import org.koin.core.parameter.parametersOf
 import ru.iandreyshev.constructor.R
 import ru.iandreyshev.constructor.navigation.router
 import ru.iandreyshev.core_app.BaseFragment
-import ru.iandreyshev.core_ui.setOrientationPortrait
-import ru.iandreyshev.core_ui.setOrientationUnspecified
 import ru.iandreyshev.core_ui.toast
 import ru.iandreyshev.core_utils.exhaustive
 import ru.iandreyshev.core_utils.uiLazy
@@ -49,18 +47,11 @@ class VideoMakerFragment : BaseFragment(R.layout.fragment_video_maker) {
 
         mViewModel.state.viewObserveWith(::render)
         mViewModel.event(::handleEvent)
-
-        setOrientationPortrait()
     }
 
     override fun onPause() {
         super.onPause()
         mViewModel.onPause()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        setOrientationUnspecified()
     }
 
     private fun initMenu() {

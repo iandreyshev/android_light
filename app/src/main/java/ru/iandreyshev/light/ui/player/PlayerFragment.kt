@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.navigation.fragment.navArgs
+import dev.chrisbanes.insetter.applySystemGestureInsetsToPadding
 import kotlinx.android.synthetic.main.fragment_player.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.iandreyshev.core_app.BaseFragment
-import ru.iandreyshev.core_ui.setFullScreen
-import ru.iandreyshev.core_ui.setOrientationPortrait
-import ru.iandreyshev.core_ui.setOrientationUnspecified
 import ru.iandreyshev.light.R
 import ru.iandreyshev.light.navigation.router
 import ru.iandreyshev.player_core.player.News
@@ -30,19 +28,12 @@ class PlayerFragment : BaseFragment(R.layout.fragment_player) {
 
         playerView.subscribe(mViewModel.wishListener)
 
-        setFullScreen()
-        setOrientationPortrait()
+        playerViewWrap.applySystemGestureInsetsToPadding(top = true, bottom = true)
     }
 
     override fun onPause() {
         super.onPause()
         playerView.pause()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        setOrientationUnspecified()
-        setFullScreen(false)
     }
 
     private fun onNews(news: News) =

@@ -48,9 +48,6 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
     private fun initMenu() {
         appBarLayout.applySystemWindowInsetsToPadding(top = true)
         toolbar.setNavigationOnClickListener { mViewModel.onExit() }
-        toolbar.withItemListeners {
-            R.id.actionEditorSave { mViewModel.onSave() }
-        }
 
         bottomMenu.applySystemWindowInsetsToPadding(bottom = true)
         addVideoButton.setOnClickListener { mViewModel.onCreateVideo() }
@@ -79,6 +76,10 @@ class EditorFragment : BaseFragment(R.layout.fragment_editor) {
         toolbar.title = state.courseTitle
         toolbar.setOnClickListener {
             showRenameCourseDialog(state.courseTitle)
+        }
+        toolbar.withItemListeners {
+            R.id.actionEditorSave { mViewModel.onSave() }
+            R.id.actionEditorRename { showRenameCourseDialog(state.courseTitle) }
         }
 
         mTimelineAdapter.update(state.items.map { item ->
