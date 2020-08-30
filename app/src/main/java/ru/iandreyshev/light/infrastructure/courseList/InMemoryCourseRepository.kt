@@ -17,6 +17,7 @@ class InMemoryCourseRepository(
     private val mCoursesObservable = ConflatedBroadcastChannel<List<Course>>()
 
     override fun prepare() {
+        mCourses.clear()
         mCourses.addAll(storage.list())
         mCoursesObservable.offer(mCourses)
     }
